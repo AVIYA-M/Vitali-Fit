@@ -1,0 +1,22 @@
+body {
+    font-family: 'Heebo', sans-serif;
+    background-color: #F8F9FA;
+}
+
+.soft-card {
+    background: #ffffff;
+    border: 1px solid rgba(229, 231, 235, 0.8);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #c5d7ce;
+    border-radius: 4px;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitaliFit - תזונה</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-[#F8F9FA] text-gray-900 font-['Heebo'] flex flex-col min-h-screen">
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630]"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-4m-4 4h8M12 3c3.5 3.5 5 7 5 10a5 5 0 11-10 0c0-3 1.5-6.5 5-10z"></path></svg></div>
+                <span class="text-xl font-extrabold text-[#1E4630]">VitaliFit</span>
+            </a>
+            <nav class="hidden md:flex items-center gap-1 bg-gray-100/80 p-1.5 rounded-full border border-gray-200/60">
+                <a href="index.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">ראשי</a>
+                <a href="workouts.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">אימונים</a>
+                <a href="nutrition.html" class="px-5 py-2 rounded-full text-sm font-semibold bg-[#1E4630] text-white shadow">תזונה</a>
+                <a href="admin.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">ניהול משתמשים</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 space-y-6 w-full">
+        <div class="soft-card p-6 rounded-2xl bg-white flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-[#1E4630]">יומן תזונה וקלוריות</h1>
+                <p class="text-gray-500 text-xs mt-1">עקוב אחר צריכת הקלוריות והחלבונים שלך בעזרת סורק ה-AI.</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 soft-card p-6 rounded-2xl bg-white space-y-4">
+                <h3 class="font-bold text-[#1E4630]">הארוחות להיום</h3>
+                <div id="meals-list" class="space-y-3">
+                    <div class="flex justify-between p-3 bg-gray-50 rounded-xl text-xs font-semibold"><span>שיבולת שועל ובננה</span><span>420 Kcal (18g חלבון)</span></div>
+                    <div class="flex justify-between p-3 bg-gray-50 rounded-xl text-xs font-semibold"><span>חזה עוף ואורז</span><span>650 Kcal (52g חלבון)</span></div>
+                </div>
+            </div>
+            <div class="soft-card p-6 rounded-2xl bg-gradient-to-b from-white to-[#E8F5F1]/30 border-2 border-[#A3D9C9]/50 space-y-4">
+                <h3 class="font-bold text-[#1E4630] flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> סורק ארוחות חכם (AI)</h3>
+                <p class="text-xs text-gray-600">צלם או תאר ארוחה וה-AI יחשב ערכים תזונתיים מיידית.</p>
+                <input type="text" id="ai-input" placeholder="תאר ארוחה..." class="w-full bg-white border border-gray-300 rounded-xl py-2.5 px-3 text-xs">
+                <button onclick="scanMealAI()" class="w-full py-2.5 bg-[#1E4630] text-white rounded-xl text-xs font-bold">חשב ערכים</button>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

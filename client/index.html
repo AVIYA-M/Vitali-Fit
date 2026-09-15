@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitaliFit - ראשי</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-[#F8F9FA] text-gray-900 font-['Heebo'] flex flex-col min-h-screen">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630] shadow-sm">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-4m-4 4h8M12 3c3.5 3.5 5 7 5 10a5 5 0 11-10 0c0-3 1.5-6.5 5-10z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-xl font-extrabold text-[#1E4630] tracking-tight">VitaliFit</span>
+                    <span class="block text-[10px] text-gray-400 font-medium -mt-1">Fitness & Nutrition</span>
+                </div>
+            </a>
+            <nav class="hidden md:flex items-center gap-1 bg-gray-100/80 p-1.5 rounded-full border border-gray-200/60">
+                <a href="index.html" class="px-5 py-2 rounded-full text-sm font-semibold bg-[#1E4630] text-white shadow">ראשי</a>
+                <a href="workouts.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">אימונים</a>
+                <a href="nutrition.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">תזונה</a>
+                <a href="admin.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">ניהול משתמשים</a>
+            </nav>
+            <div>
+                <a href="login.html" class="px-4 py-2.5 rounded-xl bg-[#E8F5F1] text-[#1E4630] text-xs font-bold hover:bg-[#d4ede4]">התחברות</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+        <div class="text-center space-y-6 max-w-3xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8F5F1] text-[#1E4630] text-xs font-bold border border-[#A3D9C9]">
+                <i class="fa-solid fa-bolt text-amber-500"></i>
+                <span>הדור הבא של כושר ותזונה חכמה</span>
+            </div>
+            <h1 class="text-4xl sm:text-6xl font-extrabold text-[#1E4630] leading-tight">
+                הגיע הזמן לקחת שליטה מלאה על <span class="text-emerald-600 underline decoration-[#A3D9C9]/60">הבריאות שלך</span>
+            </h1>
+            <p class="text-gray-600 text-base leading-relaxed">
+                פלטפורמה מתקדמת המרכזת תוכניות אימון אישיות, מעקב תזונה מבוסס בינה מלאכותית, וניהול נתונים חכם במקום אחד.
+            </p>
+            <div class="flex justify-center gap-4 pt-4">
+                <a href="workouts.html" class="px-7 py-3.5 rounded-2xl bg-[#1E4630] text-white font-bold text-sm shadow-lg">צפה בתוכניות אימון</a>
+                <a href="nutrition.html" class="px-7 py-3.5 rounded-2xl bg-white border-2 border-gray-200 text-[#1E4630] font-bold text-sm">יומן תזונה ו-AI</a>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+
+</body>
+</html>

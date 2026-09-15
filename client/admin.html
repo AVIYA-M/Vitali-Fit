@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitaliFit - ניהול משתמשים</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-[#F8F9FA] text-gray-900 font-['Heebo'] flex flex-col min-h-screen">
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630]">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-4m-4 4h8M12 3c3.5 3.5 5 7 5 10a5 5 0 11-10 0c0-3 1.5-6.5 5-10z"></path></svg>
+                </div>
+                <span class="text-xl font-extrabold text-[#1E4630]">VitaliFit</span>
+            </a>
+            <nav class="hidden md:flex items-center gap-1 bg-gray-100/80 p-1.5 rounded-full border border-gray-200/60">
+                <a href="index.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">ראשי</a>
+                <a href="workouts.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">אימונים</a>
+                <a href="nutrition.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">תזונה</a>
+                <a href="admin.html" class="px-5 py-2 rounded-full text-sm font-semibold bg-[#1E4630] text-white shadow">ניהול משתמשים</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 space-y-6 w-full">
+        <div class="soft-card p-6 rounded-2xl flex justify-between items-center bg-white">
+            <div>
+                <h1 class="text-2xl font-bold text-[#1E4630]">ניהול משתמשי הפלטפורמה</h1>
+                <p class="text-gray-500 text-xs mt-1">צפה, חפש וניהול הרשאות משתמשים.</p>
+            </div>
+            <button onclick="alert('הוספת משתמש')" class="px-4 py-2 bg-[#1E4630] text-white rounded-xl text-xs font-bold">הוסף משתמש</button>
+        </div>
+        <div class="soft-card rounded-2xl bg-white overflow-hidden">
+            <table class="w-full text-right text-xs">
+                <thead class="bg-gray-100 text-gray-700 uppercase">
+                    <tr>
+                        <th class="py-3 px-6">שם משתמש</th>
+                        <th class="py-3 px-6">אימייל</th>
+                        <th class="py-3 px-6">תפקיד</th>
+                        <th class="py-3 px-6">סטטוס</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    <tr><td class="py-3 px-6 font-semibold">ישראל ישראלי</td><td class="py-3 px-6">israel@example.com</td><td class="py-3 px-6"><span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">Admin</span></td><td class="py-3 px-6"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">Active</span></td></tr>
+                    <tr><td class="py-3 px-6 font-semibold">שרה כהן</td><td class="py-3 px-6">sara@example.com</td><td class="py-3 px-6"><span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">User</span></td><td class="py-3 px-6"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">Active</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
