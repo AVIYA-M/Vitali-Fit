@@ -33,3 +33,9 @@ mongoose
     console.error(err);
     process.exit(1);
   });
+
+const workoutRoutes = require('./routes/workoutRoutes.js');
+const nutritionRoutes = require('./routes/nutritionRoutes.js');
+
+app.use('/api/workouts', workoutRoutes);
+app.use('/api/nutrition', nutritionRoutes);

@@ -1,4 +1,4 @@
-const Nutrition = require('../models/nutrition.model');
+const Nutrition = require('../models/Nutrition.js');
 
 // הוספת ארוחה חדשה ליומן (כולל תמונה)
 exports.addMeal = async (req, res) => {

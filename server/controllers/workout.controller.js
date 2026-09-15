@@ -1,4 +1,4 @@
-const Workout = require('../models/workout.model');
+const Workout = require('../models/Workout.js');
 
 // שליפת כל האימונים
 exports.getAllWorkouts = async (req, res) => {
