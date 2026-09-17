@@ -9,19 +9,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-[#F8F9FA] text-gray-900 font-['Heebo'] flex flex-col min-h-screen">
-    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3">
-                <div class="w-11 h-11 rounded-2xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630]"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-4m-4 4h8M12 3c3.5 3.5 5 7 5 10a5 5 0 11-10 0c0-3 1.5-6.5 5-10z"></path></svg></div>
-                <span class="text-xl font-extrabold text-[#1E4630]">VitaliFit</span>
+<body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen justify-between">
+    <header class="site-header">
+        <div class="header-shell">
+            <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
+                <div class="brand-logo-wrap">
+                    <span class="brand-symbol"><i class="fa-solid fa-heart-pulse"></i></span>
+                    <span class="brand-copy">
+                        <span class="brand-name">VitaliFit</span>
+                        <span class="brand-tagline">בריאות ואנרגיה</span>
+                    </span>
+                </div>
             </a>
-            <nav class="hidden md:flex items-center gap-1 bg-gray-100/80 p-1.5 rounded-full border border-gray-200/60">
-                <a href="index.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">ראשי</a>
-                <a href="workouts.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">אימונים</a>
-                <a href="nutrition.html" class="px-5 py-2 rounded-full text-sm font-semibold bg-[#1E4630] text-white shadow">תזונה</a>
-                <a href="admin.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">ניהול משתמשים</a>
+
+            <nav class="main-menu" aria-label="Main navigation">
+                <a href="index.html">דף בית</a>
+                <a href="register.html">הרשמה</a>
+                <a href="workouts.html">קביעת לוז</a>
+                <a href="workouts.html">לוח מעקב</a>
+                <a href="workouts.html">אימונים</a>
+                <a href="#">צרו קשר</a>
+                <a href="#">בלוג</a>
+                <a href="#">שעות פעילות</a>
             </nav>
+
+            <div class="nav-actions">
+                <a href="login.html" class="icon-button" aria-label="התחברות"><i class="fa-regular fa-user"></i></a>
+                <a href="register.html" class="join-button">הצטרף</a>
+            </div>
         </div>
     </header>
 
@@ -48,6 +63,53 @@
             </div>
         </div>
     </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-newsletter">
+                <h3>הרשמה לניוזלטר שלנו</h3>
+                <div class="newsletter-shell">
+                    <button type="button" class="newsletter-btn">שליחה</button>
+                    <input type="email" placeholder="כתובת אימייל" aria-label="כתובת אימייל">
+                </div>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>שירותים</h4>
+                <ul class="footer-list">
+                    <li><a href="workouts.html">תוכניות כושר</a></li>
+                    <li><a href="#">אודותינו</a></li>
+                    <li><a href="#">מרכז העזרה</a></li>
+                    <li><a href="#">צור קשר</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>קהילות</h4>
+                <ul class="footer-list">
+                    <li><a href="#">מתחילים</a></li>
+                    <li><a href="#">מתקדמים</a></li>
+                    <li><a href="#">תזונה נכונה</a></li>
+                    <li><a href="#">תמיכה ומוטיבציה</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.</p>
+            <div class="legal-links">
+                <a href="#">תנאים והתניות</a>
+                <a href="#">פרטיות</a>
+                <a href="#">Accessibility Statement</a>
+                <a href="#">עזרה</a>
+            </div>
+        </div>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>

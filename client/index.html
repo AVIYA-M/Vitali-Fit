@@ -3,59 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VitaliFit - ראשי</title>
+    <title>VitaliFit - ויטאליפיט | בריאות ואנרגיה</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-[#F8F9FA] text-gray-900 font-['Heebo'] flex flex-col min-h-screen">
+<body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen justify-between">
 
     <!-- Header Navigation -->
-    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3">
-                <div class="w-11 h-11 rounded-2xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630] shadow-sm">
-                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-4m-4 4h8M12 3c3.5 3.5 5 7 5 10a5 5 0 11-10 0c0-3 1.5-6.5 5-10z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <span class="text-xl font-extrabold text-[#1E4630] tracking-tight">VitaliFit</span>
-                    <span class="block text-[10px] text-gray-400 font-medium -mt-1">Fitness & Nutrition</span>
+    <header class="site-header">
+        <div class="header-shell">
+            <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
+                <div class="brand-logo-wrap">
+                    <span class="brand-symbol"><i class="fa-solid fa-heart-pulse"></i></span>
+                    <span class="brand-copy">
+                        <span class="brand-name">VitaliFit</span>
+                        <span class="brand-tagline">בריאות ואנרגיה</span>
+                    </span>
                 </div>
             </a>
-            <nav class="hidden md:flex items-center gap-1 bg-gray-100/80 p-1.5 rounded-full border border-gray-200/60">
-                <a href="index.html" class="px-5 py-2 rounded-full text-sm font-semibold bg-[#1E4630] text-white shadow">ראשי</a>
-                <a href="workouts.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">אימונים</a>
-                <a href="nutrition.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">תזונה</a>
-                <a href="admin.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">ניהול משתמשים</a>
+
+            <nav class="main-menu" aria-label="Main navigation">
+                <a href="index.html" class="active">דף בית</a>
+                <a href="register.html">הרשמה</a>
+                <a href="workouts.html">קביעת לוז</a>
+                <a href="workouts.html">לוח מעקב</a>
+                <a href="workouts.html">אימונים</a>
+                <a href="#">צרו קשר</a>
+                <a href="#">בלוג</a>
+                <a href="#">שעות פעילות</a>
             </nav>
-            <div>
-                <a href="login.html" class="px-4 py-2.5 rounded-xl bg-[#E8F5F1] text-[#1E4630] text-xs font-bold hover:bg-[#d4ede4]">התחברות</a>
+
+            <div class="nav-actions">
+                <a href="login.html" class="icon-button" aria-label="התחברות"><i class="fa-regular fa-user"></i></a>
+                <a href="register.html" class="join-button">הצטרף</a>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        <div class="text-center space-y-6 max-w-3xl mx-auto">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8F5F1] text-[#1E4630] text-xs font-bold border border-[#A3D9C9]">
-                <i class="fa-solid fa-bolt text-amber-500"></i>
-                <span>הדור הבא של כושר ותזונה חכמה</span>
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 space-y-12 w-full">
+        
+        <!-- באנר ראשי בצבעי מנטה יוקרתיים -->
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-l from-[#C8E6C9]/40 via-[#E8F5F1] to-[#A3D9C9]/30 border border-[#A3D9C9]/50 p-8 sm:p-16 shadow-lg flex flex-col md:flex-row items-center justify-between">
+            <div class="space-y-6 max-w-xl text-right z-10">
+                <div class="home-brand-lockup" aria-label="VitaliFit - בריאות ואנרגיה">
+                    <span class="home-brand-symbol"><i class="fa-solid fa-heart-pulse"></i></span>
+                    <div>
+                        <div class="home-brand-name">VitaliFit</div>
+                        <div class="home-brand-tagline">בריאות ואנרגיה בתנועה</div>
+                    </div>
+                </div>
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-[#1E4630] leading-tight">
+                    המסע שלך לחיים בריאים מתחיל כאן
+                </h1>
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                    תוכניות כושר ותזונה בהתאמה אישית לכל מטרה. קבל ליווי מדויק, מעקב יומי וכלים מתקדמים להצלחה.
+                </p>
+                <div>
+                    <a href="workouts.html" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-[#1E4630] text-white font-bold text-xs shadow-lg hover:bg-[#163524] transition-all">
+                        התחל את האימון הראשון שלך
+                    </a>
+                </div>
             </div>
-            <h1 class="text-4xl sm:text-6xl font-extrabold text-[#1E4630] leading-tight">
-                הגיע הזמן לקחת שליטה מלאה על <span class="text-emerald-600 underline decoration-[#A3D9C9]/60">הבריאות שלך</span>
-            </h1>
-            <p class="text-gray-600 text-base leading-relaxed">
-                פלטפורמה מתקדמת המרכזת תוכניות אימון אישיות, מעקב תזונה מבוסס בינה מלאכותית, וניהול נתונים חכם במקום אחד.
-            </p>
-            <div class="flex justify-center gap-4 pt-4">
-                <a href="workouts.html" class="px-7 py-3.5 rounded-2xl bg-[#1E4630] text-white font-bold text-sm shadow-lg">צפה בתוכניות אימון</a>
-                <a href="nutrition.html" class="px-7 py-3.5 rounded-2xl bg-white border-2 border-gray-200 text-[#1E4630] font-bold text-sm">יומן תזונה ו-AI</a>
+            
+            <div class="mt-8 md:mt-0 z-10">
+                <div class="w-72 h-72 sm:w-80 sm:h-80 rounded-3xl bg-white/60 backdrop-blur-md border border-white shadow-xl flex items-center justify-center text-center p-6">
+                    <div class="space-y-3">
+                        <div class="w-16 h-16 rounded-2xl bg-[#E8F5F1] text-[#1E4630] flex items-center justify-center mx-auto text-2xl border border-[#A3D9C9]">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                        <h4 class="font-bold text-[#1E4630] text-sm">כוח, בריאות ואנרגיה</h4>
+                        <p class="text-xs text-gray-500">הפלטפורמה המובילה לניהול אורח חיים פעיל.</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </main>
-    <script src="script.js"></script>
 
+        <!-- 3 כרטיסים מרכזיים -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+            
+            <div class="soft-card bg-white p-7 rounded-3xl space-y-3 text-center group">
+                <div class="w-12 h-12 rounded-2xl bg-[#E8F5F1] text-[#1E4630] flex items-center justify-center mx-auto text-lg border border-[#A3D9C9] group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-dumbbell"></i>
+                </div>
+                <h3 class="text-lg font-bold text-[#1E4630]">תוכניות אימון</h3>
+                <p class="text-gray-500 text-xs leading-relaxed">מגוון אימונים לכל רמות הכושר מהבית או בחוץ.</p>
+            </div>
+
+            <div class="soft-card bg-white p-7 rounded-3xl space-y-3 text-center group">
+                <div class="w-12 h-12 rounded-2xl bg-[#E8F5F1] text-[#1E4630] flex items-center justify-center mx-auto text-lg border border-[#A3D9C9] group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <h3 class="text-lg font-bold text-[#1E4630]">תזונה בריאה</h3>
+                <p class="text-gray-500 text-xs leading-relaxed">תפריטים מותאמים אישית והמלצות תזונה לתוצאות.</p>
+            </div>
+
+            <div class="soft-card bg-white p-7 rounded-3xl space-y-3 text-center group">
+                <div class="w-12 h-12 rounded-2xl bg-[#E8F5F1] text-[#1E4630] flex items-center justify-center mx-auto text-lg border border-[#A3D9C9] group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+                <h3 class="text-lg font-bold text-[#1E4630]">מעקב התקדמות</h3>
+                <p class="text-gray-500 text-xs leading-relaxed">מעקב אחר הישגים, המשקלים והמוטיבציה שלך.</p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer כהה בסגנון ההשראה -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-newsletter">
+                <h3>הרשמה לניוזלטר שלנו</h3>
+                <div class="newsletter-shell">
+                    <button type="button" class="newsletter-btn">שליחה</button>
+                    <input type="email" placeholder="כתובת אימייל" aria-label="כתובת אימייל">
+                </div>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>שירותים</h4>
+                <ul class="footer-list">
+                    <li><a href="workouts.html">תוכניות כושר</a></li>
+                    <li><a href="#">אודותינו</a></li>
+                    <li><a href="#">מרכז העזרה</a></li>
+                    <li><a href="#">צור קשר</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>קהילות</h4>
+                <ul class="footer-list">
+                    <li><a href="#">מתחילים</a></li>
+                    <li><a href="#">מתקדמים</a></li>
+                    <li><a href="#">תזונה נכונה</a></li>
+                    <li><a href="#">תמיכה ומוטיבציה</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.</p>
+            <div class="legal-links">
+                <a href="#">תנאים והתניות</a>
+                <a href="#">פרטיות</a>
+                <a href="#">Accessibility Statement</a>
+                <a href="#">עזרה</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

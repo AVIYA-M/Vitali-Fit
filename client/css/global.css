@@ -1,0 +1,135 @@
+/* client/css/global.css */
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Heebo', sans-serif;
+    background-color: #f8fafc;
+    direction: rtl;
+}
+
+/* --- הדר כללי לאתר --- */
+.site-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 15px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn-join {
+    background: #1E4630;
+    color: white;
+    padding: 10px 22px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.main-nav {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    background: #1E4630;
+    padding: 8px 10px;
+    border-radius: 40px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.nav-link.active {
+    color: #1E4630;
+    background: white;
+    font-weight: 600;
+}
+
+.logo-container img {
+    max-height: 55px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* --- פוטר כללי לאתר (ירוק יוקרתי) --- */
+.site-footer {
+    background-color: #1E4630;
+    color: #ffffff;
+    padding: 50px 20px 25px;
+    margin-top: 60px;
+    border-top: 4px solid #2D6A4F;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.newsletter-form {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.newsletter-input {
+    padding: 12px 18px;
+    border-radius: 25px;
+    border: none;
+    width: 240px;
+    outline: none;
+    font-family: inherit;
+}
+
+.newsletter-btn {
+    background: #2D6A4F;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.newsletter-btn:hover {
+    background: #163524;
+}
+
+.footer-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    width: 100%;
+}

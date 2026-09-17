@@ -9,31 +9,110 @@
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-[#F8F9FA] text-gray-900 font-['Heebo'] flex flex-col min-h-screen justify-center items-center p-4">
-    <div class="max-w-md w-full bg-white p-8 rounded-3xl shadow-xl border border-gray-200/80 space-y-6 text-right">
-        <div class="text-center space-y-2">
-            <h1 class="text-2xl font-bold text-[#1E4630]">התחברות למערכת</h1>
-            <p class="text-xs text-gray-500">הכנס את פרטי החשבון שלך כדי להמשיך</p>
-        </div>
-        <div class="flex rounded-xl bg-gray-100 p-1">
-            <a href="login.html" class="flex-1 py-2.5 text-center rounded-lg font-semibold text-xs bg-[#1E4630] text-white shadow">התחברות</a>
-            <a href="register.html" class="flex-1 py-2.5 text-center rounded-lg font-semibold text-xs text-gray-500 hover:text-gray-900">הרשמה</a>
-        </div>
-        <form onsubmit="handleAuth(event)" class="space-y-4">
-            <div class="space-y-1">
-                <label class="text-xs font-medium text-gray-700 block">כתובת אימייל</label>
-                <input type="email" required placeholder="israel@example.com" class="w-full bg-gray-50 border border-gray-300 rounded-xl py-3 px-4 text-xs text-right focus:outline-none focus:border-[#1E4630]">
+<body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen justify-between">
+    <header class="site-header">
+        <div class="header-shell">
+            <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
+                <div class="brand-logo-wrap">
+                    <span class="brand-symbol"><i class="fa-solid fa-heart-pulse"></i></span>
+                    <span class="brand-copy">
+                        <span class="brand-name">VitaliFit</span>
+                        <span class="brand-tagline">בריאות ואנרגיה</span>
+                    </span>
+                </div>
+            </a>
+
+            <nav class="main-menu" aria-label="Main navigation">
+                <a href="index.html">דף בית</a>
+                <a href="register.html">הרשמה</a>
+                <a href="workouts.html">קביעת לוז</a>
+                <a href="workouts.html">לוח מעקב</a>
+                <a href="workouts.html">אימונים</a>
+                <a href="#">צרו קשר</a>
+                <a href="#">בלוג</a>
+                <a href="#">שעות פעילות</a>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="login.html" class="icon-button" aria-label="התחברות"><i class="fa-regular fa-user"></i></a>
+                <a href="register.html" class="join-button">הצטרף</a>
             </div>
-            <div class="space-y-1">
-                <label class="text-xs font-medium text-gray-700 block">סיסמה</label>
-                <input type="password" required placeholder="••••••••" class="w-full bg-gray-50 border border-gray-300 rounded-xl py-3 px-4 text-xs text-right focus:outline-none focus:border-[#1E4630]">
-            </div>
-            <button type="submit" class="w-full py-3.5 bg-[#1E4630] text-white rounded-xl text-xs font-bold hover:bg-[#163524] transition-all shadow-md">התחבר</button>
-        </form>
-        <div class="text-center">
-            <a href="index.html" class="text-xs text-gray-500 hover:text-[#1E4630]">← חזרה לדף הבית</a>
         </div>
-    </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full bg-white p-8 rounded-3xl shadow-xl border border-gray-200/80 space-y-6 text-right">
+            <div class="text-center space-y-2">
+                <h1 class="text-2xl font-bold text-[#1E4630]">התחברות למערכת</h1>
+                <p class="text-xs text-gray-500">הכנס את פרטי החשבון שלך כדי להמשיך</p>
+            </div>
+            <div class="flex rounded-xl bg-gray-100 p-1">
+                <a href="login.html" class="flex-1 py-2.5 text-center rounded-lg font-semibold text-xs bg-[#1E4630] text-white shadow">התחברות</a>
+                <a href="register.html" class="flex-1 py-2.5 text-center rounded-lg font-semibold text-xs text-gray-500 hover:text-gray-900">הרשמה</a>
+            </div>
+            <form onsubmit="handleAuth(event)" class="space-y-4">
+                <div class="space-y-1">
+                    <label class="text-xs font-medium text-gray-700 block">כתובת אימייל</label>
+                    <input type="email" required placeholder="israel@example.com" class="w-full bg-gray-50 border border-gray-300 rounded-xl py-3 px-4 text-xs text-right focus:outline-none focus:border-[#1E4630]">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-medium text-gray-700 block">סיסמה</label>
+                    <input type="password" required placeholder="••••••••" class="w-full bg-gray-50 border border-gray-300 rounded-xl py-3 px-4 text-xs text-right focus:outline-none focus:border-[#1E4630]">
+                </div>
+                <button type="submit" class="w-full py-3.5 bg-[#1E4630] text-white rounded-xl text-xs font-bold hover:bg-[#163524] transition-all shadow-md">התחבר</button>
+            </form>
+            <div class="text-center">
+                <a href="index.html" class="text-xs text-gray-500 hover:text-[#1E4630]">← חזרה לדף הבית</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-newsletter">
+                <h3>הרשמה לניוזלטר שלנו</h3>
+                <div class="newsletter-shell">
+                    <button type="button" class="newsletter-btn">שליחה</button>
+                    <input type="email" placeholder="כתובת אימייל" aria-label="כתובת אימייל">
+                </div>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>שירותים</h4>
+                <ul class="footer-list">
+                    <li><a href="workouts.html">תוכניות כושר</a></li>
+                    <li><a href="#">אודותינו</a></li>
+                    <li><a href="#">מרכז העזרה</a></li>
+                    <li><a href="#">צור קשר</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>קהילות</h4>
+                <ul class="footer-list">
+                    <li><a href="#">מתחילים</a></li>
+                    <li><a href="#">מתקדמים</a></li>
+                    <li><a href="#">תזונה נכונה</a></li>
+                    <li><a href="#">תמיכה ומוטיבציה</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.</p>
+            <div class="legal-links">
+                <a href="#">תנאים והתניות</a>
+                <a href="#">פרטיות</a>
+                <a href="#">Accessibility Statement</a>
+                <a href="#">עזרה</a>
+            </div>
+        </div>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>

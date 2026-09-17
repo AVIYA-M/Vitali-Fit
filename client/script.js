@@ -5,6 +5,55 @@ let usersData = [
     { id: 4, name: 'מיכל אברהמי', email: 'michal@example.com', role: 'User', status: 'Active' }
 ];
 
+function handleAuth(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const email = form.querySelector('input[type="email"]')?.value?.trim() || 'משתמש';
+    showCustomMessageBox(`התחברת בהצלחה למערכת VitaliFit!\nברוך הבא, ${email}`);
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 600);
+}
+
+function handleRegister(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const name = form.querySelector('input[type="text"]')?.value?.trim() || 'משתמש חדש';
+    showCustomMessageBox(`ההרשמה בוצעה בהצלחה!\nברוכים הבאים, ${name}`);
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 600);
+}
+
+function scanMealAI() {
+    const input = document.getElementById('ai-input');
+    const value = input ? input.value.trim() : '';
+    const container = document.getElementById('meals-list');
+
+    if (!value) {
+        showCustomMessageBox('אנא כתוב תיאור של הארוחה כדי לקבל חישוב תזונתי.');
+        return;
+    }
+
+    const predicted = {
+        name: value.length > 24 ? `${value.slice(0, 24)}...` : value,
+        calories: 420,
+        protein: 24,
+        carbs: 34,
+        fats: 15
+    };
+
+    if (container) {
+        const item = document.createElement('div');
+        item.className = 'flex justify-between p-3 bg-gray-50 rounded-xl text-xs font-semibold';
+        item.innerHTML = `<span>${predicted.name}</span><span>${predicted.calories} Kcal (${predicted.protein}g חלבון)</span>`;
+        container.appendChild(item);
+    }
+
+    showCustomMessageBox(`הארוחה נותחה: ${predicted.name}\nקלוריות: ${predicted.calories} kcal\nחלבון: ${predicted.protein}g\nפחמימות: ${predicted.carbs}g\nשומנים: ${predicted.fats}g`);
+    if (input) input.value = '';
+}
+
 let totalConsumedCalories = 780;
 let totalProtein = 110;
 let totalCarbs = 190;
@@ -205,6 +254,12 @@ function switchAiTab(tab) {
 
 // טעינת תמונה לתצוגה מקדימה
 document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('modal-container')) {
+        const modalRoot = document.createElement('div');
+        modalRoot.id = 'modal-container';
+        document.body.appendChild(modalRoot);
+    }
+
     const fileInput = document.getElementById('ai-food-file');
     if (fileInput) {
         fileInput.addEventListener('change', function(e) {

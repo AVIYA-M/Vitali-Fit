@@ -3,43 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VitaliFit - אימונים</title>
+    <title>לוח אימונים - VitaliFit</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/workouts.css">
 </head>
-<body class="bg-[#F8F9FA] text-gray-900 font-['Heebo'] flex flex-col min-h-screen">
-    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3">
-                <div class="w-11 h-11 rounded-2xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630]"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-4m-4 4h8M12 3c3.5 3.5 5 7 5 10a5 5 0 11-10 0c0-3 1.5-6.5 5-10z"></path></svg></div>
-                <span class="text-xl font-extrabold text-[#1E4630]">VitaliFit</span>
+<body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen justify-between">
+    <header class="site-header">
+        <div class="header-shell">
+            <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
+                <div class="brand-logo-wrap">
+                    <span class="brand-symbol"><i class="fa-solid fa-heart-pulse"></i></span>
+                    <span class="brand-copy">
+                        <span class="brand-name">VitaliFit</span>
+                        <span class="brand-tagline">בריאות ואנרגיה</span>
+                    </span>
+                </div>
             </a>
-            <nav class="hidden md:flex items-center gap-1 bg-gray-100/80 p-1.5 rounded-full border border-gray-200/60">
-                <a href="index.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">ראשי</a>
-                <a href="workouts.html" class="px-5 py-2 rounded-full text-sm font-semibold bg-[#1E4630] text-white shadow">אימונים</a>
-                <a href="nutrition.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">תזונה</a>
-                <a href="admin.html" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-[#1E4630]">ניהול משתמשים</a>
+
+            <nav class="main-menu" aria-label="Main navigation">
+                <a href="index.html">דף בית</a>
+                <a href="register.html">הרשמה</a>
+                <a href="workouts.html" class="active">קביעת לוז</a>
+                <a href="workouts.html">לוח מעקב</a>
+                <a href="workouts.html">אימונים</a>
+                <a href="#">צרו קשר</a>
+                <a href="#">בלוג</a>
+                <a href="#">שעות פעילות</a>
             </nav>
+
+            <div class="nav-actions">
+                <a href="login.html" class="icon-button" aria-label="התחברות"><i class="fa-regular fa-user"></i></a>
+                <a href="register.html" class="join-button">הצטרף</a>
+            </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 space-y-6 w-full">
-        <div class="soft-card p-6 rounded-2xl bg-white flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold text-[#1E4630]">לוח האימונים שלי</h1>
-                <p class="text-gray-500 text-xs mt-1">בחר אימון ועקוב אחר התרגילים.</p>
-            </div>
+    <main class="workouts-main flex-grow max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 w-full">
+        <div class="hero-banner">
+            <span class="hero-tag">מערכת אימונים מתקדמת</span>
+            <h1 class="hero-title">בחרי אימון, תאריך והבטחי את מקומך</h1>
+            <p class="hero-subtitle">מגבלת 30 משתתפים לאימון. שישי פתוח עד 12:00, בשבת סגור.</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="soft-card rounded-2xl bg-white overflow-hidden p-5 space-y-3">
-                <h3 class="font-bold text-[#1E4630]">אימון כוח עליון</h3>
-                <p class="text-xs text-gray-500">45 דקות • חדר כוח</p>
-                <button onclick="startWorkout()" class="w-full py-2 bg-[#1E4630] text-white rounded-xl text-xs font-bold">התחל אימון</button>
+
+        <div class="calendar-card">
+            <div class="calendar-header">
+                <button id="prev-btn" class="cal-nav-btn">הקודם</button>
+                <h2 id="cal-title" class="cal-title">ספטמבר 2026</h2>
+                <button id="next-btn" class="cal-nav-btn">הבא</button>
             </div>
+
+            <div class="workout-filters" role="group" aria-label="סינון סוג אימון">
+                <button type="button" class="workout-filter active" data-filter="all">כל האימונים</button>
+                <button type="button" class="workout-filter" data-filter="studio">בסטודיו</button>
+                <button type="button" class="workout-filter" data-filter="zoom"><i class="fa-solid fa-video"></i> אימונים בזום</button>
+            </div>
+            
+            <div class="calendar-grid">
+                <div class="day-name">א'</div>
+                <div class="day-name">ב'</div>
+                <div class="day-name">ג'</div>
+                <div class="day-name">ד'</div>
+                <div class="day-name">ה'</div>
+                <div class="day-name">ו'</div>
+                <div class="day-name">ש'</div>
+            </div>
+            <div id="days-grid" class="calendar-grid"></div>
+        </div>
+
+        <div class="sessions-panel" aria-live="polite">
+            <div class="sessions-panel-header">
+                <h3 id="selected-day-heading">שיעורים ב-17 בספטמבר 2026</h3>
+            </div>
+            <div id="selected-day-sessions" class="session-list"></div>
         </div>
     </main>
-    <script src="script.js"></script>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-newsletter">
+                <h3>הרשמה לניוזלטר שלנו</h3>
+                <div class="newsletter-shell">
+                    <button type="button" class="newsletter-btn">שליחה</button>
+                    <input type="email" placeholder="כתובת אימייל" aria-label="כתובת אימייל">
+                </div>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>שירותים</h4>
+                <ul class="footer-list">
+                    <li><a href="workouts.html">תוכניות כושר</a></li>
+                    <li><a href="#">אודותינו</a></li>
+                    <li><a href="#">מרכז העזרה</a></li>
+                    <li><a href="#">צור קשר</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>קהילות</h4>
+                <ul class="footer-list">
+                    <li><a href="#">מתחילים</a></li>
+                    <li><a href="#">מתקדמים</a></li>
+                    <li><a href="#">תזונה נכונה</a></li>
+                    <li><a href="#">תמיכה ומוטיבציה</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.</p>
+            <div class="legal-links">
+                <a href="#">תנאים והתניות</a>
+                <a href="#">פרטיות</a>
+                <a href="#">Accessibility Statement</a>
+                <a href="#">עזרה</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/workouts.js"></script>
+
 </body>
 </html>
