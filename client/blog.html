@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VitaliFit - בלוג</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-shell">
+
+            <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
+                <div class="brand-logo-wrap">
+
+                    <span class="brand-symbol">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </span>
+
+                    <span class="brand-copy">
+                        <span class="brand-name">VitaliFit</span>
+                        <span class="brand-tagline">בריאות ואנרגיה</span>
+                    </span>
+
+                </div>
+            </a>
+
+
+            <nav class="main-menu" aria-label="Main navigation">
+
+                <a href="index.html">דף בית</a>
+
+                <a href="register.html">הרשמה</a>
+
+                <a href="workouts.html">קביעת לוז</a>
+
+                <a href="tracking.html">לוח מעקב</a>
+
+                <a href="exercises.html">אימונים</a>
+
+                <a href="nutrition.html">תזונה</a>
+
+                <a href="contact.html">צרו קשר</a>
+
+                <a href="blog.html" class="active">בלוג</a>
+
+            </nav>
+
+
+            <div class="nav-actions">
+
+                <a href="login.html"
+                   class="icon-button"
+                   aria-label="התחברות">
+
+                    <i class="fa-regular fa-user"></i>
+
+                </a>
+
+                <a href="register.html" class="join-button">
+                    הצטרף
+                </a>
+
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- Main -->
+    <main class="flex-grow max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 w-full">
+
+        <section class="text-center mb-10">
+
+            <h1 class="text-3xl md:text-4xl font-bold text-[#1E4630]">
+                הבלוג של VitaliFit
+            </h1>
+
+            <p class="text-gray-500 mt-3 max-w-2xl mx-auto">
+                טיפים, מידע ורעיונות שיעזרו לך לשמור על שגרת חיים פעילה ובריאה.
+            </p>
+
+        </section>
+
+
+        <!-- Blog cards -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+
+            <!-- Article 1 -->
+            <article class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+
+                <div class="h-40 bg-[#E8F5F1] flex items-center justify-center text-[#1E4630]">
+
+                    <i class="fa-solid fa-dumbbell text-5xl"></i>
+
+                </div>
+
+
+                <div class="p-6">
+
+                    <span class="text-xs font-semibold text-[#1E4630]">
+                        אימונים
+                    </span>
+
+                    <h2 class="text-xl font-bold text-[#1E4630] mt-2 mb-3">
+                        איך לבנות שגרת אימונים?
+                    </h2>
+
+                    <p class="text-gray-500 text-sm leading-6 mb-5">
+                        כמה צעדים פשוטים שיעזרו לך ליצור שגרת אימונים
+                        שניתן להתמיד בה לאורך זמן.
+                    </p>
+
+                    <button
+                        type="button"
+                        onclick="showCustomMessageBox('המאמר המלא יהיה זמין בקרוב.')"
+                        class="text-[#1E4630] font-bold text-sm">
+
+                        קראי עוד ←
+
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- Article 2 -->
+            <article class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+
+                <div class="h-40 bg-[#E8F5F1] flex items-center justify-center text-[#1E4630]">
+
+                    <i class="fa-solid fa-utensils text-5xl"></i>
+
+                </div>
+
+
+                <div class="p-6">
+
+                    <span class="text-xs font-semibold text-[#1E4630]">
+                        תזונה
+                    </span>
+
+                    <h2 class="text-xl font-bold text-[#1E4630] mt-2 mb-3">
+                        איך לשמור על תזונה מאוזנת?
+                    </h2>
+
+                    <p class="text-gray-500 text-sm leading-6 mb-5">
+                        רעיונות שיעזרו לך לארגן את הארוחות ולנהל
+                        את המעקב התזונתי בצורה פשוטה.
+                    </p>
+
+                    <button
+                        type="button"
+                        onclick="showCustomMessageBox('המאמר המלא יהיה זמין בקרוב.')"
+                        class="text-[#1E4630] font-bold text-sm">
+
+                        קראי עוד ←
+
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- Article 3 -->
+            <article class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+
+                <div class="h-40 bg-[#E8F5F1] flex items-center justify-center text-[#1E4630]">
+
+                    <i class="fa-solid fa-chart-line text-5xl"></i>
+
+                </div>
+
+
+                <div class="p-6">
+
+                    <span class="text-xs font-semibold text-[#1E4630]">
+                        מעקב
+                    </span>
+
+                    <h2 class="text-xl font-bold text-[#1E4630] mt-2 mb-3">
+                        למה כדאי לעקוב אחר ההתקדמות?
+                    </h2>
+
+                    <p class="text-gray-500 text-sm leading-6 mb-5">
+                        מעקב אחר הפעילות מאפשר לראות את ההתקדמות
+                        ולשמור על מוטיבציה לאורך הדרך.
+                    </p>
+
+                    <button
+                        type="button"
+                        onclick="showCustomMessageBox('המאמר המלא יהיה זמין בקרוב.')"
+                        class="text-[#1E4630] font-bold text-sm">
+
+                        קראי עוד ←
+
+                    </button>
+
+                </div>
+
+            </article>
+
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="site-footer">
+
+        <div class="footer-inner">
+
+            <div class="footer-newsletter">
+
+                <h3>הרשמה לניוזלטר שלנו</h3>
+
+                <div class="newsletter-shell">
+
+                    <button type="button" class="newsletter-btn">
+                        שליחה
+                    </button>
+
+                    <input
+                        type="email"
+                        placeholder="כתובת אימייל"
+                        aria-label="כתובת אימייל">
+
+                </div>
+
+
+                <div class="social-links">
+
+                    <a href="#" aria-label="Facebook" class="social-link">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+
+                    <a href="#" aria-label="Instagram" class="social-link">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+
+                    <a href="#" aria-label="WhatsApp" class="social-link">
+                      <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-column">
+                <h4>שירותים</h4>
+                <ul class="footer-list">
+                    <li><a href="exercises.html">תוכניות כושר</a></li>
+                    <li><a href="blog.html">בלוג</a></li>
+                    <li><a href="contact.html">מרכז העזרה</a></li>
+                    <li><a href="contact.html">צור קשר</a></li>
+                </ul>
+            </div>
+
+
+            <div class="footer-column">
+                <h4>קהילות</h4>
+                <ul class="footer-list">
+                    <li><a href="exercises.html">מתחילים</a></li>
+                    <li><a href="exercises.html">מתקדמים</a></li>
+                    <li><a href="nutrition.html">תזונה נכונה</a></li>
+                    <li><a href="contact.html">תמיכה ומוטיבציה</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <script src="js/script.js"></script>
+
+</body>
+</html>

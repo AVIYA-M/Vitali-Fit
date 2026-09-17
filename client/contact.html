@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VitaliFit - צרו קשר</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-shell">
+
+            <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
+                <div class="brand-logo-wrap">
+
+                    <span class="brand-symbol">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </span>
+
+                    <span class="brand-copy">
+                        <span class="brand-name">VitaliFit</span>
+                        <span class="brand-tagline">בריאות ואנרגיה</span>
+                    </span>
+
+                </div>
+            </a>
+
+
+            <nav class="main-menu" aria-label="Main navigation">
+                <a href="index.html">דף בית</a>
+                <a href="register.html">הרשמה</a>
+                <a href="workouts.html">קביעת לוז</a>
+                <a href="tracking.html">לוח מעקב</a>
+                <a href="exercises.html">אימונים</a>
+                <a href="nutrition.html">תזונה</a>
+                <a href="contact.html" class="active">צרו קשר</a>
+                <a href="blog.html">בלוג</a>
+            </nav>
+
+
+            <div class="nav-actions">
+
+                <a href="login.html"
+                   class="icon-button"
+                   aria-label="התחברות">
+                    <i class="fa-regular fa-user"></i>
+                </a>
+
+                <a href="register.html" class="join-button">
+                    הצטרף
+                </a>
+
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- Main -->
+    <main class="flex-grow max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 w-full">
+
+        <section class="text-center mb-10">
+
+            <h1 class="text-3xl md:text-4xl font-bold text-[#1E4630]">
+                צרו קשר
+            </h1>
+
+            <p class="text-gray-500 mt-3 max-w-2xl mx-auto">
+                יש לך שאלה, בקשה או הצעה? נשמח לשמוע ממך.
+            </p>
+
+        </section>
+
+
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+
+            <!-- Contact form -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+
+                <h2 class="text-xl font-bold text-[#1E4630] mb-6">
+                    שליחת הודעה
+                </h2>
+
+
+                <form class="space-y-5">
+
+                    <div>
+
+                        <label for="contact-name"
+                               class="block text-sm font-semibold text-gray-700 mb-2">
+                            שם מלא
+                        </label>
+
+                        <input
+                            type="text"
+                            id="contact-name"
+                            name="name"
+                            placeholder="הכניסי את שמך"
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#1E4630]"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="contact-email"
+                               class="block text-sm font-semibold text-gray-700 mb-2">
+                            כתובת אימייל
+                        </label>
+
+                        <input
+                            type="email"
+                            id="contact-email"
+                            name="email"
+                            placeholder="name@example.com"
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#1E4630]"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="contact-subject"
+                               class="block text-sm font-semibold text-gray-700 mb-2">
+                            נושא
+                        </label>
+
+                        <input
+                            type="text"
+                            id="contact-subject"
+                            name="subject"
+                            placeholder="נושא הפנייה"
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#1E4630]"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="contact-message"
+                               class="block text-sm font-semibold text-gray-700 mb-2">
+                            הודעה
+                        </label>
+
+                        <textarea
+                            id="contact-message"
+                            name="message"
+                            rows="5"
+                            placeholder="כתבי כאן את ההודעה שלך..."
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#1E4630] resize-none"
+                        ></textarea>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        onclick="showCustomMessageBox('ההודעה נשלחה בהצלחה! נחזור אלייך בהקדם.')"
+                        class="w-full bg-[#1E4630] text-white py-3 rounded-xl text-sm font-bold hover:opacity-90 transition">
+                        שליחת הודעה
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- Contact information -->
+            <div class="space-y-6">
+
+
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+
+                    <h2 class="text-xl font-bold text-[#1E4630] mb-6">
+                        פרטי קשר
+                    </h2>
+
+
+                    <div class="space-y-5">
+
+                        <div class="flex items-center gap-4">
+
+                            <div class="w-11 h-11 rounded-xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630]">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+
+                            <div>
+                                <p class="text-sm text-gray-500">
+                                    אימייל
+                                </p>
+
+                                <p class="font-semibold">
+                                    info@vitalifit.co.il
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="flex items-center gap-4">
+
+                            <div class="w-11 h-11 rounded-xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630]">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+
+                            <div>
+                                <p class="text-sm text-gray-500">
+                                    טלפון
+                                </p>
+
+                                <p class="font-semibold">
+                                    03-1234567
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="flex items-center gap-4">
+
+                            <div class="w-11 h-11 rounded-xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630]">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+
+                            <div>
+                                <p class="text-sm text-gray-500">
+                                    כתובת
+                                </p>
+
+                                <p class="font-semibold">
+                                    מרכז VitaliFit
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+
+                    <h2 class="text-xl font-bold text-[#1E4630] mb-5">
+                        שעות פעילות
+                    </h2>
+
+
+                    <div class="space-y-3 text-sm">
+
+                        <div class="flex justify-between">
+                            <span>ראשון - חמישי</span>
+                            <span class="font-semibold">07:00 - 21:00</span>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <span>שישי</span>
+                            <span class="font-semibold">07:00 - 12:00</span>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <span>שבת</span>
+                            <span class="font-semibold text-gray-400">סגור</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="site-footer">
+
+        <div class="footer-inner">
+
+            <div class="footer-newsletter">
+
+                <h3>הרשמה לניוזלטר שלנו</h3>
+
+                <div class="newsletter-shell">
+
+                    <button type="button" class="newsletter-btn">
+                        שליחה
+                    </button>
+
+                    <input
+                        type="email"
+                        placeholder="כתובת אימייל"
+                        aria-label="כתובת אימייל">
+
+                </div>
+
+
+                <div class="social-links">
+
+                    <a href="#" aria-label="Facebook" class="social-link">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+
+                    <a href="#" aria-label="Instagram" class="social-link">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+
+                 <a href="#" aria-label="WhatsApp" class="social-link">
+                     <i class="fa-brands fa-whatsapp"></i>
+                   </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-column">
+                <h4>שירותים</h4>
+                <ul class="footer-list">
+                    <li><a href="exercises.html">תוכניות כושר</a></li>
+                    <li><a href="blog.html">בלוג</a></li>
+                    <li><a href="contact.html">מרכז העזרה</a></li>
+                    <li><a href="contact.html">צור קשר</a></li>
+                </ul>
+            </div>
+
+
+            <div class="footer-column">
+                <h4>קהילות</h4>
+                <ul class="footer-list">
+                    <li><a href="exercises.html">מתחילים</a></li>
+                    <li><a href="exercises.html">מתקדמים</a></li>
+                    <li><a href="nutrition.html">תזונה נכונה</a></li>
+                    <li><a href="contact.html">תמיכה ומוטיבציה</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <script src="js/script.js"></script>
+
+</body>
+</html>

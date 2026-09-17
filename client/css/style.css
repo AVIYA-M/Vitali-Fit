@@ -2,7 +2,9 @@ html { scroll-behavior: smooth; }
 body {
     margin: 0;
     font-family: 'Heebo', 'Segoe UI', sans-serif;
-    background: #F8F9FA;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+    url("../image/חדר כושר.png");
+    background-size: cover;
     color: #111827;
     direction: rtl;
 }

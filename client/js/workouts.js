@@ -1,7 +1,7 @@
 // client/js/workouts.js
 document.addEventListener("DOMContentLoaded", () => {
-    let currentDate = new Date(2026, 8, 17); // מתחיל בספטמבר 2026
-    let selectedDate = new Date(2026, 8, 17);
+    let currentDate = new Date();
+    let selectedDate = new Date();
     let activeFilter = "all";
 
     const sessionsByDate = {
