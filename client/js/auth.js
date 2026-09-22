@@ -1,28 +1,44 @@
-function handleAuth(event) {
+const API_URL = 'http://localhost:5000/api';
+
+async function handleAuth(event) {
     event.preventDefault();
 
     const form = event.currentTarget;
-    const email = form.querySelector('input[type="email"]')?.value.trim() || 'משתמש';
+    const email = form.querySelector('input[type="email"]').value.trim();
+    const password = form.querySelector('input[type="password"]').value;
 
-    showCustomMessageBox(`התחברת בהצלחה למערכת VitaliFit!\nברוך הבא, ${email}`);
+    try {
+        const response = await fetch(`${API_URL}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
 
-    const params = new URLSearchParams(window.location.search);
-    const redirectPage = params.get('redirect') || 'index.html';
+        const data = await response.json();
 
-    setTimeout(() => {
-        window.location.href = redirectPage;
-    }, 600);
-}
+        // במקרה של שגיאה בהתחברות
+        if (!response.ok) {
+            showModalMessage(`שגיאה בהתחברות: ${data.message || 'פרטים שגויים'}`);
+            return;
+        }
 
-function handleRegister(event) {
-    event.preventDefault();
+        // שמירת פרטי המשתמש בדפדפן
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
 
-    const form = event.currentTarget;
-    const name = form.querySelector('input[type="text"]')?.value.trim() || 'משתמש חדש';
+        // הודעת הצלחה מדויקת
+        showModalMessage(`התחברת בהצלחה למערכת!\nברוך הבא, ${data.user.fullName}`);
 
-    showCustomMessageBox(`ההרשמה בוצעה בהצלחה!\nברוכים הבאים, ${name}`);
+        const params = new URLSearchParams(window.location.search);
+        const redirectPage = params.get('redirect') || 'index.html';
 
-    setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 600);
+        // מעבר לדף הבית
+        setTimeout(() => {
+            window.location.href = redirectPage;
+        }, 1000);
+
+    } catch (error) {
+        console.error('Login error:', error);
+        showModalMessage('שגיאת תקשורת עם השרת. ודאי שהשרת פועל.');
+    }
 }

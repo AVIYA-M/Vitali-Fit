@@ -14,17 +14,19 @@ app.use(cors());
 const authRoutes = require('./routes/authRoutes.js');
 const workoutRoutes = require('./routes/workoutRoutes.js');
 const nutritionRoutes = require('./routes/nutritionRoutes.js');
+const adminRoutes = require('./routes/userRoutes.js'); // הוספת ראוט הניהול והמשתמשים
 
 app.use('/api/auth', authRoutes);
 app.use('/api/workouts', workoutRoutes);
 app.use('/api/nutrition', nutritionRoutes);
+app.use('/api/admin', adminRoutes); // חיבור הניתוב החדש תחת /api/admin
 
 app.get('/api/status', (req, res) => {
   res.json({ message: 'VitaliFit Server is up and running!' });
 });
 
 // 3. Global Error Handler - חייב להיות תמיד אחרי כל הראוטים!
-const errorHandler = require('./middlewares/error.middleware'); // ודא שהנתיב מדויק אצלך
+const errorHandler = require('./middlewares/error.middleware');
 app.use(errorHandler);
 
 // 4. חיבור למסד הנתונים והפעלת השרת

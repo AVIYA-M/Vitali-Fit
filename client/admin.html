@@ -3,26 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VitaliFit - ניהול משתמשים</title>
+    <title>VitaliFit - ניהול מערכת ומשתמשים</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/global.css">
 </head>
 <body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen justify-between">
+    
     <header class="site-header">
         <div class="header-shell">
             <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
                 <div class="brand-logo-wrap">
-
                    <img src="image/לוגו.png" alt="VitaliFit" class="brand-image">
-
                    <span class="brand-copy">
                      <span class="brand-name">VitaliFit</span>
                      <span class="brand-tagline">בריאות ואנרגיה</span>
                    </span>
-
-              </div>
+                </div>
             </a>
 
             <nav class="main-menu" aria-label="Main navigation">
@@ -36,7 +34,6 @@
                 <a href="blog.html">בלוג</a>
             </nav>
 
-
             <div class="nav-actions">
                 <a href="login.html" class="icon-button" aria-label="התחברות"><i class="fa-regular fa-user"></i></a>
                 <a href="register.html" class="join-button">הצטרף</a>
@@ -45,16 +42,73 @@
     </header>
 
     <main class="flex-grow max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 space-y-6 w-full">
-        <div class="soft-card p-6 rounded-2xl flex justify-between items-center bg-white">
+        
+        <!-- כותרת ראשית וניהול פעולות מנהל -->
+        <div class="soft-card p-6 rounded-2xl flex flex-col md:flex-row justify-between items-center bg-white gap-4">
             <div>
-                <h1 class="text-2xl font-bold text-[#1E4630]">ניהול משתמשי הפלטפורמה</h1>
-                <p class="text-gray-500 text-xs mt-1">צפה, חפש וניהול הרשאות משתמשים.</p>
+                <h1 class="text-2xl font-bold text-[#1E4630]">פאנל ניהול מערכת</h1>
+                <p class="text-gray-500 text-xs mt-1">ניהול משתמשי הפלטפורמה והוספת אימונים חדשים ללוח.</p>
             </div>
-            <button onclick="openAddUserModal()" class="px-4 py-2 bg-[#1E4630] text-white rounded-xl text-xs font-bold">
-                הוסף משתמש
-            </button>
+            <div class="flex items-center gap-3">
+                <button onclick="openAddWorkoutModal()" class="px-4 py-2.5 bg-[#1E4630] text-white rounded-xl text-xs font-bold hover:bg-[#163524] transition-all shadow-md flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> הוסף אימון חדש
+                </button>
+            </div>
         </div>
+
+        <!-- טופס מודאלי להוספת אימון (מוסתר כברירת מחדל) -->
+        <div id="add-workout-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity">
+            <div class="bg-white rounded-3xl p-6 shadow-2xl max-w-md w-full mx-4 text-right border border-gray-100">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-[#1E4630] text-lg">הוספת שיעור/אימון ללוח</h3>
+                    <button onclick="closeAddWorkoutModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                <form id="create-workout-form" onsubmit="handleCreateWorkout(event)" class="space-y-3.5 text-xs">
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-1">כותרת האימון</label>
+                        <input type="text" id="w-title" required placeholder="למשל: אימון כוח מתקדם" class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-1">תיאור קצר</label>
+                        <input type="text" id="w-desc" required placeholder="למשל: אימון ממוקד לפלג גוף עליון" class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block font-semibold text-gray-700 mb-1">תאריך</label>
+                            <input type="date" id="w-date" required class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-700 mb-1">שעה</label>
+                            <input type="text" id="w-time" required placeholder="09:00" class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block font-semibold text-gray-700 mb-1">שם המדריך</label>
+                            <input type="text" id="w-instructor" required placeholder="ישראל ישראלי" class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-700 mb-1">מקסימום משתתפים</label>
+                            <input type="number" id="w-max" required value="30" class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-1">סוג אימון</label>
+                        <select id="w-type" class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+                            <option value="studio">בסטודיו</option>
+                            <option value="zoom">זום (מקוון)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full mt-2 py-3 bg-[#1E4630] text-white rounded-xl font-bold hover:bg-[#163524] transition-all shadow-md">שמור אימון במערכת</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- טבלת ניהול משתמשים -->
         <div class="soft-card rounded-2xl bg-white overflow-hidden">
+            <div class="p-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="font-bold text-[#1E4630] text-sm">רשימת משתמשי המערכת הרשומים</h3>
+            </div>
             <table class="w-full text-right text-xs">
                 <thead class="bg-gray-100 text-gray-700 uppercase">
                     <tr>
@@ -62,11 +116,11 @@
                        <th class="py-3 px-6">אימייל</th>
                        <th class="py-3 px-6">תפקיד</th>
                        <th class="py-3 px-6">סטטוס</th>
-                       <th class="py-3 px-6">פעולות</th>
+                       <th class="py-3 px-6 text-center">פעולות</th>
                     </tr>
                 </thead>
                 <tbody id="users-table-body" class="divide-y divide-gray-100">
-                    
+                    <!-- הנתונים ייטענו דינמית מהשרת -->
                 </tbody>
             </table>
         </div>
@@ -83,9 +137,7 @@
                 <div class="social-links">
                     <a href="#" aria-label="Facebook" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
                     <a href="#" aria-label="Instagram" class="social-link"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" aria-label="WhatsApp" class="social-link">
-                      <i class="fa-brands fa-whatsapp"></i>
-                      </a>
+                    <a href="#" aria-label="WhatsApp" class="social-link"><i class="fa-brands fa-whatsapp"></i></a>
                 </div>
             </div>
 
@@ -114,8 +166,8 @@
             <p>© 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.</p>
         </div>
     </footer>
+
     <script src="js/script.js"></script>
     <script src="js/admin.js"></script>
-
 </body>
 </html>
