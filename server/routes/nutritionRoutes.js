@@ -1,12 +1,21 @@
 const express = require('express');
+
 const router = express.Router();
+
 const nutritionController = require('../controllers/nutrition.controller');
-const upload = require('../middlewares/upload.middleware'); // ייבוא ה-Multer שהגדרנו קודם
+const upload = require('../middlewares/upload.middleware');
 
-// POST /api/nutrition - הוספת ארוחה חדשה כולל העלאת תמונה שדה בשם 'image'
-router.post('/', upload.single('image'), nutritionController.addMeal);
+const { verifyToken } = require('../middlewares/auth.middleware.js');
 
-// GET /api/nutrition/:userId - שליפת היסטוריית הארוחות לפי משתמש
-router.get('/:userId', nutritionController.getUserMeals);
+// POST /api/nutrition
+// הוספת ארוחה חדשה - רק משתמש מחובר
+router.post(
+  '/analyze',
+  verifyToken,
+  upload.single('image'),
+  nutritionController.analyzeMeal
+);// GET /api/nutrition
+// שליפת הארוחות של המשתמש המחובר
+router.get('/',verifyToken,nutritionController.getUserMeals);
 
 module.exports = router;

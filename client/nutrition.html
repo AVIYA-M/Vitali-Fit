@@ -1,40 +1,45 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VitaliFit - תזונה</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/global.css">
 </head>
+
 <body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen justify-between">
     <header class="site-header">
         <div class="header-shell">
             <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
                 <div class="brand-logo-wrap">
 
-                   <img src="image/לוגו.png" alt="VitaliFit" class="brand-image">
+                    <img src="image/לוגו.png" alt="VitaliFit" class="brand-image">
 
-                   <span class="brand-copy">
-                     <span class="brand-name">VitaliFit</span>
-                     <span class="brand-tagline">בריאות ואנרגיה</span>
-                   </span>
+                    <span class="brand-copy">
+                        <span class="brand-name">VitaliFit</span>
+                        <span class="brand-tagline">בריאות ואנרגיה</span>
+                    </span>
 
-              </div>
+                </div>
             </a>
 
             <nav class="main-menu" aria-label="Main navigation">
-                  <a href="index.html">דף בית</a>
-                  <a href="register.html">הרשמה</a>
-                  <a href="workouts.html">קביעת לוז</a>
-                  <a href="tracking.html">לוח מעקב</a>
-                  <a href="exercises.html">אימונים</a>
-                  <a href="nutrition.html" class="active">תזונה</a>
-                  <a href="contact.html">צרו קשר</a>
-                  <a href="blog.html">בלוג</a>
-                  <a href="admin.html" id="admin-nav-link" class="nav-link text-white font-medium hover:text-green-300 transition" style="display: none;">פאנל ניהול</a>
+                <a href="index.html">דף בית</a>
+                <a href="register.html">הרשמה</a>
+                <a href="workouts.html">קביעת לוז</a>
+                <a href="tracking.html">לוח מעקב</a>
+                <a href="exercises.html">אימונים</a>
+                <a href="nutrition.html" class="active">תזונה</a>
+                <a href="contact.html">צרו קשר</a>
+                <a href="blog.html">בלוג</a>
+                <a href="admin.html" id="admin-nav-link"
+                    class="nav-link text-white font-medium hover:text-green-300 transition" style="display: none;">פאנל
+                    ניהול</a>
             </nav>
 
             <div class="nav-actions">
@@ -44,28 +49,189 @@
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 space-y-6 w-full">
-        <div class="soft-card p-6 rounded-2xl bg-white flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold text-[#1E4630]">יומן תזונה וקלוריות</h1>
-                <p class="text-gray-500 text-xs mt-1">עקוב אחר צריכת הקלוריות והחלבונים שלך בעזרת סורק ה-AI.</p>
+    <main class="max-w-6xl mx-auto px-4 py-10">
+
+        <!-- כותרת -->
+        <section class="bg-white rounded-3xl p-6 shadow-sm mb-6 text-center">
+
+            <h1 class="text-3xl font-extrabold text-[#1E4630]">
+                יומן תזונה
+            </h1>
+             <h2 class="text-xl font-bold text-[#1E4630] mb-4 text-center">
+              סיכום יומי
+            </h2>
+
+            <p class="text-gray-500 mt-2">
+                עקוב אחרי הארוחות שלך והערכים התזונתיים
+            </p>
+           
+
+        </section>
+
+
+        <!-- סיכום יומי -->
+        <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+
+            <!-- קלוריות -->
+            <div class="soft-card p-4 rounded-2xl bg-white text-center">
+                <p class="text-xs text-gray-500">
+                    קלוריות
+                </p>
+
+                <p id="summary-calories" class="text-xl font-bold text-[#1E4630] mt-1">
+                    0
+                </p>
+
+                <p class="text-xs text-gray-400">
+                    Kcal
+                </p>
             </div>
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 soft-card p-6 rounded-2xl bg-white space-y-4">
-                <h3 class="font-bold text-[#1E4630]">הארוחות להיום</h3>
-                <div id="meals-list" class="space-y-3">
-                    <div class="flex justify-between p-3 bg-gray-50 rounded-xl text-xs font-semibold"><span>שיבולת שועל ובננה</span><span>420 Kcal (18g חלבון)</span></div>
-                    <div class="flex justify-between p-3 bg-gray-50 rounded-xl text-xs font-semibold"><span>חזה עוף ואורז</span><span>650 Kcal (52g חלבון)</span></div>
+
+
+            <!-- חלבון -->
+            <div class="soft-card p-4 rounded-2xl bg-white text-center">
+                <p class="text-xs text-gray-500">
+                    חלבון
+                </p>
+
+                <p id="summary-protein" class="text-xl font-bold text-[#1E4630] mt-1">
+                    0g
+                </p>
+
+                <p class="text-xs text-gray-400">
+                    גרם
+                </p>
+            </div>
+
+
+            <!-- פחמימות -->
+            <div class="soft-card p-4 rounded-2xl bg-white text-center">
+                <p class="text-xs text-gray-500">
+                    פחמימות
+                </p>
+
+                <p id="summary-carbs" class="text-xl font-bold text-[#1E4630] mt-1">
+                    0g
+                </p>
+
+                <p class="text-xs text-gray-400">
+                    גרם
+                </p>
+            </div>
+
+
+            <!-- שומנים -->
+            <div class="soft-card p-4 rounded-2xl bg-white text-center">
+                <p class="text-xs text-gray-500">
+                    שומנים
+                </p>
+
+                <p id="summary-fats" class="text-xl font-bold text-[#1E4630] mt-1">
+                    0g
+                </p>
+
+                <p class="text-xs text-gray-400">
+                    גרם
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- אזור מרכזי -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+
+            <!-- הוספת ארוחה -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm">
+
+                <h2 class="text-xl font-bold text-[#1E4630] mb-2">
+                    הוספת ארוחה
+                </h2>
+
+                <p class="text-sm text-gray-500 mb-6">
+                    הוסף את הארוחה שלך והתמונה שלה,
+                    והמערכת תחשב את הערכים התזונתיים.
+                </p>
+
+
+                <form id="meal-form" class="space-y-4">
+
+                    <!-- שם הארוחה -->
+                    <div>
+                        <label for="meal-name" class="block text-sm font-semibold text-gray-700 mb-2">
+                            שם הארוחה
+                        </label>
+
+                        <input type="text" id="meal-name" placeholder="לדוגמה: חזה עוף עם אורז" required
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-[#1E4630]">
+                    </div>
+
+
+                    <!-- תמונה -->
+                    <div>
+                        <label for="meal-image" class="block text-sm font-semibold text-gray-700 mb-2">
+                            תמונה של הארוחה
+                        </label>
+
+                        <input type="file" id="meal-image" accept="image/*" required
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                    </div>
+
+
+                    <!-- תאריך -->
+                    <div>
+                        <label for="meal-date" class="block text-sm font-semibold text-gray-700 mb-2">
+                            תאריך
+                        </label>
+
+                        <input type="date" id="meal-date" required
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3">
+                    </div>
+
+
+                    <!-- כפתור -->
+                    <button type="submit"
+                        class="w-full bg-[#1E4630] text-white py-3 rounded-xl font-semibold hover:opacity-90 transition">
+
+                        נתח ארוחה
+
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- רשימת ארוחות -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm">
+
+                <div class="flex justify-between items-center mb-5">
+
+                    <h2 class="text-xl font-bold text-[#1E4630]">
+                        הארוחות שלי
+                    </h2>
+
+                    <span id="total-calories" class="text-sm font-semibold text-[#1E4630]">
+                        0 Kcal
+                    </span>
+
                 </div>
+
+
+                <!-- כאן ה-JS יכניס את הארוחות -->
+                <div id="meals-list" class="space-y-3">
+
+                    <p class="text-sm text-gray-400 text-center py-6">
+                        עדיין לא נוספו ארוחות.
+                    </p>
+
+                </div>
+
             </div>
-            <div class="soft-card p-6 rounded-2xl bg-gradient-to-b from-white to-[#E8F5F1]/30 border-2 border-[#A3D9C9]/50 space-y-4">
-                <h3 class="font-bold text-[#1E4630] flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> סורק ארוחות חכם (AI)</h3>
-                <p class="text-xs text-gray-600">צלם או תאר ארוחה וה-AI יחשב ערכים תזונתיים מיידית.</p>
-                <input type="text" id="ai-input" placeholder="תאר ארוחה..." class="w-full bg-white border border-gray-300 rounded-xl py-2.5 px-3 text-xs">
-                <button onclick="scanMealAI()" class="w-full py-2.5 bg-[#1E4630] text-white rounded-xl text-xs font-bold">חשב ערכים</button>
-            </div>
-        </div>
+
+        </section>
+
     </main>
 
     <footer class="site-footer">
@@ -113,4 +279,5 @@
     <script src="js/script.js"></script>
     <script src="js/nutrition.js"></script>
 </body>
+
 </html>

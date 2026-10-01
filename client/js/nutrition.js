@@ -1,245 +1,479 @@
-let totalConsumedCalories = 780;
-let totalProtein = 110;
-let totalCarbs = 190;
-let totalFats = 48;
+const API_URL_NUTRITION = 'http://localhost:5000/api/nutrition';
+const API_URL_NUTRITION_ANALYZE = `${API_URL_NUTRITION}/analyze`;
+let todayMeals = [];
 
-function scanMealAI() {
-    const input = document.getElementById('ai-input');
-    const value = input ? input.value.trim() : '';
-    const container = document.getElementById('meals-list');
+function getLocalDate() {
+    const today = new Date();
 
-    if (!value) {
-        showCustomMessageBox('אנא כתוב תיאור של הארוחה כדי לקבל חישוב תזונתי.');
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    loadMeals();
+
+    const mealForm = document.getElementById('meal-form');
+
+    if (mealForm) {
+        mealForm.addEventListener('submit', addMeal);
+    }
+
+    const dateInput = document.getElementById('meal-date');
+
+    if (dateInput) {
+        dateInput.value = getLocalDate();
+    }
+});
+
+
+// שליפת הארוחות של המשתמש המחובר
+async function loadMeals() {
+
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        window.location.href = 'login.html';
         return;
     }
 
-    const predicted = {
-        name: value.length > 24 ? `${value.slice(0, 24)}...` : value,
-        calories: 420,
-        protein: 24
-    };
+    try {
 
-    if (container) {
-        const item = document.createElement('div');
+        const response = await fetch(API_URL_NUTRITION, {
+            method: 'GET',
+            cache: 'no-store',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
-        item.className =
-            'flex justify-between p-3 bg-gray-50 rounded-xl text-xs font-semibold';
+        const data = await response.json();
 
-        item.innerHTML = `
-            <span>${predicted.name}</span>
-            <span>${predicted.calories} Kcal (${predicted.protein}g חלבון)</span>
-        `;
+        if (!response.ok) {
+            throw new Error(
+                data.message || 'שגיאה בשליפת הארוחות'
+            );
+        }
 
-        container.appendChild(item);
-    }
+        todayMeals = getTodayMeals(data);
 
-    showCustomMessageBox(
-        `הארוחה נותחה: ${predicted.name}
-קלוריות: ${predicted.calories} kcal
-חלבון: ${predicted.protein}g`
-    );
+        displayMeals(todayMeals);
+        
 
-    if (input) {
-        input.value = '';
+    } catch (error) {
+
+        console.error(
+            'שגיאה בשליפת הארוחות:',
+            error
+        );
+
+        showCustomMessageBox(error.message);
     }
 }
 
-// ניהול תזונה ותאריכים
-// function changeNutritionDate(direction) {
-//     currentNutritionDateOffset += direction;
-//     const label = document.getElementById('nutrition-date-label');
-//     if (!label) return;
+function getTodayMeals(meals) {
 
-//     if (currentNutritionDateOffset === 0) label.innerText = "היום, 15 בספטמבר";
-//     else if (currentNutritionDateOffset === 1) label.innerText = "מחר, 16 בספטמבר";
-//     else if (currentNutritionDateOffset === -1) label.innerText = "אתמול, 14 בספטמבר";
-//     else label.innerText = `15 בספטמבר (${currentNutritionDateOffset > 0 ? '+' : ''}${currentNutritionDateOffset} ימים)`;
-// }
+    const today = new Date();
 
-// // מעבר בין טאבים של AI (טקסט מול תמונה)
-// function switchAiTab(tab) {
-//     const textBtn = document.getElementById('aitab-text');
-//     const photoBtn = document.getElementById('aitab-photo');
-//     const textMode = document.getElementById('aimode-text');
-//     const photoMode = document.getElementById('aimode-photo');
+    return meals.filter(meal => {
 
-//     if (!textBtn || !photoBtn || !textMode || !photoMode) return;
-
-//     if (tab === 'text') {
-//         textBtn.className = "flex-1 py-1.5 rounded-lg font-semibold text-xs bg-[#1E4630] text-white transition-all";
-//         photoBtn.className = "flex-1 py-1.5 rounded-lg font-semibold text-xs text-gray-500 hover:text-gray-900 transition-all";
-//         textMode.classList.remove('hidden');
-//         photoMode.classList.add('hidden');
-//     } else {
-//         photoBtn.className = "flex-1 py-1.5 rounded-lg font-semibold text-xs bg-[#1E4630] text-white transition-all";
-//         textBtn.className = "flex-1 py-1.5 rounded-lg font-semibold text-xs text-gray-500 hover:text-gray-900 transition-all";
-//         photoMode.classList.remove('hidden');
-//         textMode.classList.add('hidden');
-//     }
-// }
-
-// // חיבור ל-Gemini AI לניתוח ארוחות
-// async function calculateFoodAI(mode) {
-//     let promptText = "";
-//     let base64Image = null;
-
-//     if (mode === 'text') {
-//         const promptInput = document.getElementById('ai-food-prompt');
-//         promptText = promptInput ? promptInput.value.trim() : "";
-//         if (!promptText) {
-//             showCustomMessageBox("אנא הקלד תיאור של הארוחה תחילה.");
-//             return;
-//         }
-//     } else {
-//         const fileInput = document.getElementById('ai-food-file');
-//         if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-//             showCustomMessageBox("אנא בחר צילום ארוחה מהמכשיר.");
-//             return;
-//         }
-//         const file = fileInput.files[0];
-//         base64Image = await toBase64(file);
-//         promptText = "Analyze this meal image. Estimate total calories (kcal), protein (g), carbohydrates (g), and fats (g), and provide the name of the meal.";
-//     }
-
-//     showCustomMessageBox("המערכת מנתחת את הארוחה באמצעות Gemini AI...");
-
-//     try {
-//         const systemInstruction = "You are a professional clinical nutritionist and fitness expert. Analyze the user's meal (text or image) and return a strict JSON response with properties: mealName (string), calories (number), protein (number), carbs (number), fats (number). No markdown formatting outside JSON.";
+        const mealDate = new Date(meal.date);
         
-//         let contents = [];
-//         if (base64Image) {
-//             contents.push({
-//                 role: "user",
-//                 parts: [
-//                     { text: promptText },
-//                     { inlineData: { mimeType: "image/jpeg", data: base64Image } }
-//                 ]
-//             });
-//         } else {
-//             contents.push({
-//                 role: "user",
-//                 parts: [{ text: `Estimate nutritional values for this meal: ${promptText}` }]
-//             });
-//         }
 
-//         const payload = {
-//             contents: contents,
-//             systemInstruction: { parts: [{ text: systemInstruction }] },
-//             generationConfig: {
-//                 responseMimeType: "application/json",
-//                 responseSchema: {
-//                     type: "OBJECT",
-//                     properties: {
-//                         mealName: { type: "STRING" },
-//                         calories: { type: "NUMBER" },
-//                         protein: { type: "NUMBER" },
-//                         carbs: { type: "NUMBER" },
-//                         fats: { type: "NUMBER" }
-//                     },
-//                     propertyOrdering: ["mealName", "calories", "protein", "carbs", "fats"]
-//                 }
-//             }
-//         };
+        return (
+            mealDate.getDate() === today.getDate() &&
+            mealDate.getMonth() === today.getMonth() &&
+            mealDate.getFullYear() === today.getFullYear()
+        );
+    });
+}
 
-//         const apiKey = ""; // הכנס את מפתח ה-API שלך כאן במידת הצורך
-//         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-        
-//         const response = await fetch(apiUrl, {
-//             method: 'POST',
-//             headers: { 'Content-Type': 'application/json' },
-//             body: JSON.stringify(payload)
-//         });
 
-//         const result = await response.json();
-//         const candidate = result.candidates?.[0];
-//         if (candidate && candidate.content?.parts?.[0]?.text) {
-//             const data = JSON.parse(candidate.content.parts[0].text);
-//             addCalculatedFoodToLog(data.mealName, data.calories, data.protein, data.carbs, data.fats);
-//         } else {
-//             throw new Error("Invalid AI response");
-//         }
-//     } catch (err) {
-//         const fallbackName = mode === 'text' ? promptText : "ארוחה מנותחת AI";
-//         addCalculatedFoodToLog(fallbackName, 450, 35, 42, 16);
-//     }
-// }
+// הוספת ארוחה
+async function addMeal(event) {
 
-// function toBase64(file) {
-//     return new Promise((resolve, reject) => {
-//         const reader = new FileReader();
-//         reader.readAsDataURL(file);
-//         reader.onload = () => resolve(reader.result.split(',')[1]);
-//         reader.onerror = error => reject(error);
-//     });
-// }
+    event.preventDefault();
 
-// function addCalculatedFoodToLog(name, cals, protein, carbs, fats) {
-//     const container = document.getElementById('meal-items-lunch');
-//     if (!container) return;
+    const token = localStorage.getItem('token');
 
-//     const div = document.createElement('div');
-//     div.className = "flex items-center justify-between text-xs py-2 px-3 rounded-xl bg-gray-50 border border-gray-200";
-//     div.innerHTML = `
-//         <span class="text-gray-700">✨ ${name} (AI)</span>
-//         <div class="flex items-center gap-3">
-//             <span class="text-[#1E4630] font-semibold">${cals} קלוריות (${protein}g חלבון)</span>
-//             <button onclick="removeFoodItem(this, ${cals})" class="text-gray-400 hover:text-rose-500"><i class="fa-solid fa-trash-can text-xs"></i></button>
-//         </div>
-//     `;
-//     container.appendChild(div);
+    if (!token) {
+        window.location.href = 'login.html';
+        return;
+    }
 
-//     totalConsumedCalories += Number(cals);
-//     totalProtein += Number(protein);
-//     totalCarbs += Number(carbs);
-//     totalFats += Number(fats);
-//     updateNutritionStatsDisplay();
+    const mealName =
+        document.getElementById('meal-name').value.trim();
 
-//     showCustomMessageBox(`הארוחה זוהתה ונוספה בהצלחה!\nשם: ${name}\nקלוריות: ${cals} kcal\nחלבון: ${protein}g`);
-// }
+    const date =
+        document.getElementById('meal-date').value;
 
-// function openAddFoodModal(mealName) {
-//     const foodName = prompt(`הכנס את שם המאכל לארוחת ${mealName === 'Breakfast' ? 'בוקר' : 'צהריים'}:`);
-//     if (!foodName) return;
-//     const cals = prompt("הכנס מספר קלוריות (kcal):", "250");
-//     if (!cals) return;
+    const imageInput =
+        document.getElementById('meal-image');
 
-//     const containerId = mealName === 'Breakfast' ? 'meal-items-breakfast' : 'meal-items-lunch';
-//     const container = document.getElementById(containerId);
-//     if (container) {
-//         const div = document.createElement('div');
-//         div.className = "flex items-center justify-between text-xs py-2 px-3 rounded-xl bg-gray-50 border border-gray-200";
-//         div.innerHTML = `
-//             <span class="text-gray-700">${foodName}</span>
-//             <div class="flex items-center gap-3">
-//                 <span class="text-[#1E4630] font-semibold">${cals} קלוריות</span>
-//                 <button onclick="removeFoodItem(this, ${cals})" class="text-gray-400 hover:text-rose-500"><i class="fa-solid fa-trash-can text-xs"></i></button>
-//             </div>
-//         `;
-//         container.appendChild(div);
-//         totalConsumedCalories += Number(cals);
-//         updateNutritionStatsDisplay();
-//         showCustomMessageBox("הפריט נוסף בהצלחה!");
-//     }
-// }
+    if (!mealName) {
+        showCustomMessageBox(
+            'אנא כתוב את שם הארוחה.'
+        );
+        return;
+    }
 
-// function removeFoodItem(btn, cals) {
-//     btn.closest('div.flex').remove();
-//     totalConsumedCalories = Math.max(0, totalConsumedCalories - Number(cals));
-//     updateNutritionStatsDisplay();
-//     showCustomMessageBox("הפריט הוסר מהיומן.");
-// }
+    if (!imageInput || imageInput.files.length === 0) {
+        showCustomMessageBox(
+            'אנא העלה תמונה של הארוחה.'
+        );
+        return;
+    }
 
-// function updateNutritionStatsDisplay() {
-//     const goalCals = 2400;
-//     const leftCals = Math.max(0, goalCals - totalConsumedCalories);
-//     const leftEl = document.getElementById('stat-calories-left');
-//     const proteinEl = document.getElementById('stat-protein');
-//     const carbsEl = document.getElementById('stat-carbs');
-//     const fatsEl = document.getElementById('stat-fats');
+    const submitButton = document.querySelector(
+        '#meal-form button[type="submit"]'
+    );
 
-//     if (leftEl) leftEl.innerText = leftCals.toLocaleString();
-//     if (proteinEl) proteinEl.innerText = totalProtein + 'g';
-//     if (carbsEl) carbsEl.innerText = totalCarbs + 'g';
-//     if (fatsEl) fatsEl.innerText = totalFats + 'g';
-// }
+    const originalButtonText =
+        submitButton.textContent;
 
+    submitButton.disabled = true;
+    submitButton.textContent = 'מנתח את הארוחה...';
+
+    const formData = new FormData();
+
+    formData.append(
+        'mealName',
+        mealName
+    );
+
+    formData.append(
+        'date',
+        date
+    );
+
+    formData.append(
+        'image',
+        imageInput.files[0]
+    );
+
+    try {
+
+        const response = await fetch(
+            API_URL_NUTRITION_ANALYZE,
+            {
+                method: 'POST',
+
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+
+                body: formData
+            }
+        );
+
+        const data = await response.json();
+
+
+        if (!response.ok) {
+            throw new Error(
+                data.message ||
+                'שגיאה בהוספת הארוחה'
+            );
+        }
+
+        showCustomMessageBox(
+            'הארוחה נוספה בהצלחה!'
+        );
+
+        todayMeals.push(data.meal);
+
+        displayMeals(todayMeals);
+
+        // איפוס הטופס
+        document
+            .getElementById('meal-form')
+            .reset();
+
+        document.getElementById(
+            'meal-date'
+        ).value = getLocalDate();
+
+    } catch (error) {
+
+        console.error(
+            'שגיאה בהוספת הארוחה:',
+            error
+        );
+
+        showCustomMessageBox(
+            error.message
+        );
+
+    } finally {
+
+        submitButton.disabled = false;
+
+        submitButton.textContent =
+            originalButtonText;
+    }
+}
+
+
+// הצגת הארוחות
+function displayMeals(meals) {
+
+    const container =
+        document.getElementById('meals-list');
+
+    const totalCaloriesElement =
+        document.getElementById('total-calories');
+
+
+    if (!container) {
+        return;
+    }
+
+
+    container.innerHTML = '';
+
+
+    let totalCalories = 0;
+    let totalProtein = 0;
+    let totalCarbs = 0;
+    let totalFats = 0;
+
+
+    if (meals.length === 0) {
+
+        container.appendChild(
+            createNoMealsMessage()
+        );
+
+        updateNutritionSummary(
+            0,
+            0,
+            0,
+            0
+        );
+
+        if (totalCaloriesElement) {
+            totalCaloriesElement.textContent =
+                '0 Kcal';
+        }
+
+        return;
+    }
+
+
+    meals.forEach(meal => {
+
+        totalCalories +=
+            Number(meal.calories) || 0;
+
+        totalProtein +=
+            Number(meal.protein) || 0;
+
+        totalCarbs +=
+            Number(meal.carbs) || 0;
+
+        totalFats +=
+            Number(meal.fats) || 0;
+
+
+        const item =
+            document.createElement('div');
+
+
+        item.className =
+            'bg-gray-50 rounded-2xl overflow-hidden';
+
+
+        item.innerHTML = `
+            <details class="group">
+
+                <summary
+                    class="cursor-pointer p-4 list-none">
+
+                    <div class="flex justify-between items-center">
+
+                        <div>
+                            <h3 class="font-semibold text-gray-800">
+                                ${meal.mealName}
+                            </h3>
+
+                            <p class="text-xs text-gray-400 mt-1">
+                                ${formatDate(meal.date)}
+                            </p>
+                        </div>
+
+                        <span class="font-bold text-[#1E4630]">
+                            ${meal.calories || 0} Kcal
+                        </span>
+
+                    </div>
+
+                </summary>
+
+
+                <div class="px-4 pb-4 border-t border-gray-200 pt-4">
+
+                    ${meal.imageUrl
+                ? `
+                                <img
+                                    src="http://localhost:5000${meal.imageUrl}"
+                                    alt="${meal.mealName}"
+                                    class="w-full h-48 object-cover rounded-xl mb-4">
+                              `
+                : ''
+            }
+
+
+                    <div class="grid grid-cols-2 gap-3">
+
+                        <div class="bg-white rounded-xl p-3 text-center">
+                            <p class="text-xs text-gray-400">
+                                קלוריות
+                            </p>
+
+                            <p class="font-bold text-[#1E4630]">
+                                ${meal.calories || 0} Kcal
+                            </p>
+                        </div>
+
+
+                        <div class="bg-white rounded-xl p-3 text-center">
+                            <p class="text-xs text-gray-400">
+                                חלבון
+                            </p>
+
+                            <p class="font-bold text-[#1E4630]">
+                                ${meal.protein || 0}g
+                            </p>
+                        </div>
+
+
+                        <div class="bg-white rounded-xl p-3 text-center">
+                            <p class="text-xs text-gray-400">
+                                פחמימות
+                            </p>
+
+                            <p class="font-bold text-[#1E4630]">
+                                ${meal.carbs || 0}g
+                            </p>
+                        </div>
+
+
+                        <div class="bg-white rounded-xl p-3 text-center">
+                            <p class="text-xs text-gray-400">
+                                שומנים
+                            </p>
+
+                            <p class="font-bold text-[#1E4630]">
+                                ${meal.fats || 0}g
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </details>
+        `;
+
+
+        container.appendChild(item);
+    });
+
+
+    if (totalCaloriesElement) {
+
+        totalCaloriesElement.textContent =
+            `${totalCalories.toLocaleString()} Kcal`;
+    }
+
+
+    updateNutritionSummary(
+        totalCalories,
+        totalProtein,
+        totalCarbs,
+        totalFats
+    );
+}
+
+
+// הודעה כאשר אין ארוחות
+function createNoMealsMessage() {
+
+    const message =
+        document.createElement('p');
+
+    message.className =
+        'text-sm text-gray-400 text-center py-6';
+
+    message.textContent =
+        'עדיין לא נוספו ארוחות.';
+
+    return message;
+}
+
+
+// עדכון הסיכום העליון
+function updateNutritionSummary(
+    calories,
+    protein,
+    carbs,
+    fats
+) {
+
+    const caloriesElement =
+        document.getElementById('summary-calories');
+
+    const proteinElement =
+        document.getElementById('summary-protein');
+
+    const carbsElement =
+        document.getElementById('summary-carbs');
+
+    const fatsElement =
+        document.getElementById('summary-fats');
+
+
+    if (caloriesElement) {
+
+        caloriesElement.textContent =
+            calories.toLocaleString();
+    }
+
+
+    if (proteinElement) {
+
+        proteinElement.textContent =
+            `${protein}g`;
+    }
+
+
+    if (carbsElement) {
+
+        carbsElement.textContent =
+            `${carbs}g`;
+    }
+
+
+    if (fatsElement) {
+
+        fatsElement.textContent =
+            `${fats}g`;
+    }
+}
+
+
+// עיצוב התאריך
+function formatDate(date) {
+
+    if (!date) {
+        return '';
+    }
+
+    const dateObject =
+        new Date(date);
+
+    return dateObject.toLocaleDateString('he-IL');
+}

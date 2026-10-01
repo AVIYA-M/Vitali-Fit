@@ -9,6 +9,8 @@ const PORT = process.env.PORT || 5000;
 // 1. Middlewares בסיסיים
 app.use(express.json());
 app.use(cors());
+// הצגת תמונות שהועלו לשרת
+app.use('/uploads', express.static('uploads'));
 
 // 2. הגדרת כל הראוטים במקום אחד מרוכז
 const authRoutes = require('./routes/authRoutes.js');
