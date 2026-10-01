@@ -5,34 +5,61 @@ const jwt = require('jsonwebtoken');
 // 1. פונקציית הרשמה (Register)
 exports.registerUser = async (req, res) => {
   try {
-    const { fullName, email, password, role } = req.body;
+    const { fullName, email, password } = req.body;
 
-    // בדיקה האם המשתמש כבר קיים במערכת לפי האימייל
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'משתמש עם אימייל זה כבר קיים במערכת.' });
+    // בדיקה שהשדות הדרושים קיימים
+    if (!fullName || !email || !password) {
+      return res.status(400).json({
+        message: 'יש למלא שם מלא, אימייל וסיסמה.'
+      });
     }
 
-    // הצפנת הסיסמה בעזרת bcrypt (רמת אבטחה 10)
+    // בדיקה שהסיסמה באורך מתאים
+    if (password.length < 6) {
+      return res.status(400).json({
+        message: 'הסיסמה חייבת להכיל לפחות 6 תווים.'
+      });
+    }
+
+    // בדיקה האם המשתמש כבר קיים במערכת
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(400).json({
+        message: 'משתמש עם אימייל זה כבר קיים במערכת.'
+      });
+    }
+
+    // הצפנת הסיסמה
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // יצירת משתמש חדש עם הסיסמה המוצפנת
+    // יצירת משתמש חדש
+    // חשוב: משתמש שנרשם מהאתר מקבל תמיד role של user
     const newUser = new User({
       fullName,
       email,
       password: hashedPassword,
-      role: role || 'user' // ברירת מחדל היא משתמש רגיל
+      role: 'user'
     });
 
     await newUser.save();
 
-    res.status(201).json({ 
-      message: 'המשתמש נוצר בהצלחה!', 
-      user: { id: newUser._id, fullName: newUser.fullName, email: newUser.email, role: newUser.role } 
+    res.status(201).json({
+      message: 'המשתמש נוצר בהצלחה!',
+      user: {
+        id: newUser._id,
+        fullName: newUser.fullName,
+        email: newUser.email,
+        role: newUser.role
+      }
     });
+
   } catch (error) {
-    res.status(500).json({ message: 'שגיאה ביצירת משתמש.', error: error.message });
+    res.status(500).json({
+      message: 'שגיאה ביצירת משתמש.',
+      error: error.message
+    });
   }
 };
 

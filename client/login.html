@@ -113,7 +113,22 @@
             <p>© 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.</p>
         </div>
     </footer>
+    
+    <div id="custom-message-box" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+    <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm text-center">
+        <p id="custom-message-text" class="text-sm text-gray-700 mb-5"></p>
+
+        <button
+            type="button"
+            onclick="document.getElementById('custom-message-box').classList.add('hidden')"
+            class="px-6 py-2 bg-[#1E4630] text-white rounded-xl text-sm font-semibold">
+            אישור
+        </button>
+    </div>
+</div>
+    
+    
     <script src="js/script.js"></script>
-<script src="js/auth.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 </html>

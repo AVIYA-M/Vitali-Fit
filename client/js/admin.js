@@ -93,6 +93,7 @@ async function handleCreateWorkout(event) {
     const instructor = document.getElementById('w-instructor').value.trim();
     const maxParticipants = Number(document.getElementById('w-max').value);
     const type = document.getElementById('w-type').value;
+    const category = document.getElementById('w-category').value;
 
     const token = localStorage.getItem('token');
 
@@ -103,7 +104,16 @@ async function handleCreateWorkout(event) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ title, description, date, time, instructor, maxParticipants, type })
+            body: JSON.stringify({
+                  title,
+                  description,
+                  date,
+                  time,
+                  instructor,
+                  maxParticipants,
+                  type,
+                  category
+            })
         });
 
         const data = await response.json();

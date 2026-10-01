@@ -8,6 +8,8 @@ const workoutSchema = new mongoose.Schema({
   instructor: { type: String, required: true },
   maxParticipants: { type: Number, required: true },
   type: { type: String, default: 'studio' }, // יכול להיות 'studio' או 'zoom'
+
+  category: { type: String, default: 'general' },
   
   // מערך חכם ששומר את מספרי הזיהוי (ID) של כל המשתמשים שנרשמו לאימון
   registeredUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]

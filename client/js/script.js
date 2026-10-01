@@ -118,3 +118,20 @@ window.showModalMessage = function(message) {
 
     document.body.appendChild(modalOverlay);
 };
+function showCustomMessageBox(message) {
+    const modal = document.getElementById('custom-message-box');
+    const messageText = document.getElementById('custom-message-text');
+
+    if (modal && messageText) {
+        messageText.textContent = message;
+        modal.classList.remove('hidden');
+    }
+}
+
+function closeCustomMessageBox() {
+    const modal = document.getElementById('custom-message-box');
+
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
