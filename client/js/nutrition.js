@@ -1,6 +1,7 @@
 const API_URL_NUTRITION = 'http://localhost:5000/api/nutrition';
 const API_URL_NUTRITION_ANALYZE = `${API_URL_NUTRITION}/analyze`;
 let todayMeals = [];
+let allMeals = [];
 
 function getLocalDate() {
     const today = new Date();
@@ -58,10 +59,14 @@ async function loadMeals() {
             );
         }
 
-        todayMeals = getTodayMeals(data);
+        allMeals = data;
+
+        todayMeals = getTodayMeals(allMeals);
 
         displayMeals(todayMeals);
-        
+
+        displayHistory(getHistoryMeals(allMeals));
+
 
     } catch (error) {
 
@@ -81,9 +86,24 @@ function getTodayMeals(meals) {
     return meals.filter(meal => {
 
         const mealDate = new Date(meal.date);
-        
+
 
         return (
+            mealDate.getDate() === today.getDate() &&
+            mealDate.getMonth() === today.getMonth() &&
+            mealDate.getFullYear() === today.getFullYear()
+        );
+    });
+}
+function getHistoryMeals(meals) {
+
+    const today = new Date();
+
+    return meals.filter(meal => {
+
+        const mealDate = new Date(meal.date);
+
+        return !(
             mealDate.getDate() === today.getDate() &&
             mealDate.getMonth() === today.getMonth() &&
             mealDate.getFullYear() === today.getFullYear()
@@ -183,9 +203,13 @@ async function addMeal(event) {
             'הארוחה נוספה בהצלחה!'
         );
 
-        todayMeals.push(data.meal);
+        allMeals.push(data.meal);
+
+        todayMeals = getTodayMeals(allMeals);
 
         displayMeals(todayMeals);
+
+        displayHistory(getHistoryMeals(allMeals));
 
         // איפוס הטופס
         document
@@ -398,7 +422,131 @@ function displayMeals(meals) {
     );
 }
 
+function displayHistory(meals) {
 
+    const container =
+        document.getElementById('history-list');
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = '';
+
+    if (meals.length === 0) {
+
+        const message =
+            document.createElement('p');
+
+        message.className =
+            'text-sm text-gray-400 text-center py-6';
+
+        message.textContent =
+            'אין עדיין היסטוריית ארוחות.';
+
+        container.appendChild(message);
+
+        return;
+    }
+
+    meals.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+    });
+
+    meals.forEach(meal => {
+
+        const item =
+            document.createElement('div');
+
+        item.className =
+            'bg-gray-50 rounded-2xl overflow-hidden';
+
+        item.innerHTML = `
+            <details class="group">
+
+                <summary class="cursor-pointer p-4 list-none">
+
+                    <div class="flex justify-between items-center">
+
+                        <div>
+                            <h3 class="font-semibold text-gray-800">
+                                ${meal.mealName}
+                            </h3>
+
+                            <p class="text-xs text-gray-400 mt-1">
+                                ${formatDate(meal.date)}
+                            </p>
+                        </div>
+
+                        <span class="font-bold text-[#1E4630]">
+                            ${meal.calories || 0} Kcal
+                        </span>
+
+                    </div>
+
+                </summary>
+
+                <div class="px-4 pb-4 border-t border-gray-200 pt-4">
+
+                    ${
+                        meal.imageUrl
+                            ? `
+                                <img
+                                    src="http://localhost:5000${meal.imageUrl}"
+                                    alt="${meal.mealName}"
+                                    class="w-full h-48 object-cover rounded-xl mb-4">
+                              `
+                            : ''
+                    }
+
+                    <div class="grid grid-cols-2 gap-3">
+
+                        <div class="bg-white rounded-xl p-3 text-center">
+                            <p class="text-xs text-gray-400">
+                                קלוריות
+                            </p>
+                            <p class="font-bold text-[#1E4630]">
+                                ${meal.calories || 0} Kcal
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-3 text-center">
+                            <p class="text-xs text-gray-400">
+                                חלבון
+                            </p>
+                            <p class="font-bold text-[#1E4630]">
+                                ${meal.protein || 0}g
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-3 text-center">
+                            <p class="text-xs text-gray-400">
+                                פחמימות
+                            </p>
+                            <p class="font-bold text-[#1E4630]">
+                                ${meal.carbs || 0}g
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-3 text-center">
+                            <p class="text-xs text-gray-400">
+                                שומנים
+                            </p>
+                            <p class="font-bold text-[#1E4630]">
+                                ${meal.fats || 0}g
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </details>
+        `;
+
+        container.appendChild(item);
+    });
+}
 // הודעה כאשר אין ארוחות
 function createNoMealsMessage() {
 
