@@ -7,13 +7,13 @@ const workoutSchema = new mongoose.Schema({
   time: { type: String, required: true },
   instructor: { type: String, required: true },
   maxParticipants: { type: Number, required: true },
-  type: { type: String, default: 'studio' }, // יכול להיות 'studio' או 'zoom'
 
+  durationMinutes: { type: Number, required: true },
+  estimatedCalories: { type: Number, required: true },
+
+  type: { type: String, default: 'studio' },
   category: { type: String, default: 'general' },
-  
-  // מערך חכם ששומר את מספרי הזיהוי (ID) של כל המשתמשים שנרשמו לאימון
   registeredUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
-},
-  { timestamps: true });
+}, { timestamps: true });
 
 module.exports = mongoose.model('Workout', workoutSchema);

@@ -85,45 +85,97 @@ function closeAddWorkoutModal() {
 }
 
 async function handleCreateWorkout(event) {
-    event.preventDefault();
-    const title = document.getElementById('w-title').value.trim();
-    const description = document.getElementById('w-desc').value.trim();
-    const date = document.getElementById('w-date').value;
-    const time = document.getElementById('w-time').value.trim();
-    const instructor = document.getElementById('w-instructor').value.trim();
-    const maxParticipants = Number(document.getElementById('w-max').value);
-    const type = document.getElementById('w-type').value;
-    const category = document.getElementById('w-category').value;
 
-    const token = localStorage.getItem('token');
+    event.preventDefault();
+
+    const title =
+        document.getElementById('w-title').value.trim();
+
+    const description =
+        document.getElementById('w-desc').value.trim();
+
+    const date =
+        document.getElementById('w-date').value;
+
+    const time =
+        document.getElementById('w-time').value.trim();
+
+    const instructor =
+        document.getElementById('w-instructor').value.trim();
+
+    const maxParticipants =
+        Number(document.getElementById('w-max').value);
+
+    const durationMinutes =
+        Number(document.getElementById('w-duration').value);
+
+    const estimatedCalories =
+        Number(document.getElementById('w-calories').value);
+
+    const type =
+        document.getElementById('w-type').value;
+
+    const category =
+        document.getElementById('w-category').value;
+
+    const token =
+        localStorage.getItem('token');
+
 
     try {
-        const response = await fetch(API_URL_WORKOUTS, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                  title,
-                  description,
-                  date,
-                  time,
-                  instructor,
-                  maxParticipants,
-                  type,
-                  category
-            })
-        });
+
+        const response = await fetch(
+            API_URL_WORKOUTS,
+            {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+
+                body: JSON.stringify({
+                    title,
+                    description,
+                    date,
+                    time,
+                    instructor,
+                    maxParticipants,
+                    durationMinutes,
+                    estimatedCalories,
+                    type,
+                    category
+                })
+            }
+        );
+
 
         const data = await response.json();
-        if (!response.ok) throw new Error(data.message || 'שגיאה ביצירת האימון');
 
-        // הודעת הצלחה ברורה שמקפיצה אישור למנהל!
-       showModalMessage('השיעור התווסף בהצלחה למערכת וללוח האימונים!');
+
+        if (!response.ok) {
+            throw new Error(
+                data.message ||
+                'שגיאה ביצירת האימון'
+            );
+        }
+
+
+        showModalMessage(
+            'השיעור התווסף בהצלחה למערכת וללוח האימונים!'
+        );
+
         closeAddWorkoutModal();
-        document.getElementById('create-workout-form').reset();
+
+        document
+            .getElementById('create-workout-form')
+            .reset();
+
+
     } catch (error) {
-        showModalMessage(error.message);
+
+        showModalMessage(
+            error.message
+        );
     }
 }

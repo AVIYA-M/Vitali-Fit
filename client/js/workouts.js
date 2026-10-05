@@ -1,4 +1,5 @@
 const API_URL_WORKOUTS = 'http://localhost:5000/api/workouts';
+const API_URL_TRACKING = 'http://localhost:5000/api/tracking';
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -35,6 +36,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const day = String(date.getDate()).padStart(2, '0');
 
         return `${year}-${month}-${day}`;
+    }
+
+    function hasWorkoutFinished(session) {
+
+        const workoutDate =
+            new Date(session.date);
+
+        const dateKey =
+            formatDateKey(workoutDate);
+
+        const workoutDateTime =
+            new Date(`${dateKey}T${session.time}`);
+
+        return new Date() >= workoutDateTime;
     }
 
     // שליפת האימונים מהשרת
@@ -92,14 +107,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (selectedCategory) {
             sessions = sessions.filter(session => {
-              return session.category === selectedCategory;
-         });
+                return session.category === selectedCategory;
+            });
         }
 
         if (selectedType) {
-         sessions = sessions.filter(session => {
-             return session.type === selectedType;
-                    });
+            sessions = sessions.filter(session => {
+                return session.type === selectedType;
+            });
         }
 
         // סינון לפי סטודיו / זום
@@ -163,38 +178,61 @@ document.addEventListener("DOMContentLoaded", () => {
                     </button>
                 `;
 
-            // המשתמש כבר רשום
+                // המשתמש כבר רשום
             } else if (isUserRegistered) {
 
-                actionBtn = `
-                    <button
-                        class="px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-xl text-xs font-semibold"
-                        disabled>
-                        נרשמת בהצלחה
-                    </button>
-                `;
+                if (hasWorkoutFinished(session)) {
 
-            // האימון מלא
+                    actionBtn = `
+            <div class="flex items-center gap-2">
+
+                <button
+                    class="px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-xl text-xs font-semibold"
+                    disabled>
+                    נרשמת בהצלחה
+                </button>
+
+                <button
+                    onclick="completeWorkout('${session._id}')"
+                    class="px-3 py-1.5 bg-[#1E4630] text-white rounded-xl text-xs font-semibold hover:bg-[#163524]">
+                    סיימתי את האימון
+                </button>
+
+            </div>
+        `;
+
+                } else {
+
+                    actionBtn = `
+            <button
+                class="px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-xl text-xs font-semibold"
+                disabled>
+                נרשמת בהצלחה
+            </button>
+        `;
+                }
+
+                // האימון מלא
             } else if (isFull) {
 
                 actionBtn = `
-                    <button
-                        class="px-3 py-1.5 bg-gray-300 text-gray-600 rounded-xl text-xs font-semibold"
-                        disabled>
-                        האימון מלא
-                    </button>
-                `;
+        <button
+            class="px-3 py-1.5 bg-gray-300 text-gray-600 rounded-xl text-xs font-semibold"
+            disabled>
+            האימון מלא
+        </button>
+    `;
 
-            // אפשר להירשם
+                // אפשר להירשם
             } else {
 
                 actionBtn = `
-                    <button
-                        onclick="registerForSession('${session._id}')"
-                        class="px-3 py-1.5 bg-[#1E4630] text-white rounded-xl text-xs font-semibold hover:bg-[#163524]">
-                        הרשמה לשיעור
-                    </button>
-                `;
+        <button
+            onclick="registerForSession('${session._id}')"
+            class="px-3 py-1.5 bg-[#1E4630] text-white rounded-xl text-xs font-semibold hover:bg-[#163524]">
+            הרשמה לשיעור
+        </button>
+    `;
             }
 
             return `
@@ -348,7 +386,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // הרשמה לאימון
-    window.registerForSession = async function(workoutId) {
+    window.registerForSession = async function (workoutId) {
 
         const token = localStorage.getItem('token');
 
@@ -388,6 +426,54 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // שליפת הנתונים מחדש
+            fetchWorkouts();
+
+        } catch (error) {
+
+            if (typeof showModalMessage === 'function') {
+                showModalMessage(error.message);
+            } else {
+                alert(error.message);
+            }
+        }
+    };
+
+    window.completeWorkout = async function (workoutId) {
+
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                `${API_URL_TRACKING}/${workoutId}/complete`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || 'שגיאה בסימון האימון'
+                );
+            }
+
+            if (typeof showModalMessage === 'function') {
+                showModalMessage(
+                    'האימון סומן כהושלם בהצלחה!'
+                );
+            }
+
+            // עדכון רשימת האימונים
             fetchWorkouts();
 
         } catch (error) {

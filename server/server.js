@@ -17,11 +17,14 @@ const authRoutes = require('./routes/authRoutes.js');
 const workoutRoutes = require('./routes/workoutRoutes.js');
 const nutritionRoutes = require('./routes/nutritionRoutes.js');
 const adminRoutes = require('./routes/userRoutes.js'); // הוספת ראוט הניהול והמשתמשים
+const trackingRoutes = require('./routes/trackingRoutes.js');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/workouts', workoutRoutes);
 app.use('/api/nutrition', nutritionRoutes);
 app.use('/api/admin', adminRoutes); // חיבור הניתוב החדש תחת /api/admin
+app.use('/api/tracking', trackingRoutes);
+
 
 app.get('/api/status', (req, res) => {
   res.json({ message: 'VitaliFit Server is up and running!' });
