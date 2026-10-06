@@ -18,6 +18,29 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6
   },
+
+  // המשקל הנוכחי של המשתמש
+  weight: {
+    type: Number,
+    required: true,
+    min: 1
+  },
+
+  // היום שבו המשתמש נשקל בכל שבוע
+  // שבת לא נכללת
+  weighInDay: {
+    type: String,
+    enum: [
+      'sunday',
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday'
+    ],
+    required: true
+  },
+
   role: {
     type: String,
     enum: ['user', 'admin'],

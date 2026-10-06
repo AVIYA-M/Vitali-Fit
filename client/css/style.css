@@ -1,23 +1,23 @@
-
+/* ==================================== */
+/* עיצוב הלוגו בדף הבית */
+/* ==================================== */
 .home-brand-lockup {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     padding: 10px 10px 10px 20px;
-    
     border-radius: 18px;
     background: rgba(255, 255, 255, 0.7);
-    border:  1px solid #E8F5F1;
+    border: 1px solid #E8F5F1;
     box-shadow: 0 8px 20px rgba(30, 70, 48, 0.06);
 }
+
 .home-brand-image-wrap {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     background: #1c4a39;
-    
-    
 }
 
 .home-brand-image {
@@ -52,13 +52,40 @@
     .home-brand-lockup {
         gap: 7px;
     }
-
     .home-brand-image {
         width: 46px;
         height: 46px;
     }
-
     .home-brand-name {
         font-size: 1.3rem;
+    }
+}
+.social-links {
+    display: flex;
+    gap: 15px;
+}
+
+.social-link {
+    color: white;
+    font-size: 18px;
+    transition: color 0.2s;
+}
+
+.social-link:hover {
+    color: #A3D9C9;
+}
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 768px) {
+    .footer-inner {
+        grid-template-columns: 1fr;
     }
 }

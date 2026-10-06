@@ -6,49 +6,73 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// 1. Middlewares בסיסיים
-app.use(express.json());
+// ========================================
+// Middlewares
+// ========================================
 app.use(cors());
-// הצגת תמונות שהועלו לשרת
+
+// שתי השורות האלו קריטיות כדי שהשרת יבין נתונים שנשלחים אליו (כמו קלוריות ומשקל)
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); 
+
 app.use('/uploads', express.static('uploads'));
 
-// 2. הגדרת כל הראוטים במקום אחד מרוכז
+// ========================================
+// Routes Imports
+// ========================================
 const authRoutes = require('./routes/authRoutes.js');
 const workoutRoutes = require('./routes/workoutRoutes.js');
 const nutritionRoutes = require('./routes/nutritionRoutes.js');
-const adminRoutes = require('./routes/userRoutes.js'); // הוספת ראוט הניהול והמשתמשים
+const adminRoutes = require('./routes/userRoutes.js');
 const trackingRoutes = require('./routes/trackingRoutes.js');
+const activityRoutes = require('./routes/activityRoutes.js');
+const weightRoutes = require('./routes/weightRoutes.js');
 
+// ========================================
+// חיבור Routes
+// ========================================
 app.use('/api/auth', authRoutes);
 app.use('/api/workouts', workoutRoutes);
 app.use('/api/nutrition', nutritionRoutes);
-app.use('/api/admin', adminRoutes); // חיבור הניתוב החדש תחת /api/admin
+app.use('/api/admin', adminRoutes);
 app.use('/api/tracking', trackingRoutes);
+app.use('/api/activities', activityRoutes);
+app.use('/api/weight', weightRoutes);
 
-
+// ========================================
+// בדיקת שרת
+// ========================================
 app.get('/api/status', (req, res) => {
-  res.json({ message: 'VitaliFit Server is up and running!' });
+    res.status(200).json({
+        message: 'VitaliFit Server is up and running!'
+    });
 });
 
-// 3. Global Error Handler - חייב להיות תמיד אחרי כל הראוטים!
+// ========================================
+// Error Handler
+// ========================================
 const errorHandler = require('./middlewares/error.middleware');
 app.use(errorHandler);
 
-// 4. חיבור למסד הנתונים והפעלת השרת
+// ========================================
+// MongoDB + Server Start
+// ========================================
 mongoose
-  .connect(process.env.MONGO_URI, {
-    serverSelectionTimeoutMS: 10000,
-    retryWrites: true,
-    w: 'majority'
-  })
-  .then(() => {
-    console.log('✅ Connected to MongoDB Atlas successfully!');
-    app.listen(PORT, () => {
-      console.log(`🚀 Server is running on port ${PORT}`);
+    .connect(process.env.MONGO_URI, {
+        serverSelectionTimeoutMS: 10000,
+        retryWrites: true,
+        w: 'majority'
+    })
+    .then(() => {
+        console.log('✅ Connected to MongoDB Atlas successfully!');
+        
+        app.listen(PORT, () => {
+            console.log(`🚀 Server is running on port ${PORT}`);
+            console.log(`🌐 API: http://localhost:${PORT}/api/status`);
+        });
+    })
+    .catch((err) => {
+        console.error('❌ Database connection error:');
+        console.error(err);
+        process.exit(1);
     });
-  })
-  .catch((err) => {
-    console.error('❌ Database connection error:');
-    console.error(err);
-    process.exit(1);
-  });

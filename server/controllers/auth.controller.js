@@ -1,27 +1,58 @@
 const User = require('../models/User.js');
+const WeightHistory = require('../models/WeightHistory.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// 1. פונקציית הרשמה (Register)
+// הרשמה
 exports.registerUser = async (req, res) => {
   try {
-    const { fullName, email, password } = req.body;
+    const {
+      fullName,
+      email,
+      password,
+      weight,
+      weighInDay
+    } = req.body;
 
-    // בדיקה שהשדות הדרושים קיימים
-    if (!fullName || !email || !password) {
+    if (
+      !fullName ||
+      !email ||
+      !password ||
+      weight === undefined ||
+      !weighInDay
+    ) {
       return res.status(400).json({
-        message: 'יש למלא שם מלא, אימייל וסיסמה.'
+        message: 'יש למלא שם מלא, אימייל, סיסמה, משקל ויום שקילה שבועי.'
       });
     }
 
-    // בדיקה שהסיסמה באורך מתאים
     if (password.length < 6) {
       return res.status(400).json({
         message: 'הסיסמה חייבת להכיל לפחות 6 תווים.'
       });
     }
 
-    // בדיקה האם המשתמש כבר קיים במערכת
+    if (Number(weight) <= 0) {
+      return res.status(400).json({
+        message: 'המשקל חייב להיות גדול מ-0.'
+      });
+    }
+
+    const allowedWeighInDays = [
+      'sunday',
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday'
+    ];
+
+    if (!allowedWeighInDays.includes(weighInDay)) {
+      return res.status(400).json({
+        message: 'יש לבחור יום שקילה בין ראשון לשישי.'
+      });
+    }
+
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
@@ -30,20 +61,25 @@ exports.registerUser = async (req, res) => {
       });
     }
 
-    // הצפנת הסיסמה
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // יצירת משתמש חדש
-    // חשוב: משתמש שנרשם מהאתר מקבל תמיד role של user
     const newUser = new User({
       fullName,
       email,
       password: hashedPassword,
+      weight: Number(weight),
+      weighInDay,
       role: 'user'
     });
 
     await newUser.save();
+
+    // שמירת השקילה הראשונה
+    await WeightHistory.create({
+      userId: newUser._id,
+      weight: Number(weight),
+      date: new Date()
+    });
 
     res.status(201).json({
       message: 'המשתמש נוצר בהצלחה!',
@@ -51,6 +87,8 @@ exports.registerUser = async (req, res) => {
         id: newUser._id,
         fullName: newUser.fullName,
         email: newUser.email,
+        weight: newUser.weight,
+        weighInDay: newUser.weighInDay,
         role: newUser.role
       }
     });
@@ -63,46 +101,81 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-// 2. פונקציית התחברות (Login)
+
+// התחברות
 exports.loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const {
+      email,
+      password
+    } = req.body;
 
-    // חיפוש המשתמש לפי האימייל
     const user = await User.findOne({ email });
+
     if (!user) {
-      return res.status(400).json({ message: 'אימייל או סיסמה שגויים.' });
+      return res.status(400).json({
+        message: 'אימייל או סיסמה שגויים.'
+      });
     }
 
-    // השוואת הסיסמה שהוזנה מול הסיסמה המוצפנת במסד הנתונים
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid =
+      await bcrypt.compare(password, user.password);
+
     if (!isPasswordValid) {
-      return res.status(400).json({ message: 'אימייל או סיסמה שגויים.' });
+      return res.status(400).json({
+        message: 'אימייל או סיסמה שגויים.'
+      });
     }
 
-    // יצירת טוקן אימות (JWT) ששומר בתוכו את מזהה המשתמש והתפקיד שלו
     const token = jwt.sign(
-      { userId: user._id, role: user.role },
+      {
+        userId: user._id,
+        role: user.role
+      },
       process.env.JWT_SECRET || 'fallback_secret_key',
-      { expiresIn: '1d' } // הטוקן תקף ליום אחד
+      {
+        expiresIn: '1d'
+      }
     );
 
     res.status(200).json({
       message: 'התחברת בהצלחה!',
       token,
-      user: { id: user._id, fullName: user.fullName, email: user.email, role: user.role }
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        weight: user.weight,
+        weighInDay: user.weighInDay,
+        role: user.role
+      }
     });
+
   } catch (error) {
-    res.status(500).json({ message: 'שגיאה בהתחברות.', error: error.message });
+    res.status(500).json({
+      message: 'שגיאה בהתחברות.',
+      error: error.message
+    });
   }
 };
 
-// 3. שליפת כל המשתמשים (לפאנל ניהול)
+
+// שליפת כל המשתמשים
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select('-password'); // מחזיר את כל המשתמשים חוץ מהסיסמאות שלהם
+
+    const users = await User
+      .find()
+      .select('-password');
+
     res.status(200).json(users);
+
   } catch (error) {
-    res.status(500).json({ message: 'שגיאה בשליפת המשתמשים.', error: error.message });
+
+    res.status(500).json({
+      message: 'שגיאה בשליפת המשתמשים.',
+      error: error.message
+    });
+
   }
 };

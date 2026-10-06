@@ -1,0 +1,71 @@
+body {
+    font-family: 'Poppins', 'Heebo', sans-serif;
+    background-color: #F8F9FA;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+}
+
+.article-hero {
+    background: linear-gradient(rgba(30, 70, 48, 0.85), rgba(30, 70, 48, 0.85)), url('../image/חדר כושר.png');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.article-container {
+    max-width: 850px;
+    margin: -40px auto 60px auto;
+    background: white;
+    padding: 50px;
+    border-radius: 30px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    position: relative;
+    z-index: 10;
+}
+
+.article-container h2 {
+    color: #1E4630;
+    font-size: 2rem;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.article-container p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #4A5568;
+    margin-bottom: 20px;
+}
+
+.article-container ul {
+    margin-bottom: 20px;
+    padding-right: 20px;
+}
+
+.article-container li {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #4A5568;
+    margin-bottom: 10px;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-top: 40px;
+    padding: 12px 30px;
+    background-color: #1E4630;
+    color: white;
+    text-decoration: none;
+    border-radius: 15px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.back-btn:hover {
+    background-color: #163524;
+}

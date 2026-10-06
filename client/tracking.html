@@ -1,318 +1,236 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>VitaliFit - לוח מעקב</title>
-
+    <title>לוח מעקב - VitaliFit | בריאות ואנרגיה</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-
     <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        .dashboard-wrapper {
+            background-image: url('image/חדר כושר.png'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 60px 20px;
+        }
+    </style>
 </head>
 
-<body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen">
+<body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen justify-between">
 
-    <!-- Header -->
+    <!-- ההדר המקורי המדויק שלך -->
     <header class="site-header">
-        <div class="header-shell">
+    <div class="header-shell">
 
-            <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
-                <div class="brand-logo-wrap">
+        <a href="index.html"
+           class="brand-link"
+           aria-label="VitaliFit Home">
 
-                    <img src="image/לוגו.png" alt="VitaliFit" class="brand-image">
+             <div class="brand-logo-wrap">
+                <img src="image/לוגו.png"
+                     alt="VitaliFit"
+                     class="brand-image">
 
-                    <span class="brand-copy">
-                        <span class="brand-name">VitaliFit</span>
-                        <span class="brand-tagline">בריאות ואנרגיה</span>
-                    </span>
+                <span class="brand-copy">
+                    <span class="brand-name">VitaliFit</span>
+                    <span class="brand-tagline">בריאות ואנרגיה</span>
+                </span>
+            </div>
+        </a>
 
-                </div>
+        <nav class="main-menu" aria-label="Main navigation">
+            <a href="index.html">דף בית</a>
+            <a href="register.html">הרשמה</a>
+            <a href="workouts.html">קביעת לוז</a>
+            <a href="tracking.html" class="active">לוח מעקב</a>
+            <a href="exercises.html">אימונים</a>
+            <a href="nutrition.html">תזונה</a>
+            <a href="contact.html">צרו קשר</a>
+            <a href="blog.html">בלוג</a>
+
+            <a href="admin.html"
+               id="admin-nav-link"
+               class="nav-link"
+               style="display: none;">
+                 פאנל ניהול
+            </a>
+        </nav>
+
+        <div class="nav-actions">
+
+            <a href="login.html"
+               class="icon-button"
+               aria-label="התחברות">
+                <i class="fa-solid fa-user"></i>
             </a>
 
-            <nav class="main-menu" aria-label="Main navigation">
-
-                <a href="index.html">דף בית</a>
-                <a href="register.html">הרשמה</a>
-                <a href="workouts.html">קביעת לוז</a>
-
-                <a href="tracking.html" class="active">
-                    לוח מעקב
-                </a>
-
-                <a href="exercises.html">אימונים</a>
-                <a href="nutrition.html">תזונה</a>
-                <a href="contact.html">צרו קשר</a>
-                <a href="blog.html">בלוג</a>
-
-                <a href="admin.html" id="admin-nav-link"
-                    class="nav-link text-white font-medium hover:text-green-300 transition" style="display: none;">
-                    פאנל ניהול
-                </a>
-
-            </nav>
-
-            <div class="nav-actions">
-
-                <a href="login.html" class="icon-button" aria-label="התחברות">
-                    <i class="fa-regular fa-user"></i>
-                </a>
-
-                <a href="register.html" class="join-button">
-                    הצטרף
-                </a>
-
-            </div>
+            <a href="register.html"
+               class="join-button">
+                 הצטרפי עכשיו
+            </a>
 
         </div>
-    </header>
 
+    </div>
+</header>
 
-    <!-- Main -->
-    <main class="flex-grow max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 w-full">
-
-        <!-- כותרת -->
-        <section class="text-center mb-10">
-
-            <h1 class="text-3xl md:text-4xl font-bold text-[#1E4630]">
-                לוח המעקב שלי
-            </h1>
-
-            <p class="text-gray-500 mt-3">
-                עקבי אחר הפעילות וההתקדמות שלך במקום אחד.
-            </p>
-
-        </section>
-
-
-        <!-- Statistics -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-
-
-            <!-- אימונים שהושלמו -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-
-                <div class="w-11 h-11 rounded-xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630] mb-4">
-                    <i class="fa-solid fa-dumbbell"></i>
-                </div>
-
-                <p class="text-gray-500 text-sm">
-                    אימונים שהושלמו
-                </p>
-
-                <p id="completed-workouts" class="text-3xl font-bold text-[#1E4630] mt-1">
-                    0
-                </p>
-
+    <div class="dashboard-wrapper flex-grow relative">
+        <div class="absolute inset-0 bg-white/50"></div> <!-- שכבת הבהרה -->
+        
+        <main class="relative z-10 max-w-7xl mx-auto space-y-8">
+            
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-extrabold text-[#1E4630] mb-2">לוח המעקב שלי</h1>
+                <p class="text-gray-700 font-medium">עקבי אחר הפעילות וההתקדמות שלך במקום אחד.</p>
             </div>
 
-
-            <!-- זמן פעילות -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-
-                <div class="w-11 h-11 rounded-xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630] mb-4">
-                    <i class="fa-solid fa-clock"></i>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- קלוריות מפעילות -->
+                <div class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex flex-col justify-center items-center text-center">
+                    <i class="fa-solid fa-person-running text-gray-400 text-2xl mb-2"></i>
+                    <h3 class="text-sm font-bold text-gray-500 mb-2">קלוריות מפעילות</h3>
+                    <div id="weekly-activity-calories" class="text-4xl font-extrabold text-[#1E4630]">0</div>
                 </div>
 
-                <p class="text-gray-500 text-sm">
-                    זמן פעילות
-                </p>
-
-                <p id="activity-time" class="text-3xl font-bold text-[#1E4630] mt-1">
-                    0
-                </p>
-
-                <p class="text-xs text-gray-400 mt-1">
-                    שעות
-                </p>
-
-            </div>
-
-
-            <!-- קלוריות השבוע -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-
-                <div class="w-11 h-11 rounded-xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630] mb-4">
-                    <i class="fa-solid fa-fire"></i>
+                <!-- קלוריות מאוכל -->
+                <div class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex flex-col justify-center items-center text-center">
+                    <i class="fa-solid fa-utensils text-gray-400 text-2xl mb-2"></i>
+                    <h3 class="text-sm font-bold text-gray-500 mb-2">קלוריות מאוכל</h3>
+                    <div id="weekly-food-calories" class="text-4xl font-extrabold text-[#1E4630]">0</div>
                 </div>
 
-                <p class="text-gray-500 text-sm">
-                    קלוריות שנשרפו השבוע
-                </p>
+                <!-- משקל (מעודכן עם שני הפרשים בולטים) -->
+                <div class="col-span-1 md:col-span-2 bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex flex-col sm:flex-row justify-between items-center gap-6">
+                    <form id="weight-form" class="bg-gray-50 p-4 rounded-2xl w-full sm:w-48">
+                        <label class="block text-xs font-bold text-gray-600 mb-2 text-center">עדכון משקל חדש</label>
+                        <input type="number" id="new-weight" step="0.1" class="w-full p-2 mb-2 rounded-xl border text-center" placeholder="69.5" required>
+                        <button type="submit" class="w-full bg-[#1E4630] text-white py-2 rounded-xl text-xs font-bold">עדכון</button>
+                    </form>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-6 w-full sm:w-auto justify-around">
+                        <!-- שינוי מהמשקל ההתחלתי -->
+                        <div class="text-center sm:text-left">
+                            <h3 class="text-xs font-bold text-gray-500 mb-1">הפרש מהתחלתי</h3>
+                            <div class="flex items-baseline justify-center sm:justify-end gap-1">
+                                <span id="weight-change" class="text-4xl font-extrabold text-[#1E4630]" style="direction: ltr;">0.0</span>
+                                <span class="text-sm font-bold text-[#1E4630]">ק"ג</span>
+                            </div>
+                        </div>
 
-                <p id="weekly-calories" class="text-3xl font-bold text-[#1E4630] mt-1">
-                    0
-                </p>
-
-            </div>
-
-
-            <!-- אימונים השבוע -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-
-                <div class="w-11 h-11 rounded-xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630] mb-4">
-                    <i class="fa-solid fa-calendar-check"></i>
-                </div>
-
-                <p class="text-gray-500 text-sm">
-                    אימונים השבוע
-                </p>
-
-                <p id="weekly-workouts" class="text-3xl font-bold text-[#1E4630] mt-1">
-                    0
-                </p>
-
-            </div>
-
-        </section>
-
-
-        <!-- Progress -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-
-            <!-- התקדמות חודשית -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-
-                <h2 class="text-xl font-bold text-[#1E4630] mb-2">
-                    התקדמות חודשית
-                </h2>
-
-                <p class="text-sm text-gray-500 mb-6">
-                    היעד החודשי שלך הוא 16 אימונים.
-                </p>
-
-                <div class="flex justify-between text-sm mb-2">
-
-                    <span>
-                        <span id="monthly-completed">0</span>
-                        מתוך
-                        <span id="monthly-goal">16</span>
-                        אימונים
-                    </span>
-
-                    <span id="monthly-percentage" class="font-bold text-[#1E4630]">
-                        0%
-                    </span>
-
-                </div>
-
-                <div class="w-full bg-gray-100 rounded-full h-3">
-
-                    <div id="monthly-progress-bar" class="bg-[#1E4630] h-3 rounded-full" style="width: 0%;">
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- האימון הקרוב שלך -->
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-[#E8F5F1] flex items-center justify-center">
-                        <i class="fa-solid fa-calendar-days text-[#1E4630] text-xl"></i>
-                    </div>
-
-                    <div>
-                        <h3 class="text-xl font-bold text-[#1E4630]">
-                            האימון הקרוב שלך
-                        </h3>
-
-                        <p class="text-gray-500 text-sm">
-                            האימון הבא שאתה רשום אליו
-                        </p>
+                        <!-- הפרש מהשקילה הקודמת (מודגש ובולט) -->
+                        <div class="text-center sm:text-left bg-[#E8F5F1] px-4 py-2 rounded-2xl border border-[#A3D9C9]">
+                            <h3 class="text-xs font-bold text-[#1E4630] mb-1">מהשקילה הקודמת</h3>
+                            <div class="flex items-baseline justify-center sm:justify-end gap-1">
+                                <span id="prev-weight-diff" class="text-3xl font-extrabold text-[#1E4630]" style="direction: ltr;">0.0</span>
+                                <span class="text-sm font-bold text-[#1E4630]">ק"ג</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div>
-                    <p id="upcoming-workout-title" class="text-lg font-bold text-gray-800">
-                        אין אימונים קרובים
-                    </p>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- סה"כ קלוריות -->
+                <div class="col-span-1 md:col-span-2 bg-[#1E4630] rounded-3xl p-8 shadow-xl flex flex-col justify-center">
+                    <i class="fa-solid fa-bolt text-[#A3D9C9] text-2xl mb-2"></i>
+                    <h3 class="text-sm font-bold text-[#A3D9C9] mb-2">סה"כ קלוריות שנשרפו</h3>
+                    <div id="total-burned-calories" class="text-6xl font-extrabold text-white">0</div>
+                    <p class="text-sm text-[#A3D9C9] mt-2">אימונים בסטודיו + פעילות עצמאית</p>
+                </div>
 
-                    <p id="upcoming-workout-date" class="text-gray-600 mt-2">
-                        עדיין לא נרשמת לאימון עתידי
-                    </p>
-
-                    <p id="upcoming-workout-time" class="text-gray-600 mt-1">
-                    </p>
-
-                    <p id="upcoming-workout-instructor" class="text-gray-600 mt-1">
-                    </p>
+                <!-- מאזן קלורי -->
+                <div class="col-span-1 md:col-span-2 bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex sm:flex-row justify-between items-center">
+                    <div class="text-right">
+                        <h3 class="text-xl font-bold text-[#1E4630]">מאזן קלורי שבועי</h3>
+                        <p class="text-xs text-gray-500">שרפת פחות צרכת</p>
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <div id="calorie-balance" class="text-5xl font-extrabold text-[#1E4630]" style="direction: ltr;">0</div>
+                        <span class="text-lg font-bold text-gray-500">Kcal</span>
+                    </div>
                 </div>
             </div>
 
-        </section>
+            <!-- אזור תחתון: הוספת פעילות, היסטוריית שקילות והיסטוריית פעילויות -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                <!-- הוספת פעילות עצמאית -->
+                <div class="bg-white/90 backdrop-blur rounded-3xl p-8 shadow-lg h-fit">
+                    <h3 class="text-xl font-bold text-[#1E4630] mb-6">הוספת פעילות עצמאית</h3>
+                    <form id="activity-form" class="space-y-4">
+                        <select id="activity-type" class="w-full p-3 rounded-xl border focus:outline-none" required>
+                            <option value="" disabled selected>בחרי פעילות...</option>
+                            <option value="walking">הליכה</option>
+                            <option value="running">ריצה</option>
+                            <option value="stairs">מדרגות</option>
+                            <option value="cycling">אופניים</option>
+                            <option value="homeWorkout">אימון ביתי</option>
+                            <option value="other">אחר</option>
+                        </select>
+                        <input type="number" id="activity-duration" class="w-full p-3 rounded-xl border focus:outline-none" placeholder="משך הפעילות בדקות" required>
+                        <button type="submit" class="w-full bg-[#1E4630] text-white font-bold py-3 rounded-xl mt-4">הוספת פעילות</button>
+                    </form>
+                </div>
 
+                <!-- היסטוריות מדויקות (ללא רווחים ריקים) -->
+                <div class="flex flex-col gap-6">
+                    <!-- היסטוריית שקילות -->
+                    <div class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg overflow-y-auto" style="max-height: 220px;">
+                        <h3 class="text-lg font-bold text-[#1E4630] mb-4 border-b pb-2">היסטוריית שקילות</h3>
+                        <div id="weight-history" class="space-y-3">טוען...</div>
+                    </div>
 
-        <!-- Quick links -->
-        <section class="mt-8 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-
-            <h2 class="text-xl font-bold text-[#1E4630] mb-5">
-                המשך פעילות
-            </h2>
-
-            <div class="flex flex-wrap gap-3">
-
-                <a href="workouts.html" class="bg-[#1E4630] text-white px-5 py-2.5 rounded-xl text-sm font-semibold">
-                    קביעת אימון
-                </a>
-
-                <a href="exercises.html" class="bg-gray-100 text-gray-700 px-5 py-2.5 rounded-xl text-sm font-semibold">
-                    צפייה באימונים
-                </a>
-
-                <a href="nutrition.html" class="bg-gray-100 text-gray-700 px-5 py-2.5 rounded-xl text-sm font-semibold">
-                    מעקב תזונה
-                </a>
-
+                    <!-- פעילויות ואימונים אחרונים -->
+                    <div class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg overflow-y-auto" style="max-height: 250px;">
+                        <h3 class="text-lg font-bold text-[#1E4630] mb-4 border-b pb-2">פעילויות ואימונים אחרונים</h3>
+                        <div id="activity-history" class="space-y-3">טוען פעילויות...</div>
+                    </div>
+                </div>
             </div>
+        </main>
+    </div>
 
-        </section>
-
-    </main>
-
-
-    <!-- Footer -->
+<!-- Footer -->
     <footer class="site-footer">
 
         <div class="footer-inner">
 
-
             <div class="footer-newsletter">
 
-                <h3>
-                    הרשמה לניוזלטר שלנו
-                </h3>
+                <h3>הרשמה לניוזלטר שלנו</h3>
 
                 <div class="newsletter-shell">
-
                     <button type="button" class="newsletter-btn">
                         שליחה
                     </button>
 
-                    <input type="email" placeholder="כתובת אימייל" aria-label="כתובת אימייל">
-
+                    <input type="email"
+                           placeholder="כתובת אימייל"
+                           aria-label="כתובת אימייל">
                 </div>
 
                 <div class="social-links">
 
-                    <a href="#" aria-label="Facebook" class="social-link">
+                    <a href="#"
+                       aria-label="Facebook"
+                       class="social-link">
                         <i class="fa-brands fa-facebook-f"></i>
                     </a>
 
-                    <a href="#" aria-label="Instagram" class="social-link">
+                    <a href="#"
+                       aria-label="Instagram"
+                       class="social-link">
                         <i class="fa-brands fa-instagram"></i>
                     </a>
 
                     <a href="#" aria-label="WhatsApp" class="social-link">
-                        <i class="fa-brands fa-whatsapp"></i>
+                         <i class="fa-brands fa-whatsapp"></i>
                     </a>
 
                 </div>
@@ -321,95 +239,36 @@
 
 
             <div class="footer-column">
-
-                <h4>
-                    שירותים
-                </h4>
-
+                <h4>שירותים</h4>
                 <ul class="footer-list">
-
-                    <li>
-                        <a href="exercises.html">
-                            תוכניות כושר
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="blog.html">
-                            בלוג
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="contact.html">
-                            מרכז העזרה
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="contact.html">
-                            צור קשר
-                        </a>
-                    </li>
-
+                    <li><a href="exercises.html">תוכניות כושר</a></li>
+                    <li><a href="blog.html">בלוג</a></li>
+                    <li><a href="contact.html">מרכז העזרה</a></li>
+                    <li><a href="contact.html">צור קשר</a></li>
                 </ul>
-
             </div>
 
 
-            <div class="footer-column">
-
-                <h4>
-                    קהילות
-                </h4>
-
+             <div class="footer-column">
+                <h4>קהילות</h4>
                 <ul class="footer-list">
-
-                    <li>
-                        <a href="exercises.html">
-                            מתחילים
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="exercises.html">
-                            מתקדמים
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="nutrition.html">
-                            תזונה נכונה
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="contact.html">
-                            תמיכה ומוטיבציה
-                        </a>
-                    </li>
-
+                    <li><a href="exercises.html">מתחילים</a></li>
+                    <li><a href="exercises.html">מתקדמים</a></li>
+                    <li><a href="nutrition.html">תזונה נכונה</a></li>
+                    <li><a href="contact.html">תמיכה ומוטיבציה</a></li>
                 </ul>
-
             </div>
 
         </div>
 
 
         <div class="footer-bottom">
-
-            <p>
-                © 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.
-            </p>
-
+            <p>© 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.</p>
         </div>
 
     </footer>
 
-
-    <script src="js/script.js"></script>
+     <script src="js/script.js"></script>
     <script src="js/tracking.js"></script>
-
 </body>
-
 </html>
