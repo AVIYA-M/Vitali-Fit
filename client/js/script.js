@@ -135,3 +135,23 @@ function closeCustomMessageBox() {
         modal.classList.add('hidden');
     }
 }
+document.addEventListener('DOMContentLoaded', () => {
+    // יצירה אוטומטית של כפתור הגלילה הצף בכל עמוד
+    if (!document.querySelector('.floating-scroll-btn')) {
+        const scrollBtn = document.createElement('button'); // נהפוך את זה לכפתור אמיתי
+        scrollBtn.className = 'floating-scroll-btn';
+        scrollBtn.setAttribute('aria-label', 'גלול לפוטר');
+        scrollBtn.innerHTML = '<i class="fa-solid fa-arrow-down text-lg"></i>';
+        
+        // פעולת גלילה חלקה לפוטר בכל עמוד באופן אוטומטי
+        scrollBtn.addEventListener('click', () => {
+            const footer = document.querySelector('footer') || document.getElementById('footer');
+            if (footer) {
+                footer.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        
+        // הוספה לגוף העמוד
+        document.body.appendChild(scrollBtn);
+    }
+});

@@ -440,3 +440,37 @@ a {
         font-size: 0.75rem;
     }
 }
+/* כפתור גלילה צף לפוטר */
+.floating-scroll-btn {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 50;
+    width: 48px;
+    height: 48px;
+    background-color: #1E4630;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border: 2px solid white;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    animation: bounce 1.5s infinite;
+    text-decoration: none;
+}
+
+.floating-scroll-btn:hover {
+    background-color: #163524;
+    transform: scale(1.05);
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}

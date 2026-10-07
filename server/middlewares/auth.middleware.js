@@ -1,3 +1,4 @@
+<!-- ... existing code ... -->
 const jwt = require('jsonwebtoken');
 
 // 1. מידלוור לאימות משתמש מחובר (בודק אם יש טוקן תקין)
@@ -13,7 +14,7 @@ exports.verifyToken = (req, res, next) => {
 
     const decoded = jwt.verify(
       token, 
-      process.env.JWT_SECRET || 'fallback_secret_key'
+      process.env.JWT_SECRET || 'fallback_secret_key' // ודאי שזה תואם למפתח יצירת הטוקן שלך
     );
 
     req.user = decoded;

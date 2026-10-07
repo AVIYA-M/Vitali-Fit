@@ -60,6 +60,7 @@
         font-size: 1.3rem;
     }
 }
+
 .social-links {
     display: flex;
     gap: 15px;
@@ -75,17 +76,281 @@
     color: #A3D9C9;
 }
 
-
-
-
-
-
-
-
-
-
 @media (max-width: 768px) {
     .footer-inner {
         grid-template-columns: 1fr;
     }
+}
+
+/* ==================================== */
+/* עיצוב סקשן המלצות קהילה VitaliFit */
+/* ==================================== */
+.reviews-section-clean {
+    padding: 40px 20px;
+    position: relative;
+    direction: rtl;
+    text-align: right;
+}
+
+.reviews-wrapper-clean {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.reviews-title-clean {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.reviews-title-clean h2 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1E4630;
+    margin-bottom: 5px;
+}
+
+.reviews-title-clean h2 span {
+    color: #1E4630; /* הצבע המותאם לאתר */
+}
+
+.reviews-title-clean p {
+    font-size: 15px;
+    color: #666;
+}
+
+.reviews-carousel-box-clean {
+    position: relative;
+    max-width: 1050px;
+    margin: 0 auto 30px auto;
+    padding: 0 50px;
+}
+
+.carousel-viewport-clean {
+    overflow: hidden;
+    padding: 10px 0;
+    width: 100%;
+}
+
+.reviews-track-clean {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.3s ease-out;
+}
+
+.carousel-btn-clean {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #1E4630;
+    font-size: 14px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.carousel-btn-clean:hover {
+    background: #1E4630;
+    color: #ffffff;
+}
+
+.carousel-btn-clean.prev { right: 0; }
+.carousel-btn-clean.next { left: 0; }
+
+.reviews-loading {
+    text-align: center;
+    color: #777;
+    width: 100%;
+    padding: 20px;
+    font-size: 14px;
+}
+
+/* כרטיסייה גדולה ומרשימה שמתחלקת בדיוק ל-3 שווה בשווה במסך */
+.review-item-card {
+    flex: 0 0 calc(33.333% - 14px); /* בדיוק 3 כרטיסיות גדולות בשורה עם מרווחים מושלמים */
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    border: 1px solid #eaeaea;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 180px;
+    box-sizing: border-box;
+}
+
+.review-item-card p {
+    color: #333;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.5;
+    margin: 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.review-item-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-top: 1px solid #f5f5f5;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.review-item-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #E8F5F1;
+    color: #1E4630;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.review-item-name {
+    font-weight: bold;
+    color: #1E4630;
+    font-size: 13px;
+    margin: 0;
+}
+
+/* טופס הוספת המלצה */
+.review-form-container-clean {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.review-card-clean {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    padding: 25px;
+    border: 1px solid #eaeaea;
+}
+
+.review-form-header {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.review-form-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1E4630;
+    margin-bottom: 4px;
+}
+
+.review-form-header p {
+    font-size: 12px;
+    color: #666;
+}
+
+.review-form-clean {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.form-field input, .form-field textarea {
+    width: 100%;
+    padding: 10px 14px;
+    background: #fcfcfc;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 13px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.form-checkbox-clean {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #555;
+}
+
+.form-checkbox-clean input {
+    width: 15px;
+    height: 15px;
+    accent-color: #1E4630;
+    cursor: pointer;
+}
+
+.form-checkbox-clean label {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.submit-btn-clean {
+    width: 100%;
+    background: #1E4630;
+    color: white;
+    font-weight: bold;
+    padding: 11px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.submit-btn-clean:hover {
+    background: #153523;
+}
+
+.success-box-clean {
+    text-align: center;
+    padding: 20px;
+}
+
+.success-icon-clean {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #E8F5F1;
+    color: #1E4630;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.success-box-clean h4 {
+    font-size: 15px;
+    font-weight: bold;
+    color: #1E4630;
+    margin-bottom: 4px;
+}
+
+.success-box-clean p {
+    font-size: 12px;
+    color: #666;
 }

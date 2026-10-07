@@ -1,10 +1,15 @@
 const API_URL_ADMIN = 'http://localhost:5000/api/admin';
 const API_URL_WORKOUTS = 'http://localhost:5000/api/workouts';
+const API_URL_REVIEWS = 'http://localhost:5000/api/reviews';
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchUsersList();
+    fetchAdminReviews();
 });
 
+// ==========================================
+// ניהול משתמשים במערכת
+// ==========================================
 async function fetchUsersList() {
     const token = localStorage.getItem('token');
     const tableBody = document.getElementById('users-table-body');
@@ -18,7 +23,6 @@ async function fetchUsersList() {
         
         const users = await response.json();
         
-        // יצירת הטבלה כולל כפתור מחיקה וכפתור לשינוי הרשאה
         tableBody.innerHTML = users.map(user => `
             <tr class="hover:bg-gray-50 border-b border-gray-100">
                 <td class="py-3 px-6 font-medium text-gray-800">${user.fullName || 'ללא שם'}</td>
@@ -48,10 +52,19 @@ async function deleteUser(userId) {
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || 'שגיאה במחיקת המשתמש');
         
-      showModalMessage('המשתמש נמחק בהצלחה');
-        fetchUsersList(); // רענון הטבלה
+        if (typeof showModalMessage === 'function') {
+            showModalMessage('המשתמש נמחק בהצלחה');
+        } else {
+            alert('המשתמש נמחק בהצלחה');
+        }
+        fetchUsersList();
     } catch (error) {
-    showModalMessage(error.message);    }
+        if (typeof showModalMessage === 'function') {
+            showModalMessage(error.message);
+        } else {
+            alert(error.message);
+        }
+    }
 }
 
 async function updateUserRole(userId, newRole) {
@@ -69,13 +82,20 @@ async function updateUserRole(userId, newRole) {
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || 'שגיאה בעדכון ההרשאה');
         
-      showModalMessage('ההרשאה עודכנה בהצלחה');
-        fetchUsersList(); // רענון הטבלה
+        if (typeof showModalMessage === 'function') {
+            showModalMessage('ההרשאה עודכנה בהצלחה');
+        } else {
+            alert('ההרשאה עודכנה בהצלחה');
+        }
+        fetchUsersList();
     } catch (error) {
-        (error.message);
+        console.error(error);
     }
 }
 
+// ==========================================
+// ניהול אימונים (הוספה ללוח)
+// ==========================================
 function openAddWorkoutModal() {
     document.getElementById('add-workout-modal').classList.remove('hidden');
 }
@@ -85,97 +105,135 @@ function closeAddWorkoutModal() {
 }
 
 async function handleCreateWorkout(event) {
-
     event.preventDefault();
 
-    const title =
-        document.getElementById('w-title').value.trim();
-
-    const description =
-        document.getElementById('w-desc').value.trim();
-
-    const date =
-        document.getElementById('w-date').value;
-
-    const time =
-        document.getElementById('w-time').value.trim();
-
-    const instructor =
-        document.getElementById('w-instructor').value.trim();
-
-    const maxParticipants =
-        Number(document.getElementById('w-max').value);
-
-    const durationMinutes =
-        Number(document.getElementById('w-duration').value);
-
-    const estimatedCalories =
-        Number(document.getElementById('w-calories').value);
-
-    const type =
-        document.getElementById('w-type').value;
-
-    const category =
-        document.getElementById('w-category').value;
-
-    const token =
-        localStorage.getItem('token');
-
+    const title = document.getElementById('w-title').value.trim();
+    const description = document.getElementById('w-desc').value.trim();
+    const date = document.getElementById('w-date').value;
+    const time = document.getElementById('w-time').value.trim();
+    const instructor = document.getElementById('w-instructor').value.trim();
+    const maxParticipants = Number(document.getElementById('w-max').value);
+    const durationMinutes = Number(document.getElementById('w-duration').value);
+    const estimatedCalories = Number(document.getElementById('w-calories').value);
+    const type = document.getElementById('w-type').value;
+    const category = document.getElementById('w-category').value;
+    const token = localStorage.getItem('token');
 
     try {
-
-        const response = await fetch(
-            API_URL_WORKOUTS,
-            {
-                method: 'POST',
-
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-
-                body: JSON.stringify({
-                    title,
-                    description,
-                    date,
-                    time,
-                    instructor,
-                    maxParticipants,
-                    durationMinutes,
-                    estimatedCalories,
-                    type,
-                    category
-                })
-            }
-        );
-
+        const response = await fetch(API_URL_WORKOUTS, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                title,
+                description,
+                date,
+                time,
+                instructor,
+                maxParticipants,
+                durationMinutes,
+                estimatedCalories,
+                type,
+                category
+            })
+        });
 
         const data = await response.json();
 
-
         if (!response.ok) {
-            throw new Error(
-                data.message ||
-                'שגיאה ביצירת האימון'
-            );
+            throw new Error(data.message || 'שגיאה ביצירת האימון');
         }
 
-
-        showModalMessage(
-            'השיעור התווסף בהצלחה למערכת וללוח האימונים!'
-        );
+        if (typeof showModalMessage === 'function') {
+            showModalMessage('השיעור התווסף בהצלחה למערכת וללוח האימונים!');
+        } else {
+            alert('השיעור התווסף בהצלחה למערכת וללוח האימונים!');
+        }
 
         closeAddWorkoutModal();
-
-        document
-            .getElementById('create-workout-form')
-            .reset();
-
+        document.getElementById('create-workout-form').reset();
 
     } catch (error) {
-
-        showModalMessage(
-            error.message
-        );
+        if (typeof showModalMessage === 'function') {
+            showModalMessage(error.message);
+        } else {
+            alert(error.message);
+        }
     }
 }
+
+// ==========================================
+// ניהול המלצות קהילה (אישור / דחייה)
+// ==========================================
+async function fetchAdminReviews() {
+    const reviewsTableBody = document.getElementById('reviews-table-body');
+    if (!reviewsTableBody) return;
+    const token = localStorage.getItem('token');
+
+    try {
+        const response = await fetch(`${API_URL_REVIEWS}/admin/all`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('שגיאה בטעינת ההמלצות');
+
+        const reviews = await response.json();
+
+        if (reviews.length === 0) {
+            reviewsTableBody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-500">אין המלצות במערכת כרגע.</td></tr>`;
+            return;
+        }
+
+        reviewsTableBody.innerHTML = reviews.map(review => `
+            <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
+                <td class="py-3 px-6 font-bold text-gray-800">${review.name}</td>
+                <td class="py-3 px-6 text-gray-600 max-w-xs truncate" title="${review.text}">"${review.text}"</td>
+                <td class="py-3 px-6">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold ${
+                        review.status === 'approved' ? 'bg-green-100 text-green-700' :
+                        review.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-800'
+                    }">
+                        ${review.status === 'approved' ? 'מאושר (מוצג באתר)' : review.status === 'rejected' ? 'נדחה' : 'ממתין לאישור'}
+                    </span>
+                </td>
+                <td class="py-3 px-6 text-center space-x-2 space-x-reverse">
+                    <button onclick="updateReviewStatus('${review._id}', 'approved')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                        אשר
+                    </button>
+                    <button onclick="updateReviewStatus('${review._id}', 'rejected')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                        דחה
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    } catch (error) {
+        console.error('Error loading reviews:', error);
+        reviewsTableBody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-red-500">שגיאה בטעינת ההמלצות מהשרת.</td></tr>`;
+    }
+}
+
+window.updateReviewStatus = async function(id, status) {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch(`${API_URL_REVIEWS}/admin/${id}/status`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ status })
+        });
+
+        if (response.ok) {
+            // רענון טבלת ההמלצות מיד לאחר שינוי הסטטוס
+            fetchAdminReviews();
+        } else {
+            const data = await response.json();
+            alert(`שגיאה בעדכון: ${data.message}`);
+        }
+    } catch (error) {
+        alert('שגיאת תקשורת מול השרת.');
+    }
+};

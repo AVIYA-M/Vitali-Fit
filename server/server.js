@@ -16,6 +16,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 
 app.use('/uploads', express.static('uploads'));
+const reviewRoutes = require('./routes/review.routes');
+app.use('/api/reviews', reviewRoutes);
 
 // ========================================
 // Routes Imports
