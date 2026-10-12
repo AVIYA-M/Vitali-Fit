@@ -1,10 +1,12 @@
 const API_URL_ADMIN = 'http://localhost:5000/api/admin';
 const API_URL_WORKOUTS = 'http://localhost:5000/api/workouts';
 const API_URL_REVIEWS = 'http://localhost:5000/api/reviews';
+const API_URL_CONTACT = 'http://localhost:5000/api/contact';
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchUsersList();
     fetchAdminReviews();
+    fetchContactMessages();
 });
 
 // ==========================================
@@ -237,3 +239,87 @@ window.updateReviewStatus = async function(id, status) {
         alert('שגיאת תקשורת מול השרת.');
     }
 };
+// ==========================================
+// הצגת פניות שהתקבלו מטופס יצירת קשר
+// ==========================================
+async function fetchContactMessages() {
+    const tableBody = document.getElementById('contact-messages-table-body');
+
+    if (!tableBody) return;
+
+    const token = localStorage.getItem('token');
+
+    try {
+        const response = await fetch(`${API_URL_CONTACT}/admin/all`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('שגיאה בטעינת הפניות');
+        }
+
+        const messages = await response.json();
+
+        if (messages.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="text-center py-6 text-gray-500">
+                        עדיין לא התקבלו פניות.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tableBody.innerHTML = messages.map(message => `
+            <tr class="hover:bg-gray-50 border-b border-gray-100">
+                <td class="py-3 px-4">
+                    ${message.createdAt
+                        ? new Date(message.createdAt).toLocaleDateString('he-IL')
+                        : '-'}
+                </td>
+
+                <td class="py-3 px-4">
+                    ${escapeContactText(message.name)}
+                </td>
+
+                <td class="py-3 px-4">
+                    ${escapeContactText(message.email)}
+                </td>
+
+                <td class="py-3 px-4">
+                    ${escapeContactText(message.subject)}
+                </td>
+
+                <td class="py-3 px-4 whitespace-pre-wrap">
+                    ${escapeContactText(message.message)}
+                </td>
+
+                <td class="py-3 px-4">
+                    ${message.status === 'read' ? 'נקראה' :
+                      message.status === 'closed' ? 'טופלה' : 'חדשה'}
+                </td>
+            </tr>
+        `).join('');
+
+    } catch (error) {
+        console.error('שגיאה בטעינת הפניות:', error);
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="text-center py-6 text-red-500">
+                    לא ניתן לטעון את הפניות. בדקי את החיבור לשרת ואת הרשאות המנהל.
+                </td>
+            </tr>
+        `;
+    }
+}
+
+// מניעת הכנסת תוכן שהתקבל מהמשתמש כ-HTML
+function escapeContactText(value) {
+    const element = document.createElement('span');
+    element.textContent = value ?? '';
+    return element.innerHTML;
+}
