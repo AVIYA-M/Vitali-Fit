@@ -11,6 +11,12 @@ router.get('/', workoutController.getAllWorkouts);
 // POST /api/workouts - הוספת אימון חדש (מנהלים בלבד!)
 router.post('/', verifyToken, isAdmin, workoutController.createWorkout);
 
+// PUT /api/workouts/:id - עריכת אימון קיים (מנהלים בלבד!)
+router.put('/:id', verifyToken, isAdmin, workoutController.updateWorkout);
+
+// DELETE /api/workouts/:id - מחיקת אימון קיים ושמירת היסטוריית משתמשים (מנהלים בלבד!)
+router.delete('/:id', verifyToken, isAdmin, workoutController.deleteWorkout);
+
 // POST /api/workouts/:id/register - הרשמה לאימון (רק משתמשים מחוברים יכולים להירשם)
 router.post('/:id/register', verifyToken, workoutController.registerForWorkout);
 

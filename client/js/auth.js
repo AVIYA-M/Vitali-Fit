@@ -1,24 +1,33 @@
-const API_URL = 'http://localhost:5000/api';
+// ==========================================
+// ניהול הרשמה והתחברות (auth.js)
+// ==========================================
 
-
-// ==============================
-// התחברות
-// ==============================
-async function handleAuth(event) {
+async function handleRegister(event) {
     event.preventDefault();
 
-    const form = event.currentTarget;
+    const fullNameInput = document.getElementById('fullName');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const msgBox = document.getElementById('register-message');
 
-    const email = form.querySelector('input[type="email"]').value.trim();
-    const password = form.querySelector('input[type="password"]').value;
+    // בדיקה שהשדות קיימים בטופס
+    if (!fullNameInput || !emailInput || !passwordInput) {
+        console.error('אחד מהשדות בטופס ההרשמה לא נמצא');
+        return;
+    }
+
+    const fullName = fullNameInput.value.trim();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
 
     try {
-        const response = await fetch(`${API_URL}/auth/login`, {
+        const response = await fetch('http://localhost:5000/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                fullName,
                 email,
                 password
             })
@@ -27,146 +36,79 @@ async function handleAuth(event) {
         const data = await response.json();
 
         if (!response.ok) {
-            showCustomMessageBox(
-                `שגיאה בהתחברות: ${data.message || 'פרטים שגויים'}`
-            );
-            return;
+            throw new Error(data.message || 'שגיאה ביצירת החשבון');
         }
 
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        // הצגת הודעת הצלחה מרגיעה למשתמשת
+        if (msgBox) {
+            msgBox.className = 'p-3 rounded-xl text-xs font-bold text-center bg-green-100 text-green-700 border border-green-200';
+            msgBox.textContent = 'החשבון נוצר בהצלחה! מעביר אותך לדף ההתחברות...';
+            msgBox.classList.remove('hidden');
+        } else {
+            alert('החשבון נוצר בהצלחה! מעביר אותך לדף ההתחברות...');
+        }
 
-        showCustomMessageBox(
-            `התחברת בהצלחה למערכת!\nברוך הבא, ${data.user.fullName}`
-        );
-
-        const params = new URLSearchParams(window.location.search);
-        const redirectPage = params.get('redirect') || 'index.html';
-
+        // מעבר אוטומטי לדף ההתחברות אחרי שנייה וחצי
         setTimeout(() => {
-            window.location.href = redirectPage;
-        }, 1000);
+            window.location.href = 'login.html';
+        }, 1500);
 
     } catch (error) {
-        console.error('Login error:', error);
-
-        showCustomMessageBox(
-            'שגיאת תקשורת עם השרת. ודאי שהשרת פועל.'
-        );
+        if (msgBox) {
+            msgBox.className = 'p-3 rounded-xl text-xs font-bold text-center bg-red-100 text-red-700 border border-red-200';
+            msgBox.textContent = error.message;
+            msgBox.classList.remove('hidden');
+        } else {
+            alert(error.message);
+        }
     }
 }
 
-
-// ==============================
-// הרשמה
-// ==============================
-async function handleRegister(event) {
-
+// פונקציית התחברות (לשימוש ב-login.html אם נדרש)
+async function handleLogin(event) {
     event.preventDefault();
 
-    const form = event.currentTarget;
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const msgBox = document.getElementById('login-message');
 
-    const fullName =
-        form.querySelector(
-            'input[name="fullName"]'
-        ).value.trim();
-
-    const email =
-        form.querySelector(
-            'input[name="email"]'
-        ).value.trim();
-
-    const password =
-        form.querySelector(
-            'input[name="password"]'
-        ).value;
-
-    const weight =
-        form.querySelector(
-            'input[name="weight"]'
-        ).value;
-
-    const weighInDay =
-        form.querySelector(
-            'select[name="weighInDay"]'
-        ).value;
-
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
 
     try {
+        const response = await fetch('http://localhost:5000/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
 
-        const response =
-            await fetch(
-                `${API_URL}/auth/register`,
-                {
-                    method: 'POST',
-
-                    headers: {
-                        'Content-Type':
-                            'application/json'
-                    },
-
-                    body: JSON.stringify({
-
-                        fullName,
-
-                        email,
-
-                        password,
-
-                        weight,
-
-                        weighInDay
-
-                    })
-                }
-            );
-
-
-        const data =
-            await response.json();
-
+        const data = await response.json();
 
         if (!response.ok) {
-
-            showCustomMessageBox(
-
-                `שגיאה בהרשמה: ${
-                    data.message ||
-                    'לא ניתן ליצור את החשבון'
-                }`
-
-            );
-
-            return;
-
+            throw new Error(data.message || 'אימייל או סיסמה שגויים');
         }
 
+        // שמירת הטוקן ופרטי המשתמש
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
 
-        showCustomMessageBox(
-            'החשבון נוצר בהצלחה!\nמעבירה אותך לדף ההתחברות...'
-        );
-
+        if (msgBox) {
+            msgBox.className = 'p-3 rounded-xl text-xs font-bold text-center bg-green-100 text-green-700 border border-green-200';
+            msgBox.textContent = 'התחברת בהצלחה! מעבר ללוח המעקב...';
+            msgBox.classList.remove('hidden');
+        }
 
         setTimeout(() => {
-
-            window.location.href =
-                'login.html';
-
-        }, 1200);
-
+            window.location.href = 'tracking.html';
+        }, 1000);
 
     } catch (error) {
-
-        console.error(
-            'Register error:',
-            error
-        );
-
-
-        showCustomMessageBox(
-            'שגיאת תקשורת עם השרת. ודאי שהשרת פועל.'
-        );
-
+        if (msgBox) {
+            msgBox.className = 'p-3 rounded-xl text-xs font-bold text-center bg-red-100 text-red-700 border border-red-200';
+            msgBox.textContent = error.message;
+            msgBox.classList.remove('hidden');
+        } else {
+            alert(error.message);
+        }
     }
-
 }
