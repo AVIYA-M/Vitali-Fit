@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>לוח אימונים - VitaliFit</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/workouts.css">
 </head>
+
 <body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen justify-between">
     <header class="site-header">
         <div class="header-shell">
             <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
                 <div class="brand-logo-wrap">
 
-                   <img src="image/לוגו.png" alt="VitaliFit" class="brand-image">
+                    <img src="image/לוגו.png" alt="VitaliFit" class="brand-image">
 
-                   <span class="brand-copy">
-                     <span class="brand-name">VitaliFit</span>
-                     <span class="brand-tagline">בריאות ואנרגיה</span>
-                   </span>
+                    <span class="brand-copy">
+                        <span class="brand-name">VitaliFit</span>
+                        <span class="brand-tagline">בריאות ואנרגיה</span>
+                    </span>
 
-              </div>
+                </div>
             </a>
 
             <nav class="main-menu" aria-label="Main navigation">
@@ -36,7 +39,9 @@
                 <a href="nutrition.html">תזונה</a>
                 <a href="contact.html">צרו קשר</a>
                 <a href="blog.html">בלוג</a>
-                <a href="admin.html" id="admin-nav-link" class="nav-link text-white font-medium hover:text-green-300 transition" style="display: none;">פאנל ניהול</a>
+                <a href="admin.html" id="admin-nav-link"
+                    class="nav-link text-white font-medium hover:text-green-300 transition" style="display: none;">פאנל
+                    ניהול</a>
             </nav>
 
             <div class="nav-actions">
@@ -63,9 +68,10 @@
             <div class="workout-filters" role="group" aria-label="סינון סוג אימון">
                 <button type="button" class="workout-filter active" data-filter="all">כל האימונים</button>
                 <button type="button" class="workout-filter" data-filter="studio">בסטודיו</button>
-                <button type="button" class="workout-filter" data-filter="zoom"><i class="fa-solid fa-video"></i> אימונים בזום</button>
+                <button type="button" class="workout-filter" data-filter="zoom"><i class="fa-solid fa-video"></i>
+                    אימונים בזום</button>
             </div>
-            
+
             <div class="calendar-grid">
                 <div class="day-name">א'</div>
                 <div class="day-name">ב'</div>
@@ -98,8 +104,8 @@
                     <a href="#" aria-label="Facebook" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
                     <a href="#" aria-label="Instagram" class="social-link"><i class="fa-brands fa-instagram"></i></a>
                     <a href="#" aria-label="WhatsApp" class="social-link">
-                       <i class="fa-brands fa-whatsapp"></i>
-                     </a>
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
                 </div>
             </div>
 
@@ -128,7 +134,7 @@
             <p>© 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.</p>
         </div>
     </footer>
-
+    <script src="js/api-config.js"></script>
     <script src="js/script.js"></script>
     <script src="js/workouts.js"></script>
 

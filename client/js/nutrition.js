@@ -1,4 +1,4 @@
-const API_URL_NUTRITION = 'http://localhost:5000/api/nutrition';
+const API_URL_NUTRITION = `${window.API_BASE_URL}/api/nutrition`;
 const API_URL_NUTRITION_ANALYZE = `${API_URL_NUTRITION}/analyze`;
 let todayMeals = [];
 let allMeals = [];
@@ -197,7 +197,7 @@ function displayMeals(meals) {
                     </div>
                 </summary>
                 <div class="px-4 pb-4 border-t border-gray-200 pt-4">
-                    ${meal.imageUrl ? `<img src="http://localhost:5000${meal.imageUrl}" alt="${meal.mealName}" class="w-full h-48 object-cover rounded-xl mb-4">` : ''}
+                    ${meal.imageUrl ? `<img src="${window.API_BASE_URL}${meal.imageUrl}" alt="${meal.mealName}" class="w-full h-48 object-cover rounded-xl mb-4">` : ''}
                     <div class="grid grid-cols-2 gap-3">
                         <div class="bg-white rounded-xl p-3 text-center">
                             <p class="text-xs text-gray-400">קלוריות</p>
@@ -262,7 +262,7 @@ function displayHistory(meals) {
                     </div>
                 </summary>
                 <div class="px-4 pb-4 border-t border-gray-200 pt-4">
-                    ${meal.imageUrl ? `<img src="http://localhost:5000${meal.imageUrl}" alt="${meal.mealName}" class="w-full h-48 object-cover rounded-xl mb-4">` : ''}
+                    ${meal.imageUrl ? `<img src="${window.API_BASE_URL}${meal.imageUrl}" alt="${meal.mealName}" class="w-full h-48 object-cover rounded-xl mb-4">` : ''}
                     <div class="grid grid-cols-2 gap-3">
                         <div class="bg-white rounded-xl p-3 text-center">
                             <p class="text-xs text-gray-400">קלוריות</p>

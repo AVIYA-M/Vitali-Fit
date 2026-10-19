@@ -1,6 +1,4 @@
-console.log("🚀 קובץ tracking.js נטען ומוכן לפעולה!");
-
-const API_URL = 'http://localhost:5000/api';
+const API_URL = `${window.API_BASE_URL}/api`;
 
 const ACTIVITY_NAMES = {
     walking: 'הליכה',

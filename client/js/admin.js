@@ -1,7 +1,7 @@
-const API_URL_ADMIN = 'http://localhost:5000/api/admin';
-const API_URL_WORKOUTS = 'http://localhost:5000/api/workouts';
-const API_URL_REVIEWS = 'http://localhost:5000/api/reviews';
-const API_URL_CONTACT = 'http://localhost:5000/api/contact';
+const API_URL_ADMIN = `${window.API_BASE_URL}/api/admin`;
+const API_URL_WORKOUTS = `${window.API_BASE_URL}/api/workouts`;
+const API_URL_REVIEWS = `${window.API_BASE_URL}/api/reviews`;
+const API_URL_CONTACT = `${window.API_BASE_URL}/api/contact`;
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchUsersList();

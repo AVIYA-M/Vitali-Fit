@@ -1,5 +1,5 @@
-const API_URL_WORKOUTS = 'http://localhost:5000/api/workouts';
-const API_URL_TRACKING = 'http://localhost:5000/api/tracking';
+const API_URL_WORKOUTS = `${window.API_BASE_URL}/api/workouts`;
+const API_URL_TRACKING = `${window.API_BASE_URL}/api/tracking`;
 
 document.addEventListener("DOMContentLoaded", () => {
 

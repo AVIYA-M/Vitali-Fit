@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>לוח מעקב - VitaliFit | בריאות ואנרגיה</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <style>
         .dashboard-wrapper {
-            background-image: url('image/חדר כושר.png'); 
+            background-image: url('image/חדר כושר.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -27,65 +29,55 @@
 
     <!-- ההדר המקורי המדויק שלך -->
     <header class="site-header">
-    <div class="header-shell">
+        <div class="header-shell">
 
-        <a href="index.html"
-           class="brand-link"
-           aria-label="VitaliFit Home">
+            <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
 
-             <div class="brand-logo-wrap">
-                <img src="image/לוגו.png"
-                     alt="VitaliFit"
-                     class="brand-image">
+                <div class="brand-logo-wrap">
+                    <img src="image/לוגו.png" alt="VitaliFit" class="brand-image">
 
-                <span class="brand-copy">
-                    <span class="brand-name">VitaliFit</span>
-                    <span class="brand-tagline">בריאות ואנרגיה</span>
-                </span>
+                    <span class="brand-copy">
+                        <span class="brand-name">VitaliFit</span>
+                        <span class="brand-tagline">בריאות ואנרגיה</span>
+                    </span>
+                </div>
+            </a>
+
+            <nav class="main-menu" aria-label="Main navigation">
+                <a href="index.html">דף בית</a>
+                <a href="register.html">הרשמה</a>
+                <a href="workouts.html">קביעת לוז</a>
+                <a href="tracking.html" class="active">לוח מעקב</a>
+                <a href="exercises.html">אימונים</a>
+                <a href="nutrition.html">תזונה</a>
+                <a href="contact.html">צרו קשר</a>
+                <a href="blog.html">בלוג</a>
+
+                <a href="admin.html" id="admin-nav-link" class="nav-link" style="display: none;">
+                    פאנל ניהול
+                </a>
+            </nav>
+
+            <div class="nav-actions">
+
+                <a href="login.html" class="icon-button" aria-label="התחברות">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+
+                <a href="register.html" class="join-button">
+                    הצטרפי עכשיו
+                </a>
+
             </div>
-        </a>
-
-        <nav class="main-menu" aria-label="Main navigation">
-            <a href="index.html">דף בית</a>
-            <a href="register.html">הרשמה</a>
-            <a href="workouts.html">קביעת לוז</a>
-            <a href="tracking.html" class="active">לוח מעקב</a>
-            <a href="exercises.html">אימונים</a>
-            <a href="nutrition.html">תזונה</a>
-            <a href="contact.html">צרו קשר</a>
-            <a href="blog.html">בלוג</a>
-
-            <a href="admin.html"
-               id="admin-nav-link"
-               class="nav-link"
-               style="display: none;">
-                 פאנל ניהול
-            </a>
-        </nav>
-
-        <div class="nav-actions">
-
-            <a href="login.html"
-               class="icon-button"
-               aria-label="התחברות">
-                <i class="fa-solid fa-user"></i>
-            </a>
-
-            <a href="register.html"
-               class="join-button">
-                 הצטרפי עכשיו
-            </a>
 
         </div>
-
-    </div>
-</header>
+    </header>
 
     <div class="dashboard-wrapper flex-grow relative">
         <div class="absolute inset-0 bg-white/50"></div> <!-- שכבת הבהרה -->
-        
+
         <main class="relative z-10 max-w-7xl mx-auto space-y-8">
-            
+
             <div class="text-center mb-8">
                 <h1 class="text-4xl font-extrabold text-[#1E4630] mb-2">לוח המעקב שלי</h1>
                 <p class="text-gray-700 font-medium">עקבי אחר הפעילות וההתקדמות שלך במקום אחד.</p>
@@ -93,42 +85,50 @@
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <!-- קלוריות מפעילות -->
-                <div class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex flex-col justify-center items-center text-center">
+                <div
+                    class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex flex-col justify-center items-center text-center">
                     <i class="fa-solid fa-person-running text-gray-400 text-2xl mb-2"></i>
                     <h3 class="text-sm font-bold text-gray-500 mb-2">קלוריות שנשרפו מפעילות</h3>
                     <div id="weekly-activity-calories" class="text-4xl font-extrabold text-[#1E4630]">0</div>
                 </div>
 
                 <!-- קלוריות מאוכל -->
-                <div class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex flex-col justify-center items-center text-center">
+                <div
+                    class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex flex-col justify-center items-center text-center">
                     <i class="fa-solid fa-utensils text-gray-400 text-2xl mb-2"></i>
                     <h3 class="text-sm font-bold text-gray-500 mb-2">קלוריות שהתווספו מאוכל</h3>
                     <div id="weekly-food-calories" class="text-4xl font-extrabold text-[#1E4630]">0</div>
                 </div>
 
                 <!-- משקל (מעודכן עם שני הפרשים בולטים) -->
-                <div class="col-span-1 md:col-span-2 bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex flex-col sm:flex-row justify-between items-center gap-6">
+                <div
+                    class="col-span-1 md:col-span-2 bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex flex-col sm:flex-row justify-between items-center gap-6">
                     <form id="weight-form" class="bg-gray-50 p-4 rounded-2xl w-full sm:w-48">
                         <label class="block text-xs font-bold text-gray-600 mb-2 text-center">עדכון משקל חדש</label>
-                        <input type="number" id="new-weight" step="0.1" class="w-full p-2 mb-2 rounded-xl border text-center" placeholder="69.5" required>
-                        <button type="submit" class="w-full bg-[#1E4630] text-white py-2 rounded-xl text-xs font-bold">עדכון</button>
+                        <input type="number" id="new-weight" step="0.1"
+                            class="w-full p-2 mb-2 rounded-xl border text-center" placeholder="69.5" required>
+                        <button type="submit"
+                            class="w-full bg-[#1E4630] text-white py-2 rounded-xl text-xs font-bold">עדכון</button>
                     </form>
-                    
+
                     <div class="flex flex-col sm:flex-row items-center gap-6 w-full sm:w-auto justify-around">
                         <!-- שינוי מהמשקל ההתחלתי -->
                         <div class="text-center sm:text-left">
                             <h3 class="text-xs font-bold text-gray-500 mb-1">הפרש מהתחלתי</h3>
                             <div class="flex items-baseline justify-center sm:justify-end gap-1">
-                                <span id="weight-change" class="text-4xl font-extrabold text-[#1E4630]" style="direction: ltr;">0.0</span>
+                                <span id="weight-change" class="text-4xl font-extrabold text-[#1E4630]"
+                                    style="direction: ltr;">0.0</span>
                                 <span class="text-sm font-bold text-[#1E4630]">ק"ג</span>
                             </div>
                         </div>
 
                         <!-- הפרש מהשקילה הקודמת (מודגש ובולט) -->
-                        <div class="text-center sm:text-left bg-[#E8F5F1] px-4 py-2 rounded-2xl border border-[#A3D9C9]">
+                        <div
+                            class="text-center sm:text-left bg-[#E8F5F1] px-4 py-2 rounded-2xl border border-[#A3D9C9]">
                             <h3 class="text-xs font-bold text-[#1E4630] mb-1">מהשקילה הקודמת</h3>
                             <div class="flex items-baseline justify-center sm:justify-end gap-1">
-                                <span id="prev-weight-diff" class="text-3xl font-extrabold text-[#1E4630]" style="direction: ltr;">0.0</span>
+                                <span id="prev-weight-diff" class="text-3xl font-extrabold text-[#1E4630]"
+                                    style="direction: ltr;">0.0</span>
                                 <span class="text-sm font-bold text-[#1E4630]">ק"ג</span>
                             </div>
                         </div>
@@ -138,7 +138,8 @@
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <!-- סה"כ קלוריות -->
-                <div class="col-span-1 md:col-span-2 bg-[#1E4630] rounded-3xl p-8 shadow-xl flex flex-col justify-center">
+                <div
+                    class="col-span-1 md:col-span-2 bg-[#1E4630] rounded-3xl p-8 shadow-xl flex flex-col justify-center">
                     <i class="fa-solid fa-bolt text-[#A3D9C9] text-2xl mb-2"></i>
                     <h3 class="text-sm font-bold text-[#A3D9C9] mb-2">סה"כ קלוריות שנשרפו</h3>
                     <div id="total-burned-calories" class="text-6xl font-extrabold text-white">0</div>
@@ -146,13 +147,15 @@
                 </div>
 
                 <!-- הפרש מפעילות מאוכל (עודכן לפי סעיף 4.2) -->
-                <div class="col-span-1 md:col-span-2 bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex sm:flex-row justify-between items-center">
+                <div
+                    class="col-span-1 md:col-span-2 bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex sm:flex-row justify-between items-center">
                     <div class="text-right">
                         <h3 class="text-xl font-bold text-[#1E4630]">הפרש מפעילות מאוכל</h3>
                         <p class="text-xs text-gray-500">הפרש בין קלוריות שנשרפו לקלוריות שנצרכו</p>
                     </div>
                     <div class="flex items-baseline gap-2">
-                        <div id="calorie-balance" class="text-5xl font-extrabold text-[#1E4630]" style="direction: ltr;">0</div>
+                        <div id="calorie-balance" class="text-5xl font-extrabold text-[#1E4630]"
+                            style="direction: ltr;">0</div>
                         <span class="text-lg font-bold text-gray-500">Kcal</span>
                     </div>
                 </div>
@@ -173,21 +176,26 @@
                             <option value="homeWorkout">אימון ביתי</option>
                             <option value="other">אחר</option>
                         </select>
-                        <input type="number" id="activity-duration" class="w-full p-3 rounded-xl border focus:outline-none" placeholder="משך הפעילות בדקות" required>
-                        <button type="submit" class="w-full bg-[#1E4630] text-white font-bold py-3 rounded-xl mt-4">הוספת פעילות</button>
+                        <input type="number" id="activity-duration"
+                            class="w-full p-3 rounded-xl border focus:outline-none" placeholder="משך הפעילות בדקות"
+                            required>
+                        <button type="submit"
+                            class="w-full bg-[#1E4630] text-white font-bold py-3 rounded-xl mt-4">הוספת פעילות</button>
                     </form>
                 </div>
 
                 <!-- היסטוריות מדויקות (ללא רווחים ריקים) -->
                 <div class="flex flex-col gap-6">
                     <!-- היסטוריית שקילות -->
-                    <div class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg overflow-y-auto" style="max-height: 220px;">
+                    <div class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg overflow-y-auto"
+                        style="max-height: 220px;">
                         <h3 class="text-lg font-bold text-[#1E4630] mb-4 border-b pb-2">היסטוריית שקילות</h3>
                         <div id="weight-history" class="space-y-3">טוען...</div>
                     </div>
 
                     <!-- פעילויות ואימונים אחרונים -->
-                    <div class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg overflow-y-auto" style="max-height: 250px;">
+                    <div class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg overflow-y-auto"
+                        style="max-height: 250px;">
                         <h3 class="text-lg font-bold text-[#1E4630] mb-4 border-b pb-2">פעילויות ואימונים אחרונים</h3>
                         <div id="activity-history" class="space-y-3">טוען פעילויות...</div>
                     </div>
@@ -196,7 +204,7 @@
         </main>
     </div>
 
-<!-- Footer -->
+    <!-- Footer -->
     <site-footer class="site-footer">
         <div class="footer-inner">
             <div class="footer-newsletter">
@@ -222,7 +230,7 @@
                 </ul>
             </div>
 
-             <div class="footer-column">
+            <div class="footer-column">
                 <h4>קהילות</h4>
                 <ul class="footer-list">
                     <li><a href="exercises.html">מתחילים</a></li>
@@ -236,9 +244,12 @@
         <div class="footer-bottom">
             <p>© 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.</p>
         </div>
-    </footer>
+        </footer>
+        <script src="js/api-config.js"></script>
 
-     <script src="js/script.js"></script>
-    <script src="js/tracking.js"></script>
+
+        <script src="js/script.js"></script>
+        <script src="js/tracking.js"></script>
 </body>
+
 </html>

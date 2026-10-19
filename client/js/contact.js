@@ -1,5 +1,4 @@
-const API_URL_CONTACT = 'http://localhost:5000/api/contact';
-
+const API_URL_CONTACT = `${window.API_BASE_URL}/api/contact`;
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('contact-form');
 

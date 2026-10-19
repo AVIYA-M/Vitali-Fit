@@ -13,16 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // המלצות לדוגמה כדי שהגלגלת תופיע מיד ותציג תוכן חי ועשיר
     const dummyReviews = [
-        { text: "האתר הזה פשוט שינה לי את החיים! התוכניות אימון והמעקב אחרי תזונה נתנו לי את כל הכלים להצליח.", name: "דנה כהן" },
-        { text: "התמיכה והמעקב באתר מדהימים. ממליצה בחום לכל מי שרוצה לעשות שינוי אמיתי ואורח חיים בריא.", name: "מיכל לוי" },
-        { text: "תוכניות כושר ברמה גבוהה מאוד ומותאמות אישית. מרגישים את ההשקעה בכל פרט ופרט באתר!", name: "אביה רחמים" },
-        { text: "התוצאות לא איחרו להגיע! מסגרת מדהימה שנותנת מוטיבציה כל יום מחדש.", name: "תהילה ש." }
+
     ];
 
     // שליפת המלצות מאושרות מהשרת ושילובן עם ההמלצות לדוגמה
     async function loadReviews() {
         try {
-            const response = await fetch('http://localhost:5000/api/reviews/approved');
+            const response = await fetch(`${window.API_BASE_URL}/api/reviews/approved`);
             let serverReviews = [];
             if (response.ok) {
                 serverReviews = await response.json();
@@ -133,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const name = nameInput.value;
 
             try {
-                const response = await fetch('http://localhost:5000/api/reviews', {
+                const response = await fetch(`${window.API_BASE_URL}/api/reviews`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
