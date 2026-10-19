@@ -6,27 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>לוח מעקב - VitaliFit | בריאות ואנרגיה</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-
-    <style>
-        .dashboard-wrapper {
-            background-image: url('image/חדר כושר.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            min-height: 100vh;
-            padding: 60px 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/tracking.css">
 </head>
 
-<body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen justify-between">
-
+<body class="tracking-page">
     <!-- ההדר המקורי המדויק שלך -->
     <header class="site-header">
         <div class="header-shell">
@@ -52,8 +37,7 @@
                 <a href="nutrition.html">תזונה</a>
                 <a href="contact.html">צרו קשר</a>
                 <a href="blog.html">בלוג</a>
-
-                <a href="admin.html" id="admin-nav-link" class="nav-link" style="display: none;">
+                <a href="admin.html" id="admin-nav-link" class="nav-link admin-nav-link">
                     פאנל ניהול
                 </a>
             </nav>
@@ -73,101 +57,160 @@
         </div>
     </header>
 
-    <div class="dashboard-wrapper flex-grow relative">
-        <div class="absolute inset-0 bg-white/50"></div> <!-- שכבת הבהרה -->
+    <div class="dashboard-wrapper">
 
-        <main class="relative z-10 max-w-7xl mx-auto space-y-8">
-
-            <div class="text-center mb-8">
-                <h1 class="text-4xl font-extrabold text-[#1E4630] mb-2">לוח המעקב שלי</h1>
-                <p class="text-gray-700 font-medium">עקבי אחר הפעילות וההתקדמות שלך במקום אחד.</p>
+        <main class="tracking-main">
+            <div class="tracking-heading">
+                <h1 class="tracking-title">לוח המעקב שלי</h1>
+                <p class="tracking-subtitle">עקבי אחר הפעילות וההתקדמות שלך במקום אחד.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="tracking-stats-grid">
+
                 <!-- קלוריות מפעילות -->
-                <div
-                    class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex flex-col justify-center items-center text-center">
-                    <i class="fa-solid fa-person-running text-gray-400 text-2xl mb-2"></i>
-                    <h3 class="text-sm font-bold text-gray-500 mb-2">קלוריות שנשרפו מפעילות</h3>
-                    <div id="weekly-activity-calories" class="text-4xl font-extrabold text-[#1E4630]">0</div>
+                <div class="tracking-card activity-calories-card">
+                    <i class="fa-solid fa-person-running tracking-card-icon"></i>
+
+                    <h3 class="tracking-card-label">
+                        קלוריות שנשרפו מפעילות
+                    </h3>
+
+                    <div id="weekly-activity-calories" class="tracking-card-value">
+                        0
+                    </div>
                 </div>
 
                 <!-- קלוריות מאוכל -->
-                <div
-                    class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex flex-col justify-center items-center text-center">
-                    <i class="fa-solid fa-utensils text-gray-400 text-2xl mb-2"></i>
-                    <h3 class="text-sm font-bold text-gray-500 mb-2">קלוריות שהתווספו מאוכל</h3>
-                    <div id="weekly-food-calories" class="text-4xl font-extrabold text-[#1E4630]">0</div>
+                <div class="tracking-card food-calories-card">
+                    <i class="fa-solid fa-utensils tracking-card-icon"></i>
+
+                    <h3 class="tracking-card-label">
+                        קלוריות שהתווספו מאוכל
+                    </h3>
+
+                    <div id="weekly-food-calories" class="tracking-card-value">
+                        0
+                    </div>
                 </div>
 
-                <!-- משקל (מעודכן עם שני הפרשים בולטים) -->
-                <div
-                    class="col-span-1 md:col-span-2 bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex flex-col sm:flex-row justify-between items-center gap-6">
-                    <form id="weight-form" class="bg-gray-50 p-4 rounded-2xl w-full sm:w-48">
-                        <label class="block text-xs font-bold text-gray-600 mb-2 text-center">עדכון משקל חדש</label>
-                        <input type="number" id="new-weight" step="0.1"
-                            class="w-full p-2 mb-2 rounded-xl border text-center" placeholder="69.5" required>
-                        <button type="submit"
-                            class="w-full bg-[#1E4630] text-white py-2 rounded-xl text-xs font-bold">עדכון</button>
+                <!-- משקל -->
+                <div class="tracking-card weight-card">
+
+                    <form id="weight-form" class="weight-form">
+                        <label for="new-weight" class="weight-form-label">
+                            עדכון משקל חדש
+                        </label>
+
+                        <input type="number" id="new-weight" step="0.1" class="weight-input" placeholder="69.5"
+                            required>
+
+                        <button type="submit" class="tracking-button">
+                            עדכון
+                        </button>
                     </form>
 
-                    <div class="flex flex-col sm:flex-row items-center gap-6 w-full sm:w-auto justify-around">
+                    <div class="weight-changes">
+
                         <!-- שינוי מהמשקל ההתחלתי -->
-                        <div class="text-center sm:text-left">
-                            <h3 class="text-xs font-bold text-gray-500 mb-1">הפרש מהתחלתי</h3>
-                            <div class="flex items-baseline justify-center sm:justify-end gap-1">
-                                <span id="weight-change" class="text-4xl font-extrabold text-[#1E4630]"
-                                    style="direction: ltr;">0.0</span>
-                                <span class="text-sm font-bold text-[#1E4630]">ק"ג</span>
+                        <div class="weight-change-item">
+                            <h3 class="weight-change-label">
+                                הפרש מהתחלתי
+                            </h3>
+
+                            <div class="weight-change-value">
+                                <span id="weight-change" class="weight-number">
+                                    0.0
+                                </span>
+
+                                <span class="weight-unit">ק"ג</span>
                             </div>
                         </div>
 
-                        <!-- הפרש מהשקילה הקודמת (מודגש ובולט) -->
-                        <div
-                            class="text-center sm:text-left bg-[#E8F5F1] px-4 py-2 rounded-2xl border border-[#A3D9C9]">
-                            <h3 class="text-xs font-bold text-[#1E4630] mb-1">מהשקילה הקודמת</h3>
-                            <div class="flex items-baseline justify-center sm:justify-end gap-1">
-                                <span id="prev-weight-diff" class="text-3xl font-extrabold text-[#1E4630]"
-                                    style="direction: ltr;">0.0</span>
-                                <span class="text-sm font-bold text-[#1E4630]">ק"ג</span>
+                        <!-- שינוי מהשקילה הקודמת -->
+                        <div class="previous-weight-box">
+                            <h3 class="weight-change-label">
+                                מהשקילה הקודמת
+                            </h3>
+
+                            <div class="weight-change-value">
+                                <span id="prev-weight-diff" class="weight-number">
+                                    0.0
+                                </span>
+
+                                <span class="weight-unit">ק"ג</span>
                             </div>
                         </div>
+
                     </div>
                 </div>
+
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <!-- סה"כ קלוריות -->
-                <div
-                    class="col-span-1 md:col-span-2 bg-[#1E4630] rounded-3xl p-8 shadow-xl flex flex-col justify-center">
-                    <i class="fa-solid fa-bolt text-[#A3D9C9] text-2xl mb-2"></i>
-                    <h3 class="text-sm font-bold text-[#A3D9C9] mb-2">סה"כ קלוריות שנשרפו</h3>
-                    <div id="total-burned-calories" class="text-6xl font-extrabold text-white">0</div>
-                    <p class="text-sm text-[#A3D9C9] mt-2">אימונים בסטודיו + פעילות עצמאית</p>
+            <div class="tracking-stats-grid calorie-summary-grid">
+
+                <!-- סך כל הקלוריות שנשרפו -->
+                <div class="total-calories-card">
+
+                    <i class="fa-solid fa-bolt total-calories-icon"></i>
+
+                    <h3 class="total-calories-label">
+                        סה"כ קלוריות שנשרפו
+                    </h3>
+
+                    <div id="total-burned-calories" class="total-calories-value">
+                        0
+                    </div>
+
+                    <p class="total-calories-description">
+                        אימונים בסטודיו + פעילות עצמאית
+                    </p>
+
                 </div>
 
-                <!-- הפרש מפעילות מאוכל (עודכן לפי סעיף 4.2) -->
-                <div
-                    class="col-span-1 md:col-span-2 bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg flex sm:flex-row justify-between items-center">
-                    <div class="text-right">
-                        <h3 class="text-xl font-bold text-[#1E4630]">הפרש מפעילות מאוכל</h3>
-                        <p class="text-xs text-gray-500">הפרש בין קלוריות שנשרפו לקלוריות שנצרכו</p>
+                <!-- מאזן קלוריות -->
+                <div class="calorie-balance-card">
+
+                    <div class="calorie-balance-text">
+
+                        <h3 class="calorie-balance-title">
+                            הפרש מפעילות מאוכל
+                        </h3>
+
+                        <p class="calorie-balance-description">
+                            הפרש בין קלוריות שנשרפו לקלוריות שנצרכו
+                        </p>
+
                     </div>
-                    <div class="flex items-baseline gap-2">
-                        <div id="calorie-balance" class="text-5xl font-extrabold text-[#1E4630]"
-                            style="direction: ltr;">0</div>
-                        <span class="text-lg font-bold text-gray-500">Kcal</span>
+
+                    <div class="calorie-balance-number">
+
+                        <div id="calorie-balance" class="calorie-balance-value">
+                            0
+                        </div>
+
+                        <span class="calorie-balance-unit">
+                            Kcal
+                        </span>
+
                     </div>
+
                 </div>
+
             </div>
 
-            <!-- אזור תחתון: הוספת פעילות, היסטוריית שקילות והיסטוריית פעילויות -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+            <!-- אזור תחתון -->
+            <div class="tracking-bottom-grid">
+
                 <!-- הוספת פעילות עצמאית -->
-                <div class="bg-white/90 backdrop-blur rounded-3xl p-8 shadow-lg h-fit">
-                    <h3 class="text-xl font-bold text-[#1E4630] mb-6">הוספת פעילות עצמאית</h3>
-                    <form id="activity-form" class="space-y-4">
-                        <select id="activity-type" class="w-full p-3 rounded-xl border focus:outline-none" required>
+                <section class="activity-form-card">
+
+                    <h3 class="activity-form-title">
+                        הוספת פעילות עצמאית
+                    </h3>
+
+                    <form id="activity-form" class="activity-form">
+
+                        <select id="activity-type" class="activity-select" required>
                             <option value="" disabled selected>בחרי פעילות...</option>
                             <option value="walking">הליכה</option>
                             <option value="running">ריצה</option>
@@ -176,36 +219,55 @@
                             <option value="homeWorkout">אימון ביתי</option>
                             <option value="other">אחר</option>
                         </select>
-                        <input type="number" id="activity-duration"
-                            class="w-full p-3 rounded-xl border focus:outline-none" placeholder="משך הפעילות בדקות"
-                            required>
-                        <button type="submit"
-                            class="w-full bg-[#1E4630] text-white font-bold py-3 rounded-xl mt-4">הוספת פעילות</button>
-                    </form>
-                </div>
 
-                <!-- היסטוריות מדויקות (ללא רווחים ריקים) -->
-                <div class="flex flex-col gap-6">
+                        <input type="number" id="activity-duration" class="activity-duration-input"
+                            placeholder="משך הפעילות בדקות" required>
+
+                        <button type="submit" class="activity-submit-button">
+                            הוספת פעילות
+                        </button>
+
+                    </form>
+
+                </section>
+
+                <!-- היסטוריות -->
+                <div class="tracking-history-column">
+
                     <!-- היסטוריית שקילות -->
-                    <div class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg overflow-y-auto"
-                        style="max-height: 220px;">
-                        <h3 class="text-lg font-bold text-[#1E4630] mb-4 border-b pb-2">היסטוריית שקילות</h3>
-                        <div id="weight-history" class="space-y-3">טוען...</div>
-                    </div>
+                    <section class="tracking-history-card weight-history-card">
+
+                        <h3 class="tracking-history-title">
+                            היסטוריית שקילות
+                        </h3>
+
+                        <div id="weight-history" class="tracking-history-content">
+                            טוען...
+                        </div>
+
+                    </section>
 
                     <!-- פעילויות ואימונים אחרונים -->
-                    <div class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg overflow-y-auto"
-                        style="max-height: 250px;">
-                        <h3 class="text-lg font-bold text-[#1E4630] mb-4 border-b pb-2">פעילויות ואימונים אחרונים</h3>
-                        <div id="activity-history" class="space-y-3">טוען פעילויות...</div>
-                    </div>
+                    <section class="tracking-history-card activity-history-card">
+
+                        <h3 class="tracking-history-title">
+                            פעילויות ואימונים אחרונים
+                        </h3>
+
+                        <div id="activity-history" class="tracking-history-content">
+                            טוען פעילויות...
+                        </div>
+
+                    </section>
+
                 </div>
+
             </div>
         </main>
     </div>
 
     <!-- Footer -->
-    <site-footer class="site-footer">
+    <footer class="site-footer">
         <div class="footer-inner">
             <div class="footer-newsletter">
                 <h3>הרשמה לניוזלטר שלנו</h3>

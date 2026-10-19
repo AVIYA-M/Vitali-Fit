@@ -1,0 +1,668 @@
+/* ========================================
+   עיצוב כללי של עמוד המעקב
+======================================== */
+
+.tracking-page {
+    color: #111827;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+    margin: 0;
+    font-family: 'Heebo', 'Segoe UI', sans-serif;
+}
+
+
+/* ========================================
+   אזור הרקע
+======================================== */
+
+.dashboard-wrapper {
+    position: relative;
+    flex-grow: 1;
+    min-height: 100vh;
+    padding: 60px 20px;
+}
+
+
+/* שכבת ההבהרה מעל הרקע */
+
+.dashboard-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+}
+
+
+/* ========================================
+   אזור התוכן הראשי
+======================================== */
+
+.tracking-main {
+    position: relative;
+    z-index: 1;
+    max-width: 1280px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+
+/* ========================================
+   כותרת העמוד
+======================================== */
+
+.tracking-heading {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.tracking-title {
+    margin: 0 0 0.5rem;
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #1E4630;
+}
+
+.tracking-subtitle {
+    margin: 0;
+    color: #374151;
+    font-weight: 500;
+}
+
+
+/* ========================================
+   התאמה למסכים קטנים
+======================================== */
+
+@media (max-width: 767px) {
+
+    .dashboard-wrapper {
+        padding: 35px 15px;
+    }
+
+    .tracking-title {
+        font-size: 1.8rem;
+    }
+
+}
+
+/* =========================
+   שורת הנתונים העליונה
+   ========================= */
+
+.tracking-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+/* כרטיס רגיל */
+
+.tracking-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* כרטיסי הקלוריות */
+
+.activity-calories-card,
+.food-calories-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.tracking-card-icon {
+    color: #9CA3AF;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.tracking-card-label {
+    color: #6B7280;
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+}
+
+.tracking-card-value {
+    color: #1E4630;
+    font-size: 2.25rem;
+    font-weight: 800;
+}
+
+/* כרטיס המשקל */
+
+.weight-card {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* טופס עדכון משקל */
+
+.weight-form {
+    width: 12rem;
+    flex-shrink: 0;
+    background-color: #F9FAFB;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.weight-form-label {
+    display: block;
+    text-align: center;
+    color: #4B5563;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.weight-input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #D1D5DB;
+    border-radius: 0.75rem;
+    text-align: center;
+    background-color: #FFFFFF;
+}
+
+/* כפתור עדכון */
+
+.tracking-button {
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    background-color: #1E4630;
+    color: #FFFFFF;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.tracking-button:hover {
+    background-color: #163723;
+}
+
+/* שני נתוני השינוי במשקל */
+
+.weight-changes {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.weight-change-item {
+    text-align: center;
+}
+
+.weight-change-label {
+    color: #6B7280;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem;
+}
+
+.weight-change-value {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.weight-number {
+    direction: ltr;
+    color: #1E4630;
+    font-size: 2.25rem;
+    font-weight: 800;
+}
+
+.weight-unit {
+    color: #1E4630;
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+/* הדגשת ההפרש מהשקילה הקודמת */
+
+.previous-weight-box {
+    padding: 0.5rem 1rem;
+    border: 1px solid #A3D9C9;
+    border-radius: 1rem;
+    background-color: #E8F5F1;
+    text-align: center;
+}
+
+/* התאמה למסכים בינוניים וקטנים */
+
+@media (max-width: 900px) {
+    .tracking-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .weight-card {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 600px) {
+    .tracking-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .weight-card {
+        grid-column: span 1;
+        flex-direction: column;
+    }
+
+    .weight-form {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .weight-changes {
+        flex-wrap: wrap;
+    }
+
+    .weight-number {
+        font-size: 1.8rem;
+    }
+}
+
+/* =========================
+   שורת סיכום הקלוריות
+   ========================= */
+
+.calorie-summary-grid {
+    margin-top: 1.5rem;
+}
+
+/* כרטיס סך הקלוריות שנשרפו */
+
+.total-calories-card {
+    grid-column: span 2;
+    background-color: #1E4630;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.total-calories-icon {
+    color: #A3D9C9;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.total-calories-label {
+    color: #A3D9C9;
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+}
+
+.total-calories-value {
+    color: #FFFFFF;
+    font-size: 3.75rem;
+    font-weight: 800;
+}
+
+.total-calories-description {
+    color: #A3D9C9;
+    font-size: 0.875rem;
+    margin: 0.5rem 0 0;
+}
+
+/* כרטיס מאזן הקלוריות */
+
+.calorie-balance-card {
+    grid-column: span 2;
+
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.calorie-balance-text {
+    text-align: right;
+}
+
+.calorie-balance-title {
+    color: #1E4630;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.calorie-balance-description {
+    color: #6B7280;
+    font-size: 0.75rem;
+    margin: 0.25rem 0 0;
+}
+
+.calorie-balance-number {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.calorie-balance-value {
+    direction: ltr;
+    color: #1E4630;
+    font-size: 3rem;
+    font-weight: 800;
+}
+
+.calorie-balance-unit {
+    color: #6B7280;
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+/* התאמה למסכים קטנים */
+
+@media (max-width: 600px) {
+
+    .total-calories-card,
+    .calorie-balance-card {
+        grid-column: span 1;
+    }
+
+    .calorie-balance-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .total-calories-value {
+        font-size: 3rem;
+    }
+
+}
+
+/* ========================================
+   האזור התחתון של לוח המעקב
+======================================== */
+
+.tracking-bottom-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+    align-items: start;
+}
+
+
+/* ========================================
+   כרטיס הוספת פעילות
+======================================== */
+
+.activity-form-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.activity-form-title {
+    color: #1E4630;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 1.5rem;
+}
+
+.activity-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+
+/* שדה בחירת הפעילות ושדה משך הפעילות */
+
+.activity-select,
+.activity-duration-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.75rem;
+    border: 1px solid #D1D5DB;
+    border-radius: 0.75rem;
+    background-color: #FFFFFF;
+    color: #111827;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.activity-select:focus,
+.activity-duration-input:focus {
+    outline: 2px solid #A3D9C9;
+    outline-offset: 1px;
+}
+
+
+/* כפתור הוספת פעילות */
+
+.activity-submit-button {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    background-color: #1E4630;
+    color: #FFFFFF;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.activity-submit-button:hover {
+    background-color: #163723;
+}
+
+
+/* ========================================
+   אזור היסטוריות
+======================================== */
+
+.tracking-history-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-width: 0;
+}
+
+
+/* כרטיס היסטוריה */
+
+.tracking-history-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+
+/* גובה אזורי ההיסטוריה */
+
+.weight-history-card {
+    max-height: 220px;
+}
+
+.activity-history-card {
+    max-height: 250px;
+}
+
+
+/* כותרות ההיסטוריה */
+
+.tracking-history-title {
+    color: #1E4630;
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+
+/* התוכן שנוצר בתוך ההיסטוריה */
+
+.tracking-history-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+
+/* ========================================
+   התאמה למסכים קטנים
+======================================== */
+
+@media (max-width: 767px) {
+
+    .tracking-bottom-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .activity-form-card {
+        padding: 1.5rem;
+    }
+
+}
+
+/* ========================================
+   היסטוריית פעילויות
+======================================== */
+
+.activity-history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.activity-history-item:last-child {
+    border-bottom: none;
+}
+
+.activity-history-details {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.activity-history-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #E8F5F1;
+    color: #1E4630;
+}
+
+.activity-history-info {
+    min-width: 0;
+}
+
+.activity-history-name {
+    color: #1E4630;
+    font-size: 0.875rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.activity-history-date {
+    margin-top: 4px;
+    color: #9CA3AF;
+    font-size: 0.75rem;
+}
+
+.activity-history-calories {
+    flex-shrink: 0;
+    color: #4B5563;
+    font-size: 0.875rem;
+    font-weight: 700;
+    direction: ltr;
+    white-space: nowrap;
+}
+
+.empty-history-message {
+    padding: 12px 0;
+    color: #6B7280;
+    font-size: 0.875rem;
+}
+
+/* ========================================
+   היסטוריית שקילות
+======================================== */
+
+.weight-history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #F3F4F6;
+}
+
+.weight-history-item:last-child {
+    border-bottom: none;
+}
+
+.weight-history-date {
+    color: #6B7280;
+    font-size: 0.875rem;
+}
+
+.weight-history-value {
+    color: #1E4630;
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.weight-history-error {
+    padding: 12px 0;
+    color: #DC2626;
+    font-size: 0.875rem;
+}

@@ -101,33 +101,52 @@ function updateDashboard(data) {
     renderRecentActivities(combinedActivities);
 }
 
+
 function renderRecentActivities(activities) {
     const container = document.getElementById('activity-history');
     if (!container) return;
 
     const lastFour = activities.slice(0, 4);
+
     if (!lastFour.length) {
-        container.innerHTML = `<div class="text-gray-500 text-sm">עדיין לא נוספו פעילויות או אימונים.</div>`;
+        container.innerHTML = `
+            <div class="empty-history-message">
+                עדיין לא נוספו פעילויות או אימונים.
+            </div>`;
         return;
     }
 
     container.innerHTML = lastFour.map(activity => {
         const name = activity.title || 'פעילות';
-        const date = activity.date ? new Date(activity.date).toLocaleDateString('he-IL') : '';
+        const date = activity.date
+            ? new Date(activity.date).toLocaleDateString('he-IL')
+            : '';
         const calories = Number(activity.caloriesBurned || 0);
+
         return `
-            <div class="flex justify-between items-center py-3 border-b border-gray-100 last:border-0">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-[#E8F5F1] text-[#1E4630] flex items-center justify-center">🏃</div>
-                    <div>
-                        <div class="font-bold text-[#1E4630] text-sm">${escapeHtml(name)}</div>
-                        <div class="text-xs text-gray-400">${escapeHtml(date)} · ${Number(activity.durationMinutes || 0)} דק'</div>
+            <div class="activity-history-item">
+                <div class="activity-history-details">
+                    <div class="activity-history-icon">🏃</div>
+
+                    <div class="activity-history-info">
+                        <div class="activity-history-name">
+                            ${escapeHtml(name)}
+                        </div>
+
+                        <div class="activity-history-date">
+                            ${escapeHtml(date)} · ${Number(activity.durationMinutes || 0)} דק'
+                        </div>
                     </div>
                 </div>
-                <div class="font-bold text-gray-600 text-sm">${calories.toLocaleString('he-IL')} Kcal</div>
+
+                <div class="activity-history-calories">
+                    ${calories.toLocaleString('he-IL')} Kcal
+                </div>
             </div>`;
     }).join('');
 }
+
+
 
 // הוספת פעילות עצמאית
 async function addActivity(event) {
@@ -194,23 +213,38 @@ async function loadWeightHistory() {
 
     try {
         const history = await apiRequest(`${API_URL}/weight/history`);
+
         if (!history.length) {
-            container.innerHTML = `<div class="text-gray-500 text-sm">עדיין אין היסטוריית משקל.</div>`;
+            container.innerHTML = `
+                <div class="empty-history-message">
+                    עדיין אין היסטוריית משקל.
+                </div>`;
             return;
         }
 
         container.innerHTML = history.slice().reverse().map(record => {
             const date = new Date(record.date).toLocaleDateString('he-IL');
+
             return `
-                <div class="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
-                    <span class="text-gray-500 text-sm">${escapeHtml(date)}</span>
-                    <strong class="text-[#1E4630]">${Number(record.weight).toFixed(1)} ק"ג</strong>
+                <div class="weight-history-item">
+                    <span class="weight-history-date">
+                        ${escapeHtml(date)}
+                    </span>
+
+                    <strong class="weight-history-value">
+                        ${Number(record.weight).toFixed(1)} ק"ג
+                    </strong>
                 </div>`;
         }).join('');
+
     } catch (error) {
-        container.innerHTML = `<div class="text-red-500 text-sm">לא ניתן לטעון היסטוריה.</div>`;
+        container.innerHTML = `
+            <div class="weight-history-error">
+                לא ניתן לטעון היסטוריה.
+            </div>`;
     }
 }
+
 
 function getHebrewDay(day) {
     const days = { sunday: 'ראשון', monday: 'שני', tuesday: 'שלישי', wednesday: 'רביעי', thursday: 'חמישי', friday: 'שישי', saturday: 'שבת' };
@@ -220,7 +254,7 @@ function getHebrewDay(day) {
 function formatNumber(value) { return Number(value || 0).toLocaleString('he-IL'); }
 function setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
 function escapeHtml(value) { return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;'); }
-function logout() { localStorage.removeItem('token'); localStorage.removeItem('user'); window.location.href = 'login.html'; }
+function logout() { showCustomModal('התנתקת בהצלחה מהמערכת', () => { localStorage.removeItem('token'); localStorage.removeItem('user'); window.location.href = 'index.html'; }); }
 
 document.addEventListener('DOMContentLoaded', () => {
     const activityForm = document.getElementById('activity-form');

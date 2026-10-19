@@ -1,0 +1,469 @@
+
+/* =========================
+   עמוד פאנל הניהול
+   ========================= */
+
+.admin-page {
+    color: #111827;
+    font-family: 'Heebo', 'Segoe UI', sans-serif;
+}
+
+.admin-main {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex-grow: 1;
+    box-sizing: border-box;
+}
+
+/* כרטיסים כלליים */
+
+.admin-page .soft-card {
+    background-color: #ffffff;
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+/* כותרת ראשית */
+
+.admin-heading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 24px;
+}
+
+.admin-title {
+    margin: 0;
+    color: #1E4630;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.admin-subtitle {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-size: 0.8rem;
+    line-height: 1.7;
+}
+
+.admin-heading-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* כפתורים */
+
+.admin-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.admin-button:hover {
+    transform: translateY(-1px);
+}
+
+.admin-button-primary {
+    background-color: #1E4630;
+    color: #ffffff;
+}
+
+.admin-button-primary:hover {
+    background-color: #163524;
+}
+
+.admin-button-full {
+    width: 100%;
+    margin-top: 8px;
+}
+
+/* אזורי ניהול */
+
+.admin-section {
+    overflow: hidden;
+}
+
+.admin-section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.admin-section-heading h3 {
+    margin: 0;
+    color: #1E4630;
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+/* טבלאות */
+
+.admin-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: right;
+    font-size: 0.8rem;
+    background-color: #ffffff;
+}
+
+.admin-table thead {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.admin-table th {
+    padding: 12px 24px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.admin-table td {
+    padding: 12px 24px;
+    border-bottom: 1px solid #f3f4f6;
+    color: #4b5563;
+    vertical-align: middle;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table-center {
+    text-align: center;
+}
+
+.admin-table-empty {
+    padding: 24px !important;
+    text-align: center;
+    color: #6b7280 !important;
+}
+
+/* כפתורי פעולות בטבלאות */
+
+.admin-action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+    padding: 6px 10px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.admin-action-role {
+    background-color: #eff6ff;
+    color: #2563eb;
+    border-color: #bfdbfe;
+}
+
+.admin-action-role:hover {
+    background-color: #dbeafe;
+}
+
+.admin-action-edit {
+    background-color: #fffbeb;
+    color: #d97706;
+    border-color: #fde68a;
+}
+
+.admin-action-edit:hover {
+    background-color: #fef3c7;
+}
+
+.admin-action-delete {
+    background-color: #fff1f2;
+    color: #e11d48;
+    border-color: #fecdd3;
+}
+
+.admin-action-delete:hover {
+    background-color: #ffe4e6;
+}
+
+.admin-action-approve {
+    background-color: #16a34a;
+    color: #ffffff;
+}
+
+.admin-action-approve:hover {
+    background-color: #15803d;
+}
+
+.admin-action-reject {
+    background-color: #ef4444;
+    color: #ffffff;
+}
+
+.admin-action-reject:hover {
+    background-color: #dc2626;
+}
+
+/* סטטוס המלצה */
+
+.admin-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.admin-status-approved {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.admin-status-rejected {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.admin-status-pending {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+/* חלונות מודאליים */
+
+.admin-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(4px);
+    overflow-y: auto;
+}
+
+.admin-modal.hidden {
+    display: none !important;
+}
+
+.admin-modal-box {
+    width: 100%;
+    max-width: 448px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    margin: auto;
+    padding: 24px;
+    background-color: #ffffff;
+    border: 1px solid #f3f4f6;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.admin-modal-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.admin-modal-heading h3 {
+    margin: 0;
+    color: #1E4630;
+    font-size: 1.125rem;
+    font-weight: 800;
+}
+
+.admin-modal-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 10px;
+    background-color: transparent;
+    color: #9ca3af;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.admin-modal-close:hover {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+
+/* טפסים */
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-size: 0.8rem;
+}
+
+.admin-form-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 6px;
+}
+
+.admin-form-group label {
+    color: #374151;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.admin-form-group input,
+.admin-form-group select {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    background-color: #f9fafb;
+    color: #111827;
+    font-family: inherit;
+    font-size: 0.8rem;
+    box-sizing: border-box;
+}
+
+.admin-form-group input:focus,
+.admin-form-group select:focus {
+    outline: none;
+    border-color: #1E4630;
+    box-shadow: 0 0 0 2px rgba(30, 70, 48, 0.12);
+}
+
+.admin-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.admin-label-spaced {
+    margin-top: 10px;
+}
+
+/* תצוגה במסכים קטנים */
+
+@media (max-width: 767px) {
+    .admin-main {
+        padding: 24px 12px;
+        gap: 18px;
+    }
+
+    .admin-heading {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .admin-heading-actions {
+        width: 100%;
+    }
+
+    .admin-heading-actions .admin-button {
+        width: 100%;
+    }
+
+    .admin-title {
+        font-size: 1.3rem;
+    }
+
+    .admin-table {
+        min-width: 650px;
+    }
+
+    .admin-modal {
+        align-items: flex-start;
+        padding: 12px;
+    }
+
+    .admin-modal-box {
+        max-height: calc(100vh - 24px);
+        padding: 18px;
+        border-radius: 18px;
+    }
+}
+
+@media (max-width: 420px) {
+    .admin-form-row {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* עיצוב תוכן התאים בטבלאות */
+
+.admin-cell-strong {
+    font-weight: 700;
+    color: #1f2937 !important;
+}
+
+.admin-cell-muted {
+    color: #6b7280 !important;
+}
+
+.admin-role-admin {
+    color: #059669 !important;
+    font-weight: 700;
+}
+
+.admin-role-user {
+    color: #4b5563 !important;
+    font-weight: 600;
+}
+
+/* תוכן המלצות */
+
+.admin-review-text {
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* שמירה על ירידות שורה בהודעות */
+
+.admin-preserve-whitespace {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+
+

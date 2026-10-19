@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VitaliFit - ויטאליפיט | בריאות ואנרגיה</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 </head>
 
-<body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen justify-between relative">
+<body class="site-body">
 
     <header class="site-header">
         <div class="header-shell">
             <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
                 <div class="brand-logo-wrap">
-                   <img src="image/לוגו.png" alt="VitaliFit" class="brand-image">
-                   <span class="brand-copy">
-                     <span class="brand-name">VitaliFit</span>
-                     <span class="brand-tagline">בריאות ואנרגיה</span>
-                   </span>
+                    <img src="image/לוגו.png" alt="VitaliFit" class="brand-image">
+                    <span class="brand-copy">
+                        <span class="brand-name">VitaliFit</span>
+                        <span class="brand-tagline">בריאות ואנרגיה</span>
+                    </span>
                 </div>
             </a>
 
@@ -34,7 +35,7 @@
                 <a href="nutrition.html">תזונה</a>
                 <a href="contact.html">צרו קשר</a>
                 <a href="blog.html">בלוג</a>
-                <a href="admin.html" id="admin-nav-link" class="nav-link text-white font-medium hover:text-green-300 transition" style="display: none;">פאנל ניהול</a>
+                <a href="admin.html" id="admin-nav-link" class="nav-link">פאנל ניהול</a>
             </nav>
 
             <div class="nav-actions">
@@ -46,13 +47,13 @@
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 space-y-12 w-full">
+    <main class="page-shell">
 
-        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-l from-[#112d26]/40 via-[#E8F5F1] to-[#112d26]/40 border border-[#A3D9C9]/50 p-8 sm:p-16 shadow-lg flex flex-col md:flex-row items-center justify-between">
-            <div class="space-y-6 max-w-xl text-right z-10">
+        <section class="home-hero">
+            <div class="home-hero-content">
                 <div class="home-brand-lockup" aria-label="VitaliFit - בריאות ואנרגיה">
                     <div class="home-brand-image-wrap">
-                    <img src="image/לוגו.png" alt="VitaliFit" class="home-brand-image">
+                        <img src="image/לוגו.png" alt="VitaliFit" class="home-brand-image">
                     </div>
                     <div>
                         <div class="home-brand-name">VitaliFit</div>
@@ -60,121 +61,113 @@
                     </div>
                 </div>
 
-                <h1 class="text-4xl sm:text-5xl font-extrabold text-[#1E4630] leading-tight">
-                    המסע שלך לחיים בריאים מתחיל כאן
-                </h1>
+                <h1>המסע שלך לחיים בריאים מתחיל כאן</h1>
 
-                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                <p>
                     תוכניות כושר ותזונה בהתאמה אישית לכל מטרה. קבל ליווי מדויק, מעקב יומי וכלים מתקדמים להצלחה.
                 </p>
 
-                <div>
-                    <a href="login.html?redirect=workouts.html"
-                       class="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-[#1E4630] text-white font-bold text-xs shadow-lg hover:bg-[#163524] transition-all">
-                        קבעי את האימון הראשון שלך
-                    </a>
-                </div>
+                <a href="login.html?redirect=workouts.html" class="btn btn-primary">
+                    קבעי את האימון הראשון שלך
+                </a>
             </div>
 
-            <div class="mt-8 md:mt-0 z-10">
-                <div class="w-72 h-72 sm:w-80 sm:h-80 rounded-3xl bg-white/60 backdrop-blur-md border border-white shadow-xl flex items-center justify-center text-center p-6">
-                    <div class="space-y-3">
-                        <div class="w-16 h-16 rounded-2xl bg-[#E8F5F1] text-[#1E4630] flex items-center justify-center mx-auto text-2xl border border-[#A3D9C9]">
-                            <i class="fa-solid fa-heart-pulse"></i>
-                        </div>
-                        <h4 class="font-bold text-[#1E4630] text-sm">כוח, בריאות ואנרגיה</h4>
-                        <p class="text-xs text-gray-500">הפלטפורמה המובילה לניהול אורח חיים פעיל.</p>
+            <div class="home-hero-panel">
+                <div class="home-hero-panel-inner">
+                    <div class="home-hero-panel-icon">
+                        <i class="fa-solid fa-heart-pulse"></i>
                     </div>
+                    <h4>כוח, בריאות ואנרגיה</h4>
+                    <p>הפלטפורמה המובילה לניהול אורח חיים פעיל.</p>
                 </div>
             </div>
-        </div>
+        </section>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-            <!-- אימונים -->
-            <a href="exercises.html" class="soft-card bg-white p-7 rounded-3xl space-y-3 text-center group shadow-md hover:shadow-xl transition-all border border-gray-100">
-                <div class="w-12 h-12 rounded-2xl bg-[#E8F5F1] text-[#1E4630] flex items-center justify-center mx-auto text-lg border border-[#A3D9C9] group-hover:scale-110 transition-transform">
+        <section class="home-features" aria-label="תכונות האתר">
+            <a href="exercises.html" class="feature-card">
+                <div class="feature-icon">
                     <i class="fa-solid fa-dumbbell"></i>
                 </div>
-                <h3 class="text-lg font-bold text-[#1E4630]">תוכניות אימון</h3>
-                <p class="text-gray-500 text-xs leading-relaxed">מגוון אימונים לכל רמות הכושר מהבית או בחוץ.</p>
+                <h3>תוכניות אימון</h3>
+                <p>מגוון אימונים לכל רמות הכושר מהבית או בחוץ.</p>
             </a>
 
-            <!-- תזונה -->
-            <a href="nutrition.html" class="soft-card bg-white p-7 rounded-3xl space-y-3 text-center group shadow-md hover:shadow-xl transition-all border border-gray-100">
-                <div class="w-12 h-12 rounded-2xl bg-[#E8F5F1] text-[#1E4630] flex items-center justify-center mx-auto text-lg border border-[#A3D9C9] group-hover:scale-110 transition-transform">
+            <a href="nutrition.html" class="feature-card">
+                <div class="feature-icon">
                     <i class="fa-solid fa-utensils"></i>
                 </div>
-                <h3 class="text-lg font-bold text-[#1E4630]">מעקב תזונה</h3>
-                <p class="text-gray-500 text-xs leading-relaxed">מעקב אחר הארוחות, הקלוריות והחלבון לאורך היום.</p>
+                <h3>מעקב תזונה</h3>
+                <p>מעקב אחר הארוחות, הקלוריות והחלבון לאורך היום.</p>
             </a>
 
-            <!-- מעקב התקדמות -->
-            <a href="tracking.html" class="soft-card bg-white p-7 rounded-3xl space-y-3 text-center group shadow-md hover:shadow-xl transition-all border border-gray-100">
-                <div class="w-12 h-12 rounded-2xl bg-[#E8F5F1] text-[#1E4630] flex items-center justify-center mx-auto text-lg border border-[#A3D9C9] group-hover:scale-110 transition-transform">
+            <a href="tracking.html" class="feature-card">
+                <div class="feature-icon">
                     <i class="fa-solid fa-chart-line"></i>
                 </div>
-                <h3 class="text-lg font-bold text-[#1E4630]">מעקב התקדמות</h3>
-                <p class="text-gray-500 text-xs leading-relaxed">מעקב אחר הישגים, אימונים וההתקדמות האישית שלך.</p>
+                <h3>מעקב התקדמות</h3>
+                <p>מעקב אחר הישגים, אימונים וההתקדמות האישית שלך.</p>
             </a>
-        </div>
-        <section class="max-w-4xl mx-auto text-center space-y-6 pt-6 pb-4">
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1E4630]">למה דווקא VitaliFit?</h2>
-            <p class="text-gray-600 text-lg leading-relaxed font-medium">
-                החזון שלנו ב-VitaliFit הוא פשוט: להנגיש אורח חיים בריא, מאוזן ומלא אנרגיה לכל אחת. 
-                אנחנו לא מאמינים בדיאטות כסאח או באימונים ששוברים את הגוף, אלא בבניית הרגלים מדויקים 
-                נשארים איתך לתמיד. הפלטפורמה שלנו פותחה מתוך הבנה שמעקב, הדרכה נכונה וקהילה תומכת 
-                הם המפתח האמיתי להצלחה שלך. המטרה שלנו היא לתת לך את כל הכלים במקום אחד, כדי שתוכלי להתמקד במה שחשוב באמת – הבריאות שלך.
+        </section>
+
+        <section class="home-intro">
+            <h2>למה דווקא VitaliFit?</h2>
+            <p>
+                החזון שלנו ב-VitaliFit הוא פשוט: להנגיש אורח חיים בריא, מאוזן ומלא אנרגיה לכל אחת.
+                אנחנו לא מאמינים בדיאטות כסאח או באימונים ששוברים את הגוף, אלא בבניית הרגלים מדויקים
+                נשארים איתך לתמיד. הפלטפורמה שלנו פותחה מתוך הבנה שמעקב, הדרכה נכונה וקהילה תומכת
+                הם המפתח האמיתי להצלחה שלך. המטרה שלנו היא לתת לך את כל הכלים במקום אחד, כדי שתוכלי להתמקד במה שחשוב
+                באמת – הבריאות שלך.
             </p>
         </section>
 
-        <!-- קהילת VitaliFit ממליצה - מבנה HTML נקי לחלוטין (ללא סטייל פנימי) -->
         <section class="reviews-section-clean">
             <div class="reviews-wrapper-clean">
-                
+
                 <div class="reviews-title-clean">
                     <h2>קהילת <span>VitaliFit</span> ממליצה</h2>
                     <p>מה אומרות המתאמנות שכבר עשו את השינוי?</p>
                 </div>
 
                 <div class="reviews-carousel-box-clean">
-                    <button id="prev-btn" class="carousel-btn-clean prev">&#10095;</button>
-                    
+                    <button id="prev-btn" class="carousel-btn-clean prev" aria-label="המלצה קודמת">&#10095;</button>
+
                     <div id="carousel-wrapper" class="carousel-viewport-clean">
                         <div id="reviews-container" class="reviews-track-clean">
                             <p class="reviews-loading">טוען המלצות...</p>
                         </div>
                     </div>
 
-                    <button id="next-btn" class="carousel-btn-clean next">&#10094;</button>
+                    <button id="next-btn" class="carousel-btn-clean next" aria-label="המלצה הבאה">&#10094;</button>
                 </div>
 
-                <div id="review-form-section" class="review-form-container-clean" style="display: none;">
+                <div id="review-form-section" class="review-form-container-clean">
                     <div class="review-card-clean">
                         <div class="review-form-header">
                             <h3>הסיפור שלך נותן השראה!</h3>
                             <p>שתפי אותנו בהתקדמות שלך (ההמלצה תפורסם לאחר אישור מנהל).</p>
                         </div>
-                        
+
                         <form id="review-form" class="review-form-clean">
                             <div class="form-field">
                                 <label for="review-name">השם שלך</label>
                                 <input type="text" id="review-name" placeholder="איך תרצי להופיע באתר?">
                             </div>
-                            
+
                             <div class="form-field">
                                 <label for="review-text">ההמלצה שלך</label>
-                                <textarea id="review-text" required rows="3" placeholder="שתפי אותנו בחוויה שלך, ההתקדמות שעשית..."></textarea>
+                                <textarea id="review-text" required rows="3"
+                                    placeholder="שתפי אותנו בחוויה שלך, ההתקדמות שעשית..."></textarea>
                             </div>
-                            
+
                             <div class="form-checkbox-clean">
                                 <input type="checkbox" id="anonymous-checkbox">
                                 <label for="anonymous-checkbox">פרסמי בעילום שם (אנונימי)</label>
                             </div>
-                            
+
                             <button type="submit" class="submit-btn-clean">שליחת המלצה לאישור</button>
                         </form>
-                        
-                        <div id="review-success-msg" class="success-box-clean" style="display: none;">
+
+                        <div id="review-success-msg" class="success-box-clean">
                             <div class="success-icon-clean">✓</div>
                             <h4>תודה רבה!</h4>
                             <p>הפידבק שלך נשלח בהצלחה למנהל.</p>
@@ -232,4 +225,5 @@
     <script src="js/script.js"></script>
     <script src="js/home-reviews.js"></script>
 </body>
+
 </html>

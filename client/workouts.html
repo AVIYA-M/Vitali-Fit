@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>לוח אימונים - VitaliFit</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -14,7 +13,7 @@
     <link rel="stylesheet" href="css/workouts.css">
 </head>
 
-<body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen justify-between">
+<body class="workouts-page">
     <header class="site-header">
         <div class="header-shell">
             <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
@@ -39,9 +38,7 @@
                 <a href="nutrition.html">תזונה</a>
                 <a href="contact.html">צרו קשר</a>
                 <a href="blog.html">בלוג</a>
-                <a href="admin.html" id="admin-nav-link"
-                    class="nav-link text-white font-medium hover:text-green-300 transition" style="display: none;">פאנל
-                    ניהול</a>
+                <a href="admin.html" id="admin-nav-link">פאנל ניהול</a>
             </nav>
 
             <div class="nav-actions">
@@ -51,7 +48,7 @@
         </div>
     </header>
 
-    <main class="workouts-main flex-grow max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 w-full">
+    <main class="workouts-main">
         <div class="hero-banner">
             <span class="hero-tag">מערכת אימונים מתקדמת</span>
             <h1 class="hero-title">בחרי אימון, תאריך והבטחי את מקומך</h1>
@@ -139,4 +136,5 @@
     <script src="js/workouts.js"></script>
 
 </body>
+
 </html>

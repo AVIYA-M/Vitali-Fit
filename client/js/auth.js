@@ -41,7 +41,7 @@ async function handleRegister(event) {
 
         // הצגת הודעת הצלחה מרגיעה למשתמשת
         if (msgBox) {
-            msgBox.className = 'p-3 rounded-xl text-xs font-bold text-center bg-green-100 text-green-700 border border-green-200';
+            msgBox.className = 'register-message register-message-success';
             msgBox.textContent = 'החשבון נוצר בהצלחה! מעביר אותך לדף ההתחברות...';
             msgBox.classList.remove('hidden');
         } else {
@@ -55,7 +55,7 @@ async function handleRegister(event) {
 
     } catch (error) {
         if (msgBox) {
-            msgBox.className = 'p-3 rounded-xl text-xs font-bold text-center bg-red-100 text-red-700 border border-red-200';
+            msgBox.className = 'register-message register-message-error';
             msgBox.textContent = error.message;
             msgBox.classList.remove('hidden');
         } else {
@@ -93,7 +93,7 @@ async function handleLogin(event) {
         localStorage.setItem('user', JSON.stringify(data.user));
 
         if (msgBox) {
-            msgBox.className = 'p-3 rounded-xl text-xs font-bold text-center bg-green-100 text-green-700 border border-green-200';
+            msgBox.className = 'login-message login-message-success';
             msgBox.textContent = 'התחברת בהצלחה! מעבר ללוח המעקב...';
             msgBox.classList.remove('hidden');
         }
@@ -104,7 +104,7 @@ async function handleLogin(event) {
 
     } catch (error) {
         if (msgBox) {
-            msgBox.className = 'p-3 rounded-xl text-xs font-bold text-center bg-red-100 text-red-700 border border-red-200';
+            msgBox.className = 'login-message login-message-error';
             msgBox.textContent = error.message;
             msgBox.classList.remove('hidden');
         } else {

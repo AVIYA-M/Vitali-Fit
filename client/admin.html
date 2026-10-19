@@ -4,21 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>VitaliFit - ניהול מערכת ומשתמשים</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/admin.css">
 </head>
 
-<body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen justify-between">
+<body class="site-body admin-page">
 
+    <!-- Header -->
     <header class="site-header">
         <div class="header-shell">
+
             <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
                 <div class="brand-logo-wrap">
                     <img src="image/לוגו.png" alt="VitaliFit" class="brand-image">
+
                     <span class="brand-copy">
                         <span class="brand-name">VitaliFit</span>
                         <span class="brand-tagline">בריאות ואנרגיה</span>
@@ -35,293 +40,418 @@
                 <a href="nutrition.html">תזונה</a>
                 <a href="contact.html">צרו קשר</a>
                 <a href="blog.html">בלוג</a>
-                <a href="admin.html" id="admin-nav-link"
-                    class="nav-link text-white font-medium hover:text-green-300 transition" style="display: none;">פאנל
-                    ניהול</a>
 
+                <a href="admin.html"
+                   id="admin-nav-link"
+                   class="nav-link"
+                   style="display: none;">
+                    פאנל ניהול
+                </a>
             </nav>
 
             <div class="nav-actions">
-                <a href="login.html" class="icon-button" aria-label="התחברות"><i class="fa-regular fa-user"></i></a>
+                <a href="login.html" class="icon-button" aria-label="התחברות">
+                    <i class="fa-regular fa-user"></i>
+                </a>
+
                 <a href="register.html" class="join-button">הצטרף</a>
             </div>
+
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 space-y-6 w-full">
+    <!-- Main -->
+    <main class="admin-main">
 
-        <!-- כותרת ראשית וניהול פעולות מנהל -->
-        <div class="soft-card p-6 rounded-2xl flex flex-col md:flex-row justify-between items-center bg-white gap-4">
+        <!-- כותרת ראשית ופעולות מנהל -->
+        <section class="soft-card admin-heading">
+
             <div>
-                <h1 class="text-2xl font-bold text-[#1E4630]">פאנל ניהול מערכת</h1>
-                <p class="text-gray-500 text-xs mt-1">ניהול משתמשי הפלטפורמה, הוספה ועריכת אימונים ואישור המלצות קהילה.
+                <h1 class="admin-title">פאנל ניהול מערכת</h1>
+
+                <p class="admin-subtitle">
+                    ניהול משתמשי הפלטפורמה, הוספה ועריכת אימונים ואישור המלצות קהילה.
                 </p>
             </div>
-            <div class="flex items-center gap-3">
-                <button onclick="openAddWorkoutModal()"
-                    class="px-4 py-2.5 bg-[#1E4630] text-white rounded-xl text-xs font-bold hover:bg-[#163524] transition-all shadow-md flex items-center gap-2">
-                    <i class="fa-solid fa-plus"></i> הוסף אימון חדש
+
+            <div class="admin-heading-actions">
+                <button type="button"
+                        onclick="openAddWorkoutModal()"
+                        class="admin-button admin-button-primary">
+                    <i class="fa-solid fa-plus"></i>
+                    הוסף אימון חדש
                 </button>
             </div>
-        </div>
 
-        <!-- טופס מודאלי להוספת אימון -->
-        <div id="add-workout-modal"
-            class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity">
-            <div class="bg-white rounded-3xl p-6 shadow-2xl max-w-md w-full mx-4 text-right border border-gray-100">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-[#1E4630] text-lg">הוספת שיעור/אימון ללוח</h3>
-                    <button onclick="closeAddWorkoutModal()" class="text-gray-400 hover:text-gray-600"><i
-                            class="fa-solid fa-xmark text-lg"></i></button>
+        </section>
+
+        <!-- חלון הוספת אימון -->
+        <div id="add-workout-modal" class="admin-modal hidden">
+
+            <div class="admin-modal-box">
+
+                <div class="admin-modal-heading">
+                    <h3>הוספת שיעור/אימון ללוח</h3>
+
+                    <button type="button"
+                            onclick="closeAddWorkoutModal()"
+                            class="admin-modal-close"
+                            aria-label="סגירה">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
                 </div>
-                <form id="create-workout-form" onsubmit="handleCreateWorkout(event)" class="space-y-3.5 text-xs">
-                    <div>
-                        <label class="block font-semibold text-gray-700 mb-1">כותרת האימון</label>
-                        <input type="text" id="w-title" required placeholder="למשל: אימון כוח מתקדם"
-                            class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                <form id="create-workout-form"
+                      onsubmit="handleCreateWorkout(event)"
+                      class="admin-form">
+
+                    <div class="admin-form-group">
+                        <label for="w-title">כותרת האימון</label>
+
+                        <input type="text"
+                               id="w-title"
+                               required
+                               placeholder="למשל: אימון כוח מתקדם">
                     </div>
-                    <div>
-                        <label class="block font-semibold text-gray-700 mb-1">תיאור קצר</label>
-                        <input type="text" id="w-desc" required placeholder="למשל: אימון ממוקד לפלג גוף עליון"
-                            class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                    <div class="admin-form-group">
+                        <label for="w-desc">תיאור קצר</label>
+
+                        <input type="text"
+                               id="w-desc"
+                               required
+                               placeholder="למשל: אימון ממוקד לפלג גוף עליון">
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block font-semibold text-gray-700 mb-1">תאריך</label>
-                            <input type="date" id="w-date" required
-                                class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                    <div class="admin-form-row">
+
+                        <div class="admin-form-group">
+                            <label for="w-date">תאריך</label>
+                            <input type="date" id="w-date" required>
                         </div>
-                        <div>
-                            <label class="block font-semibold text-gray-700 mb-1">שעה</label>
-                            <input type="text" id="w-time" required placeholder="09:00"
-                                class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                        <div class="admin-form-group">
+                            <label for="w-time">שעה</label>
+                            <input type="text"
+                                   id="w-time"
+                                   required
+                                   placeholder="09:00">
                         </div>
+
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block font-semibold text-gray-700 mb-1">שם המדריך</label>
-                            <input type="text" id="w-instructor" required placeholder="ישראל ישראלי"
-                                class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                    <div class="admin-form-row">
+
+                        <div class="admin-form-group">
+                            <label for="w-instructor">שם המדריך</label>
+
+                            <input type="text"
+                                   id="w-instructor"
+                                   required
+                                   placeholder="ישראל ישראלי">
                         </div>
-                        <div>
-                            <label class="block font-semibold text-gray-700 mb-1">מקסימום משתתפים</label>
-                            <input type="number" id="w-max" required value="30"
-                                class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                        <div class="admin-form-group">
+                            <label for="w-max">מקסימום משתתפים</label>
+
+                            <input type="number"
+                                   id="w-max"
+                                   required
+                                   value="30">
                         </div>
+
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block font-semibold text-gray-700 mb-1">משך האימון (בדקות)</label>
-                            <input type="number" id="w-duration" required min="1" placeholder="45"
-                                class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                    <div class="admin-form-row">
+
+                        <div class="admin-form-group">
+                            <label for="w-duration">משך האימון (בדקות)</label>
+
+                            <input type="number"
+                                   id="w-duration"
+                                   required
+                                   min="1"
+                                   placeholder="45">
                         </div>
-                        <div>
-                            <label class="block font-semibold text-gray-700 mb-1">קלוריות משוערות</label>
-                            <input type="number" id="w-calories" required min="0" placeholder="400"
-                                class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                        <div class="admin-form-group">
+                            <label for="w-calories">קלוריות משוערות</label>
+
+                            <input type="number"
+                                   id="w-calories"
+                                   required
+                                   min="0"
+                                   placeholder="400">
                         </div>
+
                     </div>
-                    <div>
-                        <label class="block font-semibold text-gray-700 mb-1">סוג אימון</label>
-                        <select id="w-type"
-                            class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                    <div class="admin-form-group">
+                        <label for="w-type">סוג אימון</label>
+
+                        <select id="w-type">
                             <option value="studio">בסטודיו</option>
                             <option value="zoom">זום (מקוון)</option>
                         </select>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1 mt-2">קטגוריית האימון</label>
-                        <select id="w-category" required
-                            class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-200">
+
+                        <label for="w-category" class="admin-label-spaced">
+                            קטגוריית האימון
+                        </label>
+
+                        <select id="w-category" required>
                             <option value="strength">אימוני כוח</option>
                             <option value="cardio">אימוני אירובי</option>
                             <option value="yoga">יוגה</option>
                             <option value="functional">אימון פונקציונלי</option>
                         </select>
                     </div>
+
                     <button type="submit"
-                        class="w-full mt-2 py-3 bg-[#1E4630] text-white rounded-xl font-bold hover:bg-[#163524] transition-all shadow-md">שמור
-                        אימון במערכת</button>
+                            class="admin-button admin-button-primary admin-button-full">
+                        שמור אימון במערכת
+                    </button>
+
                 </form>
+
             </div>
         </div>
 
-        <!-- טופס מודאלי לעריכת אימון קיים -->
-        <div id="edit-workout-modal"
-            class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity">
-            <div class="bg-white rounded-3xl p-6 shadow-2xl max-w-md w-full mx-4 text-right border border-gray-100">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-[#1E4630] text-lg">עריכת אימון קיים</h3>
-                    <button onclick="closeEditWorkoutModal()" class="text-gray-400 hover:text-gray-600"><i
-                            class="fa-solid fa-xmark text-lg"></i></button>
+        <!-- חלון עריכת אימון -->
+        <div id="edit-workout-modal" class="admin-modal hidden">
+
+            <div class="admin-modal-box">
+
+                <div class="admin-modal-heading">
+                    <h3>עריכת אימון קיים</h3>
+
+                    <button type="button"
+                            onclick="closeEditWorkoutModal()"
+                            class="admin-modal-close"
+                            aria-label="סגירה">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
                 </div>
-                <form id="edit-workout-form" onsubmit="handleUpdateWorkout(event)" class="space-y-3.5 text-xs">
+
+                <form id="edit-workout-form"
+                      onsubmit="handleUpdateWorkout(event)"
+                      class="admin-form">
+
                     <input type="hidden" id="edit-w-id">
-                    <div>
-                        <label class="block font-semibold text-gray-700 mb-1">כותרת האימון</label>
-                        <input type="text" id="edit-w-title" required
-                            class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                    <div class="admin-form-group">
+                        <label for="edit-w-title">כותרת האימון</label>
+                        <input type="text" id="edit-w-title" required>
                     </div>
-                    <div>
-                        <label class="block font-semibold text-gray-700 mb-1">תיאור קצר</label>
-                        <input type="text" id="edit-w-desc" required
-                            class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                    <div class="admin-form-group">
+                        <label for="edit-w-desc">תיאור קצר</label>
+                        <input type="text" id="edit-w-desc" required>
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block font-semibold text-gray-700 mb-1">תאריך</label>
-                            <input type="date" id="edit-w-date" required
-                                class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                    <div class="admin-form-row">
+
+                        <div class="admin-form-group">
+                            <label for="edit-w-date">תאריך</label>
+                            <input type="date" id="edit-w-date" required>
                         </div>
-                        <div>
-                            <label class="block font-semibold text-gray-700 mb-1">שעה</label>
-                            <input type="text" id="edit-w-time" required
-                                class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                        <div class="admin-form-group">
+                            <label for="edit-w-time">שעה</label>
+                            <input type="text" id="edit-w-time" required>
                         </div>
+
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block font-semibold text-gray-700 mb-1">שם המדריך</label>
-                            <input type="text" id="edit-w-instructor" required
-                                class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                    <div class="admin-form-row">
+
+                        <div class="admin-form-group">
+                            <label for="edit-w-instructor">שם המדריך</label>
+                            <input type="text" id="edit-w-instructor" required>
                         </div>
-                        <div>
-                            <label class="block font-semibold text-gray-700 mb-1">מקסימום משתתפים</label>
-                            <input type="number" id="edit-w-max" required
-                                class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                        <div class="admin-form-group">
+                            <label for="edit-w-max">מקסימום משתתפים</label>
+                            <input type="number" id="edit-w-max" required>
                         </div>
+
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block font-semibold text-gray-700 mb-1">משך האימון (בדקות)</label>
-                            <input type="number" id="edit-w-duration" required min="1"
-                                class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                    <div class="admin-form-row">
+
+                        <div class="admin-form-group">
+                            <label for="edit-w-duration">משך האימון (בדקות)</label>
+                            <input type="number"
+                                   id="edit-w-duration"
+                                   required
+                                   min="1">
                         </div>
-                        <div>
-                            <label class="block font-semibold text-gray-700 mb-1">קלוריות משוערות</label>
-                            <input type="number" id="edit-w-calories" required min="0"
-                                class="w-full bg-gray-50 border border-gray-300 rounded-xl py-2.5 px-3 focus:outline-none focus:border-[#1E4630]">
+
+                        <div class="admin-form-group">
+                            <label for="edit-w-calories">קלוריות משוערות</label>
+                            <input type="number"
+                                   id="edit-w-calories"
+                                   required
+                                   min="0">
                         </div>
+
                     </div>
+
                     <button type="submit"
-                        class="w-full mt-2 py-3 bg-[#1E4630] text-white rounded-xl font-bold hover:bg-[#163524] transition-all shadow-md">עדכן
-                        אימון</button>
+                            class="admin-button admin-button-primary admin-button-full">
+                        עדכן אימון
+                    </button>
+
                 </form>
+
             </div>
         </div>
 
-        <!-- טבלת ניהול אימונים במערכת -->
-        <div class="soft-card rounded-2xl bg-white overflow-hidden mb-8">
-            <div class="p-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
-                <h3 class="font-bold text-[#1E4630] text-sm">ניהול אימונים קיימים (עריכה ומחיקה)</h3>
+        <!-- ניהול אימונים -->
+        <section class="soft-card admin-section">
+
+            <div class="admin-section-heading">
+                <h3>ניהול אימונים קיימים (עריכה ומחיקה)</h3>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-right text-xs">
-                    <thead class="bg-gray-100 text-gray-700 uppercase">
+
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
+                    <thead>
                         <tr>
-                            <th class="py-3 px-6">כותרת האימון</th>
-                            <th class="py-3 px-6">תאריך ושעה</th>
-                            <th class="py-3 px-6">מדריך</th>
-                            <th class="py-3 px-6 text-center">פעולות ניהול</th>
+                            <th>כותרת האימון</th>
+                            <th>תאריך ושעה</th>
+                            <th>מדריך</th>
+                            <th class="admin-table-center">פעולות ניהול</th>
                         </tr>
                     </thead>
-                    <tbody id="workouts-table-body" class="divide-y divide-gray-100">
+
+                    <tbody id="workouts-table-body">
                         <!-- אימונים ייטענו דינמית -->
                     </tbody>
                 </table>
             </div>
-        </div>
 
-        <!-- טבלת ניהול משתמשים -->
-        <div class="soft-card rounded-2xl bg-white overflow-hidden">
-            <div class="p-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
-                <h3 class="font-bold text-[#1E4630] text-sm">רשימת משתמשי המערכת הרשומים</h3>
-            </div>
-            <table class="w-full text-right text-xs">
-                <thead class="bg-gray-100 text-gray-700 uppercase">
-                    <tr>
-                        <th class="py-3 px-6">שם משתמש</th>
-                        <th class="py-3 px-6">אימייל</th>
-                        <th class="py-3 px-6">תפקיד</th>
-                        <th class="py-3 px-6 text-center">פעולות</th>
-                    </tr>
-                </thead>
-                <tbody id="users-table-body" class="divide-y divide-gray-100">
-                    <!-- הנתונים ייטענו דינמית מהשרת -->
-                </tbody>
-            </table>
-        </div>
+        </section>
 
-        <!-- טבלת ניהול המלצות קהילה -->
-        <div class="soft-card rounded-2xl bg-white overflow-hidden mt-8">
-            <div class="p-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
-                <h3 class="font-bold text-[#1E4630] text-sm">ניהול המלצות קהילה (אישור / דחייה)</h3>
+        <!-- ניהול משתמשים -->
+        <section class="soft-card admin-section">
+
+            <div class="admin-section-heading">
+                <h3>רשימת משתמשי המערכת הרשומים</h3>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-right text-xs">
-                    <thead class="bg-gray-100 text-gray-700 uppercase">
+
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
+                    <thead>
                         <tr>
-                            <th class="py-3 px-6">שם הממליצ/ה</th>
-                            <th class="py-3 px-6">תוכן ההמלצה</th>
-                            <th class="py-3 px-6">סטטוס</th>
-                            <th class="py-3 px-6 text-center">פעולות אישור</th>
+                            <th>שם משתמש</th>
+                            <th>אימייל</th>
+                            <th>תפקיד</th>
+                            <th class="admin-table-center">פעולות</th>
                         </tr>
                     </thead>
-                    <tbody id="reviews-table-body" class="divide-y divide-gray-100">
+
+                    <tbody id="users-table-body">
+                        <!-- הנתונים ייטענו דינמית מהשרת -->
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <!-- ניהול המלצות קהילה -->
+        <section class="soft-card admin-section">
+
+            <div class="admin-section-heading">
+                <h3>ניהול המלצות קהילה (אישור / דחייה)</h3>
+            </div>
+
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>שם הממליצ/ה</th>
+                            <th>תוכן ההמלצה</th>
+                            <th>סטטוס</th>
+                            <th class="admin-table-center">פעולות אישור</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="reviews-table-body">
                         <!-- ההמלצות ייטענו דינמית מהשרת -->
                     </tbody>
-
                 </table>
-                <!-- פניות שהתקבלו מטופס יצירת קשר -->
-
-            </div>
-        </div>
-        <div class="soft-card rounded-2xl bg-white overflow-hidden mt-8">
-            <div class="p-4 bg-gray-50 border-b border-gray-100">
-                <h3 class="font-bold text-[#1E4630] text-sm">פניות שהתקבלו</h3>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-right text-xs">
-                    <thead class="bg-gray-100 text-gray-700">
+        </section>
+
+        <!-- פניות שהתקבלו מטופס יצירת קשר -->
+        <section class="soft-card admin-section">
+
+            <div class="admin-section-heading">
+                <h3>פניות שהתקבלו</h3>
+            </div>
+
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
+                    <thead>
                         <tr>
-                            <th class="py-3 px-4">תאריך</th>
-                            <th class="py-3 px-4">שם</th>
-                            <th class="py-3 px-4">אימייל</th>
-                            <th class="py-3 px-4">נושא</th>
-                            <th class="py-3 px-4">הודעה</th>
-                            <th class="py-3 px-4">סטטוס</th>
+                            <th>תאריך</th>
+                            <th>שם</th>
+                            <th>אימייל</th>
+                            <th>נושא</th>
+                            <th>הודעה</th>
+                            <th>סטטוס</th>
                         </tr>
                     </thead>
 
-                    <tbody id="contact-messages-table-body" class="divide-y divide-gray-100">
+                    <tbody id="contact-messages-table-body">
                         <tr>
-                            <td colspan="6" class="text-center py-6 text-gray-500">
+                            <td colspan="6" class="admin-table-empty">
                                 טוען פניות...
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-        </div>
+
+        </section>
 
     </main>
 
+    <!-- Footer -->
     <footer class="site-footer">
+
         <div class="footer-inner">
+
             <div class="footer-newsletter">
                 <h3>הרשמה לניוזלטר שלנו</h3>
+
                 <div class="newsletter-shell">
                     <button type="button" class="newsletter-btn">שליחה</button>
-                    <input type="email" placeholder="כתובת אימייל" aria-label="כתובת אימייל">
+
+                    <input type="email"
+                           placeholder="כתובת אימייל"
+                           aria-label="כתובת אימייל">
                 </div>
+
                 <div class="social-links">
-                    <a href="#" aria-label="Facebook" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" aria-label="Instagram" class="social-link"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" aria-label="WhatsApp" class="social-link"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="#" aria-label="Facebook" class="social-link">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+
+                    <a href="#" aria-label="Instagram" class="social-link">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+
+                    <a href="#" aria-label="WhatsApp" class="social-link">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
                 </div>
             </div>
 
             <div class="footer-column">
                 <h4>שירותים</h4>
+
                 <ul class="footer-list">
                     <li><a href="exercises.html">תוכניות כושר</a></li>
                     <li><a href="blog.html">בלוג</a></li>
@@ -332,6 +462,7 @@
 
             <div class="footer-column">
                 <h4>קהילות</h4>
+
                 <ul class="footer-list">
                     <li><a href="exercises.html">מתחילים</a></li>
                     <li><a href="exercises.html">מתקדמים</a></li>
@@ -339,16 +470,19 @@
                     <li><a href="contact.html">תמיכה ומוטיבציה</a></li>
                 </ul>
             </div>
+
         </div>
 
         <div class="footer-bottom">
             <p>© 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.</p>
         </div>
+
     </footer>
 
     <script src="js/api-config.js"></script>
     <script src="js/script.js"></script>
     <script src="js/admin.js"></script>
-</body>
 
+</body>
 </html>
+

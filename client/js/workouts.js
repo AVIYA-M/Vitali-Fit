@@ -124,14 +124,12 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // אם אין אימונים
         if (!sessions.length) {
-
             container.innerHTML = `
-                <div class="p-4 text-center text-gray-500 text-xs">
-                    אין שיעורים שנקבעו ליום זה במערכת
-                </div>
-            `;
+        <div class="empty-session">
+            אין שיעורים שנקבעו ליום זה במערכת
+        </div>
+    `;
 
             return;
         }
@@ -167,103 +165,83 @@ document.addEventListener("DOMContentLoaded", () => {
 
             let actionBtn = '';
 
-            // המשתמש לא מחובר
             if (!userStr) {
-
                 actionBtn = `
-                    <button
-                        onclick="window.location.href='login.html'"
-                        class="px-3 py-1.5 bg-gray-200 text-gray-700 rounded-xl text-xs font-semibold hover:bg-gray-300">
-                        התחבר כדי להירשם
-                    </button>
-                `;
-
-                // המשתמש כבר רשום
+        <button
+            onclick="window.location.href='login.html'"
+            class="session-action-btn login">
+            התחבר כדי להירשם
+        </button>
+    `;
             } else if (isUserRegistered) {
-
                 if (hasWorkoutFinished(session)) {
-
                     actionBtn = `
-            <div class="flex items-center gap-2">
+        <div class="session-action-group">
+            <button
+                class="session-action-btn registered"
+                disabled>
+                נרשמת בהצלחה
+            </button>
 
-                <button
-                    class="px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-xl text-xs font-semibold"
-                    disabled>
-                    נרשמת בהצלחה
-                </button>
-
-                <button
-                    onclick="completeWorkout('${session._id}')"
-                    class="px-3 py-1.5 bg-[#1E4630] text-white rounded-xl text-xs font-semibold hover:bg-[#163524]">
-                    סיימתי את האימון
-                </button>
-
-            </div>
-        `;
-
+            <button
+                onclick="completeWorkout('${session._id}')"
+                class="session-action-btn complete">
+                סיימתי את האימון
+            </button>
+        </div>
+    `;
                 } else {
-
                     actionBtn = `
             <button
-                class="px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-xl text-xs font-semibold"
+                class="session-action-btn registered"
                 disabled>
                 נרשמת בהצלחה
             </button>
         `;
                 }
-
-                // האימון מלא
             } else if (isFull) {
-
                 actionBtn = `
         <button
-            class="px-3 py-1.5 bg-gray-300 text-gray-600 rounded-xl text-xs font-semibold"
+            class="session-action-btn full"
             disabled>
             האימון מלא
         </button>
     `;
-
-                // אפשר להירשם
             } else {
-
                 actionBtn = `
         <button
             onclick="registerForSession('${session._id}')"
-            class="px-3 py-1.5 bg-[#1E4630] text-white rounded-xl text-xs font-semibold hover:bg-[#163524]">
+            class="session-action-btn register">
             הרשמה לשיעור
         </button>
     `;
             }
 
             return `
-                <div class="p-4 bg-white rounded-2xl border border-gray-100 flex justify-between items-center shadow-sm">
+    <div class="session-item">
+        <div class="session-main">
+            <span class="session-time">
+                ${session.time}
+            </span>
 
-                    <div>
-                        <span class="text-xs font-bold text-[#1E4630]">
-                            ${session.time}
-                        </span>
+            <h4 class="session-title">
+                ${session.title}
+            </h4>
 
-                        <h4 class="font-bold text-gray-800 text-sm">
-                            ${session.title}
-                        </h4>
+            <p class="session-meta">
+                מדריך: ${session.instructor}
+            </p>
+        </div>
 
-                        <p class="text-xs text-gray-500">
-                            מדריך: ${session.instructor}
-                        </p>
-                    </div>
+        <div class="session-actions">
+            <span class="session-meta">
+                ${registeredCount}/${session.maxParticipants} רשומים
+            </span>
 
-                    <div class="flex items-center gap-3">
-
-                        <span class="text-xs text-gray-500">
-                            ${registeredCount}/${session.maxParticipants} רשומים
-                        </span>
-
-                        ${actionBtn}
-
-                    </div>
-
-                </div>
-            `;
+            ${actionBtn}
+        </div>
+    </div>
+`;
         }).join('');
     }
 
@@ -323,8 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const dayBox = document.createElement('div');
 
-            dayBox.className =
-                'day-box p-2 text-center rounded-xl cursor-pointer hover:bg-gray-100 text-xs font-semibold';
+            dayBox.className = 'day-box';
 
             dayBox.innerText = i;
 
@@ -338,10 +315,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 selectedDate.getDate() === currentCellDate.getDate()
             ) {
 
-                dayBox.classList.add(
-                    'bg-[#1E4630]',
-                    'text-white'
-                );
+                dayBox.classList.add('selected');
             }
 
             // לחיצה על יום

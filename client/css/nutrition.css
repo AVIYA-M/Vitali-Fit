@@ -1,0 +1,392 @@
+/* =========================
+   מבנה עמוד התזונה
+   ========================= */
+
+.nutrition-page {
+    background-color: #F8F9FA;
+    color: #111827;
+}
+
+.nutrition-main {
+    width: 100%;
+    max-width: 1184px;
+    margin: 0 auto;
+    padding: 40px 16px;
+}
+
+/* =========================
+   כותרת העמוד
+   ========================= */
+
+.nutrition-heading {
+    padding: 24px;
+    margin-bottom: 24px;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.04);
+    text-align: center;
+}
+
+.nutrition-title {
+    margin: 0;
+    color: #1E4630;
+    font-size: 1.875rem;
+    font-weight: 800;
+}
+
+.nutrition-subtitle {
+    margin: 12px 0 0;
+    color: #1E4630;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.nutrition-description {
+    margin: 8px 0 0;
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+/* =========================
+   סיכום ערכים תזונתיים
+   ========================= */
+
+
+.nutrition-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.nutrition-summary-card {
+    min-width: 0;
+    padding: 12px 8px;
+    background: #ffffff;
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.04);
+    text-align: center;
+}
+
+
+
+.summary-label {
+    margin: 0;
+    color: #6b7280;
+    font-size: 0.75rem;
+}
+
+.summary-value {
+    margin: 4px 0;
+    color: #1E4630;
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.summary-unit {
+    margin: 0;
+    color: #9ca3af;
+    font-size: 0.75rem;
+}
+
+/* =========================
+   אזור מרכזי
+   ========================= */
+
+.nutrition-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+}
+
+.nutrition-panel {
+    min-width: 0;
+    padding: 24px;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.04);
+}
+
+.panel-title {
+    margin: 0;
+    color: #1E4630;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.panel-description {
+    margin: 8px 0 24px;
+    color: #6b7280;
+    font-size: 0.875rem;
+    line-height: 1.7;
+}
+
+/* =========================
+   טופס הוספת ארוחה
+   ========================= */
+
+.meal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    color: #374151;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #111827;
+    font: inherit;
+    font-size: 0.875rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #1E4630;
+    box-shadow: 0 0 0 3px rgba(30, 70, 48, 0.08);
+}
+
+.form-group input[type="file"] {
+    padding: 10px;
+}
+
+.meal-submit-btn {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 12px;
+    background: #1E4630;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.meal-submit-btn:hover {
+    background: #163524;
+}
+
+.meal-submit-btn:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
+/* =========================
+   רשימת הארוחות
+   ========================= */
+
+.meals-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.meals-total {
+    color: #1E4630;
+    font-size: 0.875rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.meals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+}
+
+.meal-card {
+    overflow: hidden;
+    border-radius: 16px;
+    background: #f9fafb;
+    border: 1px solid #f3f4f6;
+}
+
+.meal-details {
+    width: 100%;
+}
+
+.meal-summary {
+    padding: 16px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.meal-summary::-webkit-details-marker {
+    display: none;
+}
+
+.meal-summary::marker {
+    content: "";
+}
+
+.meal-summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.meal-summary-info {
+    min-width: 0;
+}
+
+.meal-name-title {
+    margin: 0;
+    color: #1f2937;
+    font-size: 1rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.meal-date {
+    margin: 4px 0 0;
+    color: #9ca3af;
+    font-size: 0.75rem;
+}
+
+.meal-calories {
+    color: #1E4630;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.meal-details-content {
+    padding: 16px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.meal-image {
+    display: block;
+    width: 100%;
+    height: 192px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.nutrition-values {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.nutrition-value-card {
+    min-width: 0;
+    padding: 12px;
+    border-radius: 12px;
+    background: #ffffff;
+    text-align: center;
+}
+
+.nutrition-label {
+    margin: 0;
+    color: #9ca3af;
+    font-size: 0.75rem;
+}
+
+.nutrition-value {
+    margin: 4px 0 0;
+    color: #1E4630;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+/* הודעות כשאין ארוחות */
+
+.empty-meals-message {
+    margin: 0;
+    padding: 24px 12px;
+    color: #9ca3af;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+/* =========================
+   היסטוריית ארוחות
+   ========================= */
+
+.nutrition-history {
+    margin-top: 32px;
+}
+
+.history-title {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* =========================
+   התאמה למסכים גדולים
+   ========================= */
+
+@media (min-width: 768px) {
+    .nutrition-content {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* =========================
+   התאמה למסכים קטנים
+   ========================= */
+
+@media (max-width: 480px) {
+    .nutrition-main {
+        padding: 24px 12px;
+    }
+
+    .nutrition-heading {
+        padding: 20px 14px;
+    }
+
+    .nutrition-title {
+        font-size: 1.6rem;
+    }
+
+    .nutrition-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .nutrition-panel {
+        padding: 18px 14px;
+    }
+
+    .meals-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .meal-summary {
+        padding: 12px;
+    }
+
+    .meal-details-content {
+        padding: 12px;
+    }
+
+    .meal-name-title {
+        font-size: 0.9rem;
+    }
+
+    .meal-calories {
+        font-size: 0.85rem;
+    }
+}

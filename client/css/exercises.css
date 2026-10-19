@@ -1,0 +1,163 @@
+
+/* =========================
+   עמוד האימונים
+   ========================= */
+
+.exercises-page {
+    color: #111827;
+    font-family: 'Heebo', sans-serif;
+}
+
+/* מבנה העמוד */
+
+.exercises-main {
+    flex-grow: 1;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 48px 32px;
+    box-sizing: border-box;
+}
+
+/* כותרת העמוד */
+
+.exercises-heading {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.exercises-title {
+    margin: 0;
+    color: #1E4630;
+    font-size: 2.25rem;
+    font-weight: 700;
+}
+
+.exercises-intro {
+    max-width: 672px;
+    margin: 12px auto 0;
+    color: #6b7280;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+/* פריסת הכרטיסים */
+
+.exercises-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+/* כרטיס אימון */
+
+.exercise-card {
+    min-width: 0;
+    padding: 24px;
+    background-color: #ffffff;
+    border: 1px solid #f3f4f6;
+    border-radius: 16px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-sizing: border-box;
+}
+
+/* ריבוע האייקון */
+
+.exercise-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    margin-bottom: 16px;
+
+    background-color: #E8F5F1;
+    color: #1E4630;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.25rem;
+}
+
+/* כותרת הכרטיס */
+
+.exercise-card-title {
+    margin: 0 0 8px;
+    color: #1E4630;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* תיאור הכרטיס */
+
+.exercise-card-description {
+    margin: 0 0 20px;
+    color: #6b7280;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+/* כפתור קביעת אימון */
+
+.exercise-button {
+    display: inline-block;
+    margin-top: auto;
+    padding: 10px 20px;
+
+    background-color: #1E4630;
+    color: #ffffff;
+    border-radius: 12px;
+
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+
+    transition: background-color 0.2s ease;
+}
+
+.exercise-button:hover {
+    background-color: #163524;
+}
+
+/* מסכים בינוניים */
+
+@media (max-width: 1024px) {
+    .exercises-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* מסכים קטנים */
+
+@media (max-width: 600px) {
+    .exercises-main {
+        padding: 32px 16px;
+    }
+
+    .exercises-heading {
+        margin-bottom: 28px;
+    }
+
+    .exercises-title {
+        font-size: 1.8rem;
+    }
+
+    .exercises-intro {
+        font-size: 0.9rem;
+    }
+
+    .exercises-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .exercise-card {
+        padding: 20px;
+    }
+}
+

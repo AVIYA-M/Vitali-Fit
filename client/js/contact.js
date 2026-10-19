@@ -81,14 +81,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         status.textContent = message;
-        status.className = 'text-sm';
+        status.className = 'contact-form-status';
 
         if (state === 'success') {
-            status.classList.add('text-green-700');
+            status.classList.add('contact-form-status-success');
         }
 
         if (state === 'error') {
-            status.classList.add('text-red-600');
+            status.classList.add('contact-form-status-error');
         }
     }
+
+
 });

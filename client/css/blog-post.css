@@ -1,3 +1,8 @@
+
+/* =========================
+   General
+========================= */
+
 body {
     font-family: 'Poppins', 'Heebo', sans-serif;
     background-color: #F8F9FA;
@@ -7,8 +12,18 @@ body {
     direction: rtl;
 }
 
+/* =========================
+   Article Hero
+========================= */
+
 .article-hero {
-    background: linear-gradient(rgba(30, 70, 48, 0.85), rgba(30, 70, 48, 0.85)), url('../image/חדר כושר.png');
+    background:
+        linear-gradient(
+            rgba(30, 70, 48, 0.85),
+            rgba(30, 70, 48, 0.85)
+        ),
+        url('../image/חדר כושר.png');
+
     background-size: cover;
     background-position: center;
     color: white;
@@ -16,16 +31,57 @@ body {
     padding: 80px 20px;
 }
 
+/* Category label */
+
+.article-category {
+    display: inline-block;
+    background-color: #A3D9C9;
+    color: #1E4630;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 999px;
+    text-transform: uppercase;
+}
+
+/* Main title */
+
+.article-hero h1 {
+    max-width: 950px;
+    margin: 16px auto 8px;
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.4;
+    color: white;
+}
+
+/* Subtitle */
+
+.article-subtitle {
+    max-width: 750px;
+    margin: 12px auto 0;
+    color: #E5E7EB;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+/* =========================
+   Article Content
+========================= */
+
 .article-container {
     max-width: 850px;
     margin: -40px auto 60px auto;
     background: white;
     padding: 50px;
     border-radius: 30px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
     position: relative;
     z-index: 10;
+    box-sizing: border-box;
 }
+
+/* Subheadings */
 
 .article-container h2 {
     color: #1E4630;
@@ -33,39 +89,156 @@ body {
     margin-top: 30px;
     margin-bottom: 15px;
     font-weight: 700;
+    line-height: 1.5;
 }
+
+/* Paragraphs */
 
 .article-container p {
     font-size: 1.1rem;
     line-height: 1.8;
     color: #4A5568;
+    margin-top: 0;
     margin-bottom: 20px;
 }
 
+/* Lists */
+
 .article-container ul {
+    margin-top: 0;
     margin-bottom: 20px;
-    padding-right: 20px;
+    padding-right: 24px;
 }
 
 .article-container li {
     font-size: 1.05rem;
-    line-height: 1.7;
+    line-height: 1.8;
     color: #4A5568;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
+
+.article-container li strong {
+    color: #1E4630;
+}
+
+/* =========================
+   Back Button
+========================= */
 
 .back-btn {
     display: inline-block;
-    margin-top: 40px;
+    margin-top: 25px;
     padding: 12px 30px;
     background-color: #1E4630;
     color: white;
     text-decoration: none;
     border-radius: 15px;
     font-weight: bold;
-    transition: background 0.3s;
+    transition: background-color 0.3s ease;
 }
 
 .back-btn:hover {
     background-color: #163524;
+}
+
+.back-btn:focus-visible {
+    outline: 3px solid #A3D9C9;
+    outline-offset: 4px;
+}
+
+/* =========================
+   Tablet
+========================= */
+
+@media (max-width: 768px) {
+
+    .article-hero {
+        padding: 60px 20px;
+    }
+
+    .article-hero h1 {
+        font-size: 2.3rem;
+    }
+
+    .article-subtitle {
+        font-size: 1rem;
+    }
+
+    .article-container {
+        width: calc(100% - 32px);
+        padding: 35px 28px;
+        margin-top: -30px;
+        margin-bottom: 40px;
+        border-radius: 24px;
+    }
+
+    .article-container h2 {
+        font-size: 1.7rem;
+    }
+
+    .article-container p {
+        font-size: 1rem;
+    }
+
+    .article-container li {
+        font-size: 1rem;
+    }
+}
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 480px) {
+
+    .article-hero {
+        padding: 45px 16px;
+    }
+
+    .article-hero h1 {
+        font-size: 1.8rem;
+        line-height: 1.5;
+    }
+
+    .article-subtitle {
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
+
+    .article-container {
+        width: calc(100% - 24px);
+        padding: 25px 20px;
+        margin-top: -20px;
+        margin-bottom: 30px;
+        border-radius: 20px;
+    }
+
+    .article-container h2 {
+        font-size: 1.4rem;
+        margin-top: 25px;
+    }
+
+    .article-container p {
+        font-size: 0.98rem;
+        line-height: 1.9;
+    }
+
+    .article-container ul {
+        padding-right: 20px;
+    }
+
+    .article-container li {
+        font-size: 0.95rem;
+        line-height: 1.9;
+    }
+
+    .back-btn {
+        display: block;
+        width: fit-content;
+        max-width: 100%;
+        box-sizing: border-box;
+        margin-top: 25px;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
 }

@@ -4,27 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>VitaliFit - תזונה</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/nutrition.css">
 </head>
 
-<body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen justify-between">
+<body class="site-body nutrition-page">
+
     <header class="site-header">
         <div class="header-shell">
+
             <a href="index.html" class="brand-link" aria-label="VitaliFit Home">
                 <div class="brand-logo-wrap">
-
                     <img src="image/לוגו.png" alt="VitaliFit" class="brand-image">
 
                     <span class="brand-copy">
                         <span class="brand-name">VitaliFit</span>
                         <span class="brand-tagline">בריאות ואנרגיה</span>
                     </span>
-
                 </div>
             </a>
 
@@ -37,208 +39,146 @@
                 <a href="nutrition.html" class="active">תזונה</a>
                 <a href="contact.html">צרו קשר</a>
                 <a href="blog.html">בלוג</a>
+
                 <a href="admin.html" id="admin-nav-link"
-                    class="nav-link text-white font-medium hover:text-green-300 transition" style="display: none;">פאנל
-                    ניהול</a>
+                    style="display: none;">פאנל ניהול</a>
             </nav>
 
             <div class="nav-actions">
-                <a href="login.html" class="icon-button" aria-label="התחברות"><i class="fa-regular fa-user"></i></a>
+                <a href="login.html" class="icon-button" aria-label="התחברות">
+                    <i class="fa-regular fa-user"></i>
+                </a>
+
                 <a href="register.html" class="join-button">הצטרף</a>
             </div>
+
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-10">
+    <main class="nutrition-main">
 
-        <!-- כותרת -->
-        <section class="bg-white rounded-3xl p-6 shadow-sm mb-6 text-center">
+        <!-- כותרת העמוד -->
+        <section class="nutrition-heading">
+            <h1 class="nutrition-title">יומן תזונה</h1>
 
-            <h1 class="text-3xl font-extrabold text-[#1E4630]">
-                יומן תזונה
-            </h1>
-            <h2 class="text-xl font-bold text-[#1E4630] mb-4 text-center">
-                סיכום יומי
-            </h2>
+            <h2 class="nutrition-subtitle">סיכום יומי</h2>
 
-            <p class="text-gray-500 mt-2">
+            <p class="nutrition-description">
                 עקוב אחרי הארוחות שלך והערכים התזונתיים
             </p>
-
-
         </section>
-
 
         <!-- סיכום יומי -->
-        <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <section class="nutrition-summary">
 
-            <!-- קלוריות -->
-            <div class="soft-card p-4 rounded-2xl bg-white text-center">
-                <p class="text-xs text-gray-500">
-                    קלוריות
-                </p>
-
-                <p id="summary-calories" class="text-xl font-bold text-[#1E4630] mt-1">
-                    0
-                </p>
-
-                <p class="text-xs text-gray-400">
-                    Kcal
-                </p>
+            <div class="nutrition-summary-card">
+                <p class="summary-label">קלוריות</p>
+                <p id="summary-calories" class="summary-value">0</p>
+                <p class="summary-unit">Kcal</p>
             </div>
 
-
-            <!-- חלבון -->
-            <div class="soft-card p-4 rounded-2xl bg-white text-center">
-                <p class="text-xs text-gray-500">
-                    חלבון
-                </p>
-
-                <p id="summary-protein" class="text-xl font-bold text-[#1E4630] mt-1">
-                    0g
-                </p>
-
-                <p class="text-xs text-gray-400">
-                    גרם
-                </p>
+            <div class="nutrition-summary-card">
+                <p class="summary-label">חלבון</p>
+                <p id="summary-protein" class="summary-value">0g</p>
+                <p class="summary-unit">גרם</p>
             </div>
 
-
-            <!-- פחמימות -->
-            <div class="soft-card p-4 rounded-2xl bg-white text-center">
-                <p class="text-xs text-gray-500">
-                    פחמימות
-                </p>
-
-                <p id="summary-carbs" class="text-xl font-bold text-[#1E4630] mt-1">
-                    0g
-                </p>
-
-                <p class="text-xs text-gray-400">
-                    גרם
-                </p>
+            <div class="nutrition-summary-card">
+                <p class="summary-label">פחמימות</p>
+                <p id="summary-carbs" class="summary-value">0g</p>
+                <p class="summary-unit">גרם</p>
             </div>
 
-
-            <!-- שומנים -->
-            <div class="soft-card p-4 rounded-2xl bg-white text-center">
-                <p class="text-xs text-gray-500">
-                    שומנים
-                </p>
-
-                <p id="summary-fats" class="text-xl font-bold text-[#1E4630] mt-1">
-                    0g
-                </p>
-
-                <p class="text-xs text-gray-400">
-                    גרם
-                </p>
+            <div class="nutrition-summary-card">
+                <p class="summary-label">שומנים</p>
+                <p id="summary-fats" class="summary-value">0g</p>
+                <p class="summary-unit">גרם</p>
             </div>
 
         </section>
 
-
-        <!-- אזור מרכזי -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
+        <!-- אזור הוספת הארוחה ורשימת הארוחות -->
+        <section class="nutrition-content">
 
             <!-- הוספת ארוחה -->
-            <div class="bg-white rounded-3xl p-6 shadow-sm">
+            <div class="nutrition-panel">
 
-                <h2 class="text-xl font-bold text-[#1E4630] mb-2">
-                    הוספת ארוחה
-                </h2>
+                <h2 class="panel-title">הוספת ארוחה</h2>
 
-                <p class="text-sm text-gray-500 mb-6">
+                <p class="panel-description">
                     הוסף את הארוחה שלך והתמונה שלה,
                     והמערכת תחשב את הערכים התזונתיים.
                 </p>
 
+                <form id="meal-form" class="meal-form">
 
-                <form id="meal-form" class="space-y-4">
+                    <div class="form-group">
+                        <label for="meal-name">שם הארוחה</label>
 
-                    <!-- שם הארוחה -->
-                    <div>
-                        <label for="meal-name" class="block text-sm font-semibold text-gray-700 mb-2">
-                            שם הארוחה
-                        </label>
-
-                        <input type="text" id="meal-name" placeholder="לדוגמה: חזה עוף עם אורז" required
-                            class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-[#1E4630]">
+                        <input
+                            type="text"
+                            id="meal-name"
+                            placeholder="לדוגמה: חזה עוף עם אורז"
+                            required>
                     </div>
 
+                    <div class="form-group">
+                        <label for="meal-image">תמונה של הארוחה</label>
 
-                    <!-- תמונה -->
-                    <div>
-                        <label for="meal-image" class="block text-sm font-semibold text-gray-700 mb-2">
-                            תמונה של הארוחה
-                        </label>
-
-                        <input type="file" id="meal-image" accept="image/*" required
-                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                        <input
+                            type="file"
+                            id="meal-image"
+                            accept="image/*"
+                            required>
                     </div>
 
+                    <div class="form-group">
+                        <label for="meal-date">תאריך</label>
 
-                    <!-- תאריך -->
-                    <div>
-                        <label for="meal-date" class="block text-sm font-semibold text-gray-700 mb-2">
-                            תאריך
-                        </label>
-
-                        <input type="date" id="meal-date" required
-                            class="w-full border border-gray-200 rounded-xl px-4 py-3">
+                        <input
+                            type="date"
+                            id="meal-date"
+                            required>
                     </div>
 
-
-                    <!-- כפתור -->
-                    <button type="submit"
-                        class="w-full bg-[#1E4630] text-white py-3 rounded-xl font-semibold hover:opacity-90 transition">
-
+                    <button type="submit" class="meal-submit-btn">
                         נתח ארוחה
-
                     </button>
 
                 </form>
 
             </div>
 
-
             <!-- רשימת ארוחות -->
-            <div class="bg-white rounded-3xl p-6 shadow-sm">
+            <div class="nutrition-panel">
 
-                <div class="flex justify-between items-center mb-5">
+                <div class="meals-heading">
+                    <h2 class="panel-title">הארוחות שלי</h2>
 
-                    <h2 class="text-xl font-bold text-[#1E4630]">
-                        הארוחות שלי
-                    </h2>
-
-                    <span id="total-calories" class="text-sm font-semibold text-[#1E4630]">
+                    <span id="total-calories" class="meals-total">
                         0 Kcal
                     </span>
-
                 </div>
 
-
-                <!-- כאן ה-JS יכניס את הארוחות -->
-                <div id="meals-list" class="space-y-3">
-
-                    <p class="text-sm text-gray-400 text-center py-6">
+                <div id="meals-list" class="meals-list">
+                    <p class="empty-meals-message">
                         עדיין לא נוספו ארוחות.
                     </p>
-
                 </div>
 
             </div>
 
         </section>
-        <section class="mt-8 bg-white rounded-2xl p-6 shadow-sm">
 
-            <h2 class="text-xl font-bold text-[#1E4630] mb-4 text-center">
+        <!-- היסטוריית ארוחות -->
+        <section class="nutrition-panel nutrition-history">
+
+            <h2 class="panel-title history-title">
                 היסטוריית ארוחות
             </h2>
 
-            <div id="history-list" class="space-y-3">
-                <p class="text-sm text-gray-400 text-center">
+            <div id="history-list" class="meals-list">
+                <p class="empty-meals-message">
                     אין עדיין היסטוריית ארוחות.
                 </p>
             </div>
@@ -248,16 +188,27 @@
     </main>
 
     <footer class="site-footer">
+
         <div class="footer-inner">
+
             <div class="footer-newsletter">
                 <h3>הרשמה לניוזלטר שלנו</h3>
+
                 <div class="newsletter-shell">
                     <button type="button" class="newsletter-btn">שליחה</button>
-                    <input type="email" placeholder="כתובת אימייל" aria-label="כתובת אימייל">
+                    <input type="email" placeholder="כתובת אימייל"
+                        aria-label="כתובת אימייל">
                 </div>
+
                 <div class="social-links">
-                    <a href="#" aria-label="Facebook" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" aria-label="Instagram" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="Facebook" class="social-link">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+
+                    <a href="#" aria-label="Instagram" class="social-link">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+
                     <a href="#" aria-label="WhatsApp" class="social-link">
                         <i class="fa-brands fa-whatsapp"></i>
                     </a>
@@ -266,6 +217,7 @@
 
             <div class="footer-column">
                 <h4>שירותים</h4>
+
                 <ul class="footer-list">
                     <li><a href="exercises.html">תוכניות כושר</a></li>
                     <li><a href="blog.html">בלוג</a></li>
@@ -276,6 +228,7 @@
 
             <div class="footer-column">
                 <h4>קהילות</h4>
+
                 <ul class="footer-list">
                     <li><a href="exercises.html">מתחילים</a></li>
                     <li><a href="exercises.html">מתקדמים</a></li>
@@ -283,16 +236,18 @@
                     <li><a href="contact.html">תמיכה ומוטיבציה</a></li>
                 </ul>
             </div>
+
         </div>
 
         <div class="footer-bottom">
             <p>© 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.</p>
         </div>
-    </footer>
-    <script src="js/api-config.js"></script>
 
+    </footer>
+
+    <script src="js/api-config.js"></script>
     <script src="js/script.js"></script>
     <script src="js/nutrition.js"></script>
-</body>
 
+</body>
 </html>

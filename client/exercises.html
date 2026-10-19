@@ -1,12 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>VitaliFit - אימונים</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,9 +15,10 @@
           rel="stylesheet">
 
     <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/exercises.css">
 </head>
 
-<body class="bg-[#F8F9FA] text-gray-900 flex flex-col min-h-screen">
+<body class="site-body exercises-page">
 
     <!-- Header -->
     <header class="site-header">
@@ -48,7 +49,7 @@
 
                 <a href="admin.html"
                    id="admin-nav-link"
-                   class="nav-link text-white font-medium hover:text-green-300 transition"
+                   class="nav-link"
                    style="display: none;">
                     פאנל ניהול
                 </a>
@@ -71,141 +72,119 @@
         </div>
     </header>
 
-
     <!-- Main -->
-    <main class="flex-grow max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 w-full">
+    <main class="exercises-main">
 
-        <section class="text-center mb-10">
+        <section class="exercises-heading">
 
-            <h1 class="text-3xl md:text-4xl font-bold text-[#1E4630]">
+            <h1 class="exercises-title">
                 סוגי אימונים
             </h1>
 
-            <p class="text-gray-500 mt-3 max-w-2xl mx-auto">
+            <p class="exercises-intro">
                 בחרי את סוג האימון שמתאים לך והתחילי לבנות שגרת אימונים שמתאימה למטרות שלך.
             </p>
 
         </section>
 
-
         <!-- Workout cards -->
-        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
+        <section class="exercises-grid">
 
             <!-- Strength -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div class="exercise-card">
 
-                <div class="w-12 h-12 rounded-xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630] mb-4">
-                    <i class="fa-solid fa-dumbbell text-xl"></i>
+                <div class="exercise-icon">
+                    <i class="fa-solid fa-dumbbell"></i>
                 </div>
 
-                <h2 class="text-xl font-bold text-[#1E4630] mb-2">
-                    אימוני כוח
-                </h2>
+                <h2 class="exercise-card-title">אימוני כוח</h2>
 
-                <p class="text-gray-500 text-sm leading-6 mb-5">
+                <p class="exercise-card-description">
                     אימונים לחיזוק השרירים, שיפור הכוח והיכולת הגופנית.
                     מתאימים למגוון רמות כושר.
                 </p>
 
-                <a href="workouts.html?category=strength"
-                   class="inline-block bg-[#1E4630] text-white px-5 py-2.5 rounded-xl text-sm font-semibold">
+                <a href="workouts.html?category=strength" class="exercise-button">
                     קבעי אימון
                 </a>
 
             </div>
 
-
             <!-- Cardio -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div class="exercise-card">
 
-                <div class="w-12 h-12 rounded-xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630] mb-4">
-                    <i class="fa-solid fa-heart-pulse text-xl"></i>
+                <div class="exercise-icon">
+                    <i class="fa-solid fa-heart-pulse"></i>
                 </div>
 
-                <h2 class="text-xl font-bold text-[#1E4630] mb-2">
-                    אימוני אירובי
-                </h2>
+                <h2 class="exercise-card-title">אימוני אירובי</h2>
 
-                <p class="text-gray-500 text-sm leading-6 mb-5">
+                <p class="exercise-card-description">
                     אימונים שמעלים את הדופק ותורמים לשיפור הסיבולת
                     והכושר הגופני.
                 </p>
 
-                <a href="workouts.html?category=cardio"
-                   class="inline-block bg-[#1E4630] text-white px-5 py-2.5 rounded-xl text-sm font-semibold">
+                <a href="workouts.html?category=cardio" class="exercise-button">
                     קבעי אימון
                 </a>
 
             </div>
 
-
             <!-- Yoga -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div class="exercise-card">
 
-                <div class="w-12 h-12 rounded-xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630] mb-4">
-                    <i class="fa-solid fa-person text-xl"></i>
+                <div class="exercise-icon">
+                    <i class="fa-solid fa-person"></i>
                 </div>
 
-                <h2 class="text-xl font-bold text-[#1E4630] mb-2">
-                    יוגה
-                </h2>
+                <h2 class="exercise-card-title">יוגה</h2>
 
-                <p class="text-gray-500 text-sm leading-6 mb-5">
+                <p class="exercise-card-description">
                     אימונים המשלבים תנועה, גמישות, שיווי משקל
                     ורגיעה.
                 </p>
 
-                <a href="workouts.html?category=yoga"
-                   class="inline-block bg-[#1E4630] text-white px-5 py-2.5 rounded-xl text-sm font-semibold">
+                <a href="workouts.html?category=yoga" class="exercise-button">
                     קבעי אימון
                 </a>
 
             </div>
 
-
             <!-- Functional -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div class="exercise-card">
 
-                <div class="w-12 h-12 rounded-xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630] mb-4">
-                    <i class="fa-solid fa-bolt text-xl"></i>
+                <div class="exercise-icon">
+                    <i class="fa-solid fa-bolt"></i>
                 </div>
 
-                <h2 class="text-xl font-bold text-[#1E4630] mb-2">
-                    אימון פונקציונלי
-                </h2>
+                <h2 class="exercise-card-title">אימון פונקציונלי</h2>
 
-                <p class="text-gray-500 text-sm leading-6 mb-5">
+                <p class="exercise-card-description">
                     אימון המתמקד בתנועות שימושיות ובשיפור הכוח,
                     היציבות והקואורדינציה.
                 </p>
 
-                <a href="workouts.html?category=functional"
-                   class="inline-block bg-[#1E4630] text-white px-5 py-2.5 rounded-xl text-sm font-semibold">
+                <a href="workouts.html?category=functional" class="exercise-button">
                     קבעי אימון
                 </a>
 
             </div>
 
-
             <!-- Zoom -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div class="exercise-card">
 
-                <div class="w-12 h-12 rounded-xl bg-[#E8F5F1] flex items-center justify-center text-[#1E4630] mb-4">
-                    <i class="fa-solid fa-video text-xl"></i>
+                <div class="exercise-icon">
+                    <i class="fa-solid fa-video"></i>
                 </div>
 
-                <h2 class="text-xl font-bold text-[#1E4630] mb-2">
-                    אימון בזום
-                </h2>
+                <h2 class="exercise-card-title">אימון בזום</h2>
 
-                <p class="text-gray-500 text-sm leading-6 mb-5">
+                <p class="exercise-card-description">
                     השתתפי באימון מקוון מהבית וקבלי את הקישור
                     לאחר ההרשמה לשיעור.
                 </p>
 
-                <a href="workouts.html?type=zoom"
-                   class="inline-block bg-[#1E4630] text-white px-5 py-2.5 rounded-xl text-sm font-semibold">
+                <a href="workouts.html?type=zoom" class="exercise-button">
                     קבעי אימון
                 </a>
 
@@ -214,7 +193,6 @@
         </section>
 
     </main>
-
 
     <!-- Footer -->
     <footer class="site-footer">
@@ -255,92 +233,42 @@
 
             </div>
 
-
             <div class="footer-column">
 
                 <h4>שירותים</h4>
 
                 <ul class="footer-list">
-
-                    <li>
-                        <a href="exercises.html">
-                            תוכניות כושר
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="blog.html">
-                            בלוג
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="contact.html">
-                            מרכז העזרה
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="contact.html">
-                            צור קשר
-                        </a>
-                    </li>
-
+                    <li><a href="exercises.html">תוכניות כושר</a></li>
+                    <li><a href="blog.html">בלוג</a></li>
+                    <li><a href="contact.html">מרכז העזרה</a></li>
+                    <li><a href="contact.html">צור קשר</a></li>
                 </ul>
 
             </div>
-
 
             <div class="footer-column">
 
                 <h4>קהילות</h4>
 
                 <ul class="footer-list">
-
-                    <li>
-                        <a href="exercises.html">
-                            מתחילים
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="exercises.html">
-                            מתקדמים
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="nutrition.html">
-                            תזונה נכונה
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="contact.html">
-                            תמיכה ומוטיבציה
-                        </a>
-                    </li>
-
+                    <li><a href="exercises.html">מתחילים</a></li>
+                    <li><a href="exercises.html">מתקדמים</a></li>
+                    <li><a href="nutrition.html">תזונה נכונה</a></li>
+                    <li><a href="contact.html">תמיכה ומוטיבציה</a></li>
                 </ul>
 
             </div>
 
         </div>
 
-
         <div class="footer-bottom">
-
-            <p>
-                © 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.
-            </p>
-
+            <p>© 2026 VitaliFit • ויטאליפיט. כל הזכויות שמורות.</p>
         </div>
 
     </footer>
 
-
-    
     <script src="js/script.js"></script>
 
 </body>
 </html>
+
