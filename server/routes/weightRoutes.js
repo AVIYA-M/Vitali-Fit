@@ -1,21 +1,12 @@
-const express = require('express');
+import express from 'express';
 
 const router =
     express.Router();
 
+import * as weightController from 
+    '../controllers/weight.controller.js';
 
-const weightController =
-    require('../controllers/weight.controller.js');
-
-
-const {
-    verifyToken
-} =
-    require('../middlewares/auth.middleware.js');
-
-
-// ========================================
-// עדכון משקל
+import { verifyToken } from '../middlewares/auth.middleware.js';
 // ========================================
 
 router.post(
@@ -36,4 +27,4 @@ router.get(
 );
 
 
-module.exports = router;
+export default router;

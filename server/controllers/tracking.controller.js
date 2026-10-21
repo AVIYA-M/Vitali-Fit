@@ -1,9 +1,9 @@
-const Tracking = require('../models/Tracking.js');
-const Workout = require('../models/Workout.js');
-const Activity = require('../models/Activity.js');
-const Nutrition = require('../models/Nutrition.js');
-const User = require('../models/User.js');
-const WeightHistory = require('../models/WeightHistory.js');
+import Tracking from '../models/Tracking.js';
+import Workout from '../models/Workout.js';
+import Activity from '../models/Activity.js';
+import Nutrition from '../models/Nutrition.js';
+import User from '../models/User.js';
+import WeightHistory from '../models/WeightHistory.js';
 
 
 // ========================================
@@ -48,7 +48,7 @@ function getStartOfUserWeek(date, weighInDay) {
 // ========================================
 // סימון אימון כהושלם
 // ========================================
-exports.completeWorkout = async (req, res) => {
+export const completeWorkout = async (req, res) => {
     try {
         const userId = req.user.userId;
         const workoutId = req.params.workoutId;
@@ -112,7 +112,7 @@ exports.completeWorkout = async (req, res) => {
 // ========================================
 // לוח המעקב
 // ========================================
-exports.getTrackingDashboard = async (req, res) => {
+export const getTrackingDashboard = async (req, res) => {
     try {
         const userId = req.user.userId;
 

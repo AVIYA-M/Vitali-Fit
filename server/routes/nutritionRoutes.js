@@ -1,11 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const nutritionController = require('../controllers/nutrition.controller');
-const upload = require('../middlewares/upload.middleware');
-const { verifyToken } = require('../middlewares/auth.middleware.js');
-
-// POST /api/nutrition
-// הוספת ארוחה חדשה - רק משתמש מחובר
+import * as nutritionController from '../controllers/nutrition.controller.js';
+import upload from '../middlewares/upload.middleware.js';
+import { verifyToken } from '../middlewares/auth.middleware.js';
 router.post(
   '/analyze',
   verifyToken,
@@ -13,8 +10,7 @@ router.post(
   nutritionController.analyzeMeal
 );
 
-// GET /api/nutrition
-// שליפת הארוחות של המשתמש המחובר
+
 router.get('/', verifyToken, nutritionController.getUserMeals);
 
-module.exports = router;
+export default router;

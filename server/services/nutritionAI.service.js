@@ -1,5 +1,5 @@
-const { GoogleGenAI } = require('@google/genai');
-const fs = require('fs');
+import { GoogleGenAI } from '@google/genai';
+import fs from 'fs';
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY
@@ -96,6 +96,4 @@ async function analyzeMealImage(imagePath, mimeType, mealName) {
 }
 
 
-module.exports = {
-    analyzeMealImage
-};
+export default analyzeMealImage;

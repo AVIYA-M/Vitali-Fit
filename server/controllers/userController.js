@@ -1,6 +1,6 @@
-const User = require('../models/User.js');
+import User from '../models/User.js';
 
-exports.getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res) => {
     try {
         const users = await User.find({}).select('-password');
         res.status(200).json(users);
@@ -9,7 +9,7 @@ exports.getAllUsers = async (req, res) => {
     }
 };
 
-exports.deleteUser = async (req, res) => {
+export const deleteUser = async (req, res) => {
     try {
         const userIdToDelete = req.params.id;
         // מניעת מחיקה עצמית של המנהל המחובר
@@ -26,7 +26,7 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
-exports.updateUserRole = async (req, res) => {
+export const updateUserRole = async (req, res) => {
     try {
         const userIdToUpdate = req.params.id;
         const { role } = req.body;

@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+import mongoose from "mongoose";
 const nutritionSchema = new mongoose.Schema({
 
   // המשתמש שאליו שייכת הארוחה
@@ -50,4 +49,4 @@ const nutritionSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('Nutrition', nutritionSchema);
+export default mongoose.model('Nutrition', nutritionSchema);

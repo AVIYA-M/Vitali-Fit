@@ -1,9 +1,9 @@
-const User = require('../models/User.js');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+import User from '../models/User.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 // הרשמה נורא פשוטה ונקייה (שם, אימייל וסיסמה בלבד)
-exports.registerUser = async (req, res) => {
+export const registerUser = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
 
@@ -57,7 +57,7 @@ exports.registerUser = async (req, res) => {
 };
 
 // התחברות
-exports.loginUser = async (req, res) => {
+export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -97,7 +97,7 @@ exports.loginUser = async (req, res) => {
 };
 
 // שליפת כל המשתמשים למנהל
-exports.getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select('-password');
     res.status(200).json(users);

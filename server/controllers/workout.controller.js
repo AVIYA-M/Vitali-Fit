@@ -1,8 +1,8 @@
-const Workout = require('../models/Workout.js');
-const Tracking = require('../models/Tracking.js');
+import Workout from '../models/Workout.js';
+import Tracking from '../models/Tracking.js';
 
 // שליפת כל האימונים
-exports.getAllWorkouts = async (req, res) => {
+export const getAllWorkouts = async (req, res) => {
   try {
     const workouts = await Workout.find({});
     res.status(200).json(workouts);
@@ -12,7 +12,7 @@ exports.getAllWorkouts = async (req, res) => {
 };
 
 // הוספת אימון חדש (למנהל)
-exports.createWorkout = async (req, res) => {
+export const createWorkout = async (req, res) => {
   try {
     const newWorkout = new Workout(req.body);
     const savedWorkout = await newWorkout.save();
@@ -23,7 +23,7 @@ exports.createWorkout = async (req, res) => {
 };
 
 // עריכת אימון קיים (למנהל - מבלי ליצור אימון חדש)
-exports.updateWorkout = async (req, res) => {
+export const updateWorkout = async (req, res) => {
   try {
     const workoutId = req.params.id;
     const updatedData = req.body;
@@ -40,7 +40,7 @@ exports.updateWorkout = async (req, res) => {
 };
 
 // מחיקת אימון (למנהל - תוך שמירת היסטוריית המשתמשים כנדרש)
-exports.deleteWorkout = async (req, res) => {
+export const deleteWorkout = async (req, res) => {
   try {
     const workoutId = req.params.id;
 
@@ -64,7 +64,7 @@ exports.deleteWorkout = async (req, res) => {
 };
 
 // הרשמת משתמש לאימון ספציפי
-exports.registerForWorkout = async (req, res) => {
+export const registerForWorkout = async (req, res) => {
   try {
     const workoutId = req.params.id;
     const userId = req.user.userId;

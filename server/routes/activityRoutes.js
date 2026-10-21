@@ -1,22 +1,15 @@
-const express =
-    require('express');
+import express from 'express';
 
 const router =
     express.Router();
 
+import * as activityController from 
+    '../controllers/activity.controller.js';
 
-const activityController =
-    require(
-        '../controllers/activity.controller.js'
-    );
-
-
-const {
+import {
     verifyToken
-} =
-    require(
-        '../middlewares/auth.middleware.js'
-    );
+} from 
+    '../middlewares/auth.middleware.js';
 
 
 // ========================================
@@ -41,5 +34,4 @@ router.get(
 );
 
 
-module.exports =
-    router;
+export default router;

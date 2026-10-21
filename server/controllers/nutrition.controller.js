@@ -1,8 +1,7 @@
-const Nutrition = require('../models/Nutrition.js');
-const { analyzeMealImage } = require('../services/nutritionAI.service');
+import Nutrition from '../models/Nutrition.js';
+import analyzeMealImage from '../services/nutritionAI.service.js';
 
-// הוספת ארוחה באמצעות Gemini
-exports.analyzeMeal = async (req, res) => {
+export const analyzeMeal = async (req, res) => {
   try {
     console.log('FILE:', req.file);
     console.log('BODY:', req.body);
@@ -62,7 +61,7 @@ exports.analyzeMeal = async (req, res) => {
 };
 
 // הצגת היסטוריית הארוחות של המשתמש המחובר
-exports.getUserMeals = async (req, res) => {
+export const getUserMeals = async (req, res) => {
   try {
     const userId = req.user.userId;
     const meals = await Nutrition.find({ userId });

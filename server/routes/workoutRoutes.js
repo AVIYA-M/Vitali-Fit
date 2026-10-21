@@ -1,9 +1,9 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const workoutController = require('../controllers/workout.controller');
+import * as workoutController from '../controllers/workout.controller.js';
 
 // מייבאים את המידלוורים שבודקים אם המשתמש מחובר (verifyToken) ואם הוא מנהל (isAdmin)
-const { verifyToken, isAdmin } = require('../middlewares/auth.middleware.js');
+import { verifyToken, isAdmin } from '../middlewares/auth.middleware.js';
 
 // GET /api/workouts - שליפת כל האימונים (כולם יכולים לראות)
 router.get('/', workoutController.getAllWorkouts);
@@ -20,4 +20,4 @@ router.delete('/:id', verifyToken, isAdmin, workoutController.deleteWorkout);
 // POST /api/workouts/:id/register - הרשמה לאימון (רק משתמשים מחוברים יכולים להירשם)
 router.post('/:id/register', verifyToken, workoutController.registerForWorkout);
 
-module.exports = router;
+export default router;

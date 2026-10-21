@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+import mongoose from "mongoose";
 const weightHistorySchema = new mongoose.Schema({
 
   userId: {
@@ -21,4 +20,4 @@ const weightHistorySchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('WeightHistory', weightHistorySchema);
+export default mongoose.model('WeightHistory', weightHistorySchema);

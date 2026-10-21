@@ -1,10 +1,10 @@
-const User = require('../models/User.js');
-const WeightHistory = require('../models/WeightHistory.js');
+import User from '../models/User.js';
+import WeightHistory from '../models/WeightHistory.js';
 
 // ========================================
 // הוספת / עדכון משקל
 // ========================================
-exports.addWeight = async (req, res) => {
+export const addWeight = async (req, res) => {
     try {
         const userId = req.user.userId;
         const weight = Number(req.body.weight);
@@ -80,7 +80,7 @@ exports.addWeight = async (req, res) => {
 // ========================================
 // היסטוריית משקל - 6 חודשים
 // ========================================
-exports.getWeightHistory = async (req, res) => {
+export const getWeightHistory = async (req, res) => {
     try {
         const userId = req.user.userId;
         const sixMonthsAgo = new Date();

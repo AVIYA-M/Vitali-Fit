@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const userController = require('../controllers/userController');
-const { verifyToken, isAdmin } = require('../middlewares/auth.middleware.js');
+import * as userController from '../controllers/userController.js';
+import { verifyToken, isAdmin } from '../middlewares/auth.middleware.js';
 
 // GET /api/admin/users - שליפת כל המשתמשים (מנהל בלבד)
 router.get('/users', verifyToken, isAdmin, userController.getAllUsers);
@@ -12,4 +12,4 @@ router.delete('/users/:id', verifyToken, isAdmin, userController.deleteUser);
 // PATCH /api/admin/users/:id/role - עדכון תפקיד משתמש (מנהל בלבד)
 router.patch('/users/:id/role', verifyToken, isAdmin, userController.updateUserRole);
 
-module.exports = router;
+export default router;

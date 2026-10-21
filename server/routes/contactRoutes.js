@@ -1,15 +1,14 @@
-const express = require('express');
+import express from 'express';
 
 const router = express.Router();
 
-const contactController = require(
-    '../controllers/contact.controller'
-);
+import * as contactController from 
+    '../controllers/contact.controller.js';
 
-const {
+import {
     verifyToken,
     isAdmin
-} = require('../middlewares/auth.middleware');
+} from '../middlewares/auth.middleware.js';
 
 // כל אחת יכולה לשלוח פנייה
 router.post(
@@ -25,4 +24,4 @@ router.get(
     contactController.getAdminContactMessages
 );
 
-module.exports = router;
+export default router;

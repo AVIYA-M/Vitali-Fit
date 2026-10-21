@@ -1,11 +1,11 @@
-const ContactMessage = require('../models/ContactMessage');
+import ContactMessage from '../models/ContactMessage.js';
 
 function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 // שמירת פנייה חדשה
-exports.createContactMessage = async (req, res) => {
+export const createContactMessage = async (req, res) => {
     try {
         const name = String(req.body.name || '').trim();
         const email = String(req.body.email || '')
@@ -66,7 +66,7 @@ exports.createContactMessage = async (req, res) => {
 };
 
 // שליפת הפניות עבור המנהל
-exports.getAdminContactMessages = async (req, res) => {
+export const getAdminContactMessages = async (req, res) => {
     try {
         const messages = await ContactMessage.find()
             .sort({ createdAt: -1 })

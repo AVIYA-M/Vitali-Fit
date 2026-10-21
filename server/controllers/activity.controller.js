@@ -1,5 +1,5 @@
-const Activity = require('../models/Activity.js');
-const User = require('../models/User.js');
+import Activity from '../models/Activity.js';
+import User from '../models/User.js';
 
 // חישוב קלוריות לפי MET
 function calculateCalories(weight, durationMinutes, met) {
@@ -7,7 +7,7 @@ function calculateCalories(weight, durationMinutes, met) {
 }
 
 // הוספת פעילות עצמאית
-exports.addActivity = async (req, res) => {
+export const addActivity = async (req, res) => {
   try {
     const userId = req.user.userId;
     const { activityType, durationMinutes, date } = req.body;
@@ -76,7 +76,7 @@ exports.addActivity = async (req, res) => {
 };
 
 // שליפת הפעילויות של המשתמש
-exports.getUserActivities = async (req, res) => {
+export const getUserActivities = async (req, res) => {
   try {
     const userId = req.user.userId;
     const activities = await Activity.find({ userId }).sort({ date: -1 });

@@ -1,8 +1,7 @@
-<!-- ... existing code ... -->
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 // 1. מידלוור לאימות משתמש מחובר (בודק אם יש טוקן תקין)
-exports.verifyToken = (req, res, next) => {
+export const verifyToken = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
     
@@ -25,7 +24,7 @@ exports.verifyToken = (req, res, next) => {
 };
 
 // 2. מידלוור לבדיקת הרשאות מנהל (Admin) בלבד
-exports.isAdmin = (req, res, next) => {
+export const isAdmin = (req, res, next) => {
   try {
     if (!req.user || req.user.role !== 'admin') {
       return res.status(403).json({ message: 'אין לך הרשאות גישה לפעולה זו (נדרש מנהל מערכת).' });

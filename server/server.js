@@ -1,8 +1,8 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv').config();
-
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -16,21 +16,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 
 app.use('/uploads', express.static('uploads'));
-const reviewRoutes = require('./routes/reviewRoutes');
-const contactRoutes = require('./routes/contactRoutes');
+import reviewRoutes from './routes/reviewRoutes.js';
+import contactRoutes from './routes/contactRoutes.js';
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/contact', contactRoutes);
 
 // ========================================
 // Routes Imports
 // ========================================
-const authRoutes = require('./routes/authRoutes.js');
-const workoutRoutes = require('./routes/workoutRoutes.js');
-const nutritionRoutes = require('./routes/nutritionRoutes.js');
-const adminRoutes = require('./routes/userRoutes.js');
-const trackingRoutes = require('./routes/trackingRoutes.js');
-const activityRoutes = require('./routes/activityRoutes.js');
-const weightRoutes = require('./routes/weightRoutes.js');
+import authRoutes from './routes/authRoutes.js';
+import workoutRoutes from './routes/workoutRoutes.js';
+import nutritionRoutes from './routes/nutritionRoutes.js';
+import adminRoutes from './routes/userRoutes.js';
+import trackingRoutes from './routes/trackingRoutes.js';
+import activityRoutes from './routes/activityRoutes.js';
+import weightRoutes from './routes/weightRoutes.js';
 
 // ========================================
 // חיבור Routes
@@ -55,7 +55,7 @@ app.get('/api/status', (req, res) => {
 // ========================================
 // Error Handler
 // ========================================
-const errorHandler = require('./middlewares/error.middleware');
+import errorHandler from './middlewares/error.middleware.js';
 app.use(errorHandler);
 
 // ========================================

@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const authController = require('../controllers/auth.controller.js');
-const { verifyToken, isAdmin } = require('../middlewares/auth.middleware.js');
+import * as authController from '../controllers/auth.controller.js';
+import { verifyToken, isAdmin } from '../middlewares/auth.middleware.js';
 
 router.post('/register', authController.registerUser);
 
@@ -16,4 +16,4 @@ router.get('/profile', verifyToken, (req, res) => {
 });
 router.get('/admin/users', verifyToken, isAdmin, authController.getAllUsers);
 
-module.exports = router;
+export default router;

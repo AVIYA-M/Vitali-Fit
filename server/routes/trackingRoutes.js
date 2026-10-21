@@ -1,12 +1,12 @@
-const express = require('express');
+import express from 'express';
 
 const router = express.Router();
 
-const trackingController =
-  require('../controllers/tracking.controller');
+import * as trackingController from 
+    '../controllers/tracking.controller.js';
 
-const { verifyToken } =
-  require('../middlewares/auth.middleware.js');
+import { verifyToken } from 
+    '../middlewares/auth.middleware.js';
 
 
 // GET /api/tracking
@@ -27,4 +27,4 @@ router.post(
 );
 
 
-module.exports = router;
+export default router;

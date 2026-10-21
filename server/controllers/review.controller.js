@@ -1,8 +1,8 @@
-const Review = require('../models/Review');
-const User = require('../models/User'); // מניח שיש לך מודל משתמש
+import Review from '../models/Review.js';
+import User from '../models/User.js'; // מניח שיש לך מודל משתמש// מניח שיש לך מודל משתמש
 
 // 1. הוספת המלצה (למשתמשים מחוברים)
-exports.addReview = async (req, res) => {
+export const addReview = async (req, res) => {
     try {
         // מתאים למבנה הטוקן שלך (userId או id)
         const userId = req.user.userId || req.user.id || req.user._id; 
@@ -33,7 +33,7 @@ exports.addReview = async (req, res) => {
 };
 
 // 2. שליפת המלצות מאושרות בלבד (לדף הבית)
-exports.getApprovedReviews = async (req, res) => {
+export const getApprovedReviews = async (req, res) => {
     try {
         const reviews = await Review.find({ status: 'approved' })
             .sort({ createdAt: -1 })
@@ -47,7 +47,7 @@ exports.getApprovedReviews = async (req, res) => {
 };
 
 // 3. מנהל: שליפת כל ההמלצות (כולל ממתינות)
-exports.getAllReviewsAdmin = async (req, res) => {
+export const getAllReviewsAdmin = async (req, res) => {
     try {
         const reviews = await Review.find().sort({ createdAt: -1 });
         res.status(200).json(reviews);
@@ -57,7 +57,7 @@ exports.getAllReviewsAdmin = async (req, res) => {
 };
 
 // 4. מנהל: עדכון סטטוס המלצה (אישור/דחייה)
-exports.updateReviewStatus = async (req, res) => {
+export const updateReviewStatus = async (req, res) => {
     try {
         const { id } = req.params;
         const { status } = req.body; 
