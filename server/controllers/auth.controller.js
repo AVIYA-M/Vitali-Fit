@@ -2,22 +2,10 @@ import User from '../models/User.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-// הרשמה נורא פשוטה ונקייה (שם, אימייל וסיסמה בלבד)
+// הרשמה (הבדיקות מתבצעות כעת בעזרת Joi ב-Middleware)
 export const registerUser = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
-
-    if (!fullName || !email || !password) {
-      return res.status(400).json({
-        message: 'יש למלא שם מלא, אימייל וסיסמה.'
-      });
-    }
-
-    if (password.length < 6) {
-      return res.status(400).json({
-        message: 'הסיסמה חייבת להכיל לפחות 6 תווים.'
-      });
-    }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {

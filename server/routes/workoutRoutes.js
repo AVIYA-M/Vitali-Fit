@@ -1,23 +1,22 @@
 import express from 'express';
 const router = express.Router();
 import * as workoutController from '../controllers/workout.controller.js';
-
-// מייבאים את המידלוורים שבודקים אם המשתמש מחובר (verifyToken) ואם הוא מנהל (isAdmin)
 import { verifyToken, isAdmin } from '../middlewares/auth.middleware.js';
+import { workoutSchema, validateWorkout } from '../middlewares/validators/workout.validator.js';
 
 // GET /api/workouts - שליפת כל האימונים (כולם יכולים לראות)
 router.get('/', workoutController.getAllWorkouts);
 
-// POST /api/workouts - הוספת אימון חדש (מנהלים בלבד!)
-router.post('/', verifyToken, isAdmin, workoutController.createWorkout);
+// POST /api/workouts - הוספת אימון חדש (מנהלים בלבד, כולל ולידציה של Joi)
+router.post('/', verifyToken, isAdmin, validateWorkout(workoutSchema), workoutController.createWorkout);
 
-// PUT /api/workouts/:id - עריכת אימון קיים (מנהלים בלבד!)
-router.put('/:id', verifyToken, isAdmin, workoutController.updateWorkout);
+// PUT /api/workouts/:id - עריכת אימון קיים (מנהלים בלבד, כולל ולידציה של Joi)
+router.put('/:id', verifyToken, isAdmin, validateWorkout(workoutSchema), workoutController.updateWorkout);
 
-// DELETE /api/workouts/:id - מחיקת אימון קיים ושמירת היסטוריית משתמשים (מנהלים בלבד!)
+// DELETE /api/workouts/:id - מחיקת אימון קיים ושמירת היסטוריית משתמשים (מנהלים בלבד)
 router.delete('/:id', verifyToken, isAdmin, workoutController.deleteWorkout);
 
-// POST /api/workouts/:id/register - הרשמה לאימון (רק משתמשים מחוברים יכולים להירשם)
+// POST /api/workouts/:id/register - הרשמה לאימון (משתמשים מחוברים)
 router.post('/:id/register', verifyToken, workoutController.registerForWorkout);
 
 export default router;
