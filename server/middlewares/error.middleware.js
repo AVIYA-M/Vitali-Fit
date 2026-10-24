@@ -1,18 +1,33 @@
 const errorHandler = (err, req, res, next) => {
-    // 1. רישום הלוג לטרמינל (לצורכי מעקב ודיבוג)
+    // רישום פרטי השגיאה בטרמינל לצורכי איתור תקלות
     console.error('❌ Global Error Caught:', err.stack || err.message);
 
-    // 2. קביעת קוד סטטוס (אם לא הוגדר, נחזיר 500 - שגיאת שרת כללית)
-    const statusCode = err.statusCode || 500;
+    // קביעת קוד סטטוס תקין
+    const statusCode =
+        Number.isInteger(err.statusCode) &&
+        err.statusCode >= 400 &&
+        err.statusCode <= 599
+            ? err.statusCode
+            : 500;
 
-    // 3. החזרת תשובת JSON מסודרת ללקוח
+    // הודעה כללית כברירת מחדל
+    let message = 'שגיאת שרת פנימית';
+
+    // שגיאות צפויות שאפשר להחזיר ללקוח
+    if (statusCode < 500 && err.message) {
+        message = err.message;
+    }
+
+    // החזרת תשובת JSON
     res.status(statusCode).json({
         success: false,
         status: statusCode,
-        message: err.message || 'שגיאת שרת פנימית',
-        // אם נרצה לראות את ה-stack trace רק בסביבת פיתוח:
-        ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+        message,
+        ...(process.env.NODE_ENV === 'development' && {
+            stack: err.stack
+        })
     });
 };
 
 export default errorHandler;
+

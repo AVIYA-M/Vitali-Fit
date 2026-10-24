@@ -86,164 +86,222 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // הצגת האימונים של היום שנבחר
-    function renderSelectedDaySessions() {
 
-        const container = document.getElementById('selected-day-sessions');
-        const heading = document.getElementById('selected-day-heading');
+// הצגת האימונים של היום שנבחר
+function renderSelectedDaySessions() {
 
-        if (!container) return;
+    const container = document.getElementById('selected-day-sessions');
+    const heading = document.getElementById('selected-day-heading');
 
-        // עדכון הכותרת של היום
-        if (heading) {
-            const day = selectedDate.getDate();
-            const month = monthNames[selectedDate.getMonth()];
-            const year = selectedDate.getFullYear();
+    if (!container) return;
 
-            heading.textContent = `שיעורים ב-${day} ב${month} ${year}`;
+    // עדכון הכותרת של היום
+    if (heading) {
+        const day = selectedDate.getDate();
+        const month = monthNames[selectedDate.getMonth()];
+        const year = selectedDate.getFullYear();
+
+        heading.textContent = `שיעורים ב-${day} ב${month} ${year}`;
+    }
+
+    let sessions = getSessionsForDate(selectedDate);
+
+    if (selectedCategory) {
+        sessions = sessions.filter(session => {
+            return session.category === selectedCategory;
+        });
+    }
+
+    if (selectedType) {
+        sessions = sessions.filter(session => {
+            return session.type === selectedType;
+        });
+    }
+
+    // סינון לפי סטודיו / זום
+    if (activeFilter !== "all") {
+        sessions = sessions.filter(session => {
+            return session.type === activeFilter;
+        });
+    }
+
+    // אם אין אימונים ביום שנבחר
+    if (!sessions.length) {
+        const message = document.createElement('div');
+
+        message.className = 'empty-session';
+        message.textContent = 'אין שיעורים שנקבעו ליום זה במערכת';
+
+        container.replaceChildren(message);
+
+        return;
+    }
+
+    const userStr = localStorage.getItem('user');
+
+    let currentUserId = null;
+
+    if (userStr) {
+        try {
+            currentUserId = JSON.parse(userStr).id;
+        } catch (error) {
+            console.error('שגיאה בקריאת פרטי המשתמש:', error);
         }
+    }
 
-        let sessions = getSessionsForDate(selectedDate);
+    // הכנת רשימת האימונים
+    const fragment = document.createDocumentFragment();
 
-        if (selectedCategory) {
-            sessions = sessions.filter(session => {
-                return session.category === selectedCategory;
-            });
-        }
+    sessions.forEach(session => {
 
-        if (selectedType) {
-            sessions = sessions.filter(session => {
-                return session.type === selectedType;
-            });
-        }
+        const registeredCount = session.registeredUsers
+            ? session.registeredUsers.length
+            : 0;
 
-        // סינון לפי סטודיו / זום
-        if (activeFilter !== "all") {
-            sessions = sessions.filter(session => {
-                return session.type === activeFilter;
-            });
-        }
+        const isFull =
+            registeredCount >= session.maxParticipants;
 
-        if (!sessions.length) {
-            container.innerHTML = `
-        <div class="empty-session">
-            אין שיעורים שנקבעו ליום זה במערכת
-        </div>
-    `;
+        // בדיקה האם המשתמש כבר רשום
+        const isUserRegistered =
+            session.registeredUsers &&
+            currentUserId &&
+            session.registeredUsers.some(id =>
+                String(id) === String(currentUserId)
+            );
 
-            return;
-        }
+        // כרטיס האימון
+        const item = document.createElement('div');
+        item.className = 'session-item';
 
-        const userStr = localStorage.getItem('user');
+        // פרטי האימון
+        const main = document.createElement('div');
+        main.className = 'session-main';
 
-        let currentUserId = null;
+        const time = document.createElement('span');
+        time.className = 'session-time';
+        time.textContent = session.time || '';
 
-        if (userStr) {
-            try {
-                currentUserId = JSON.parse(userStr).id;
-            } catch (error) {
-                console.error('שגיאה בקריאת פרטי המשתמש:', error);
+        const title = document.createElement('h4');
+        title.className = 'session-title';
+        title.textContent = session.title || '';
+
+        const instructor = document.createElement('p');
+        instructor.className = 'session-meta';
+        instructor.textContent = `מדריך: ${session.instructor || ''}`;
+
+        main.append(time, title, instructor);
+
+        // אזור הפעולות
+        const actions = document.createElement('div');
+        actions.className = 'session-actions';
+
+        const count = document.createElement('span');
+        count.className = 'session-meta';
+        count.textContent =
+            `${registeredCount}/${session.maxParticipants} רשומים`;
+
+        actions.appendChild(count);
+
+        // יצירת כפתור
+        function createActionButton(text, className, onClick, disabled = false) {
+            const button = document.createElement('button');
+
+            button.type = 'button';
+            button.className = `session-action-btn ${className}`;
+            button.textContent = text;
+            button.disabled = disabled;
+
+            if (onClick) {
+                button.addEventListener('click', onClick);
             }
+
+            return button;
         }
 
-        container.innerHTML = sessions.map(session => {
+        // התאמת הכפתורים למצב האימון
+        if (!userStr) {
 
-            const registeredCount = session.registeredUsers
-                ? session.registeredUsers.length
-                : 0;
+            actions.appendChild(
+                createActionButton(
+                    'התחבר כדי להירשם',
+                    'login',
+                    () => {
+                        window.location.href = 'login.html';
+                    }
+                )
+            );
 
-            const isFull =
-                registeredCount >= session.maxParticipants;
+        } else if (isUserRegistered) {
 
-            // בדיקה האם המשתמש כבר רשום
-            const isUserRegistered =
-                session.registeredUsers &&
-                currentUserId &&
-                session.registeredUsers.some(id =>
-                    String(id) === String(currentUserId)
+            if (hasWorkoutFinished(session)) {
+
+                const actionGroup = document.createElement('div');
+                actionGroup.className = 'session-action-group';
+
+                actionGroup.appendChild(
+                    createActionButton(
+                        'נרשמת בהצלחה',
+                        'registered',
+                        null,
+                        true
+                    )
                 );
 
-            let actionBtn = '';
+                actionGroup.appendChild(
+                    createActionButton(
+                        'סיימתי את האימון',
+                        'complete',
+                        () => window.completeWorkout(session._id)
+                    )
+                );
 
-            if (!userStr) {
-                actionBtn = `
-        <button
-            onclick="window.location.href='login.html'"
-            class="session-action-btn login">
-            התחבר כדי להירשם
-        </button>
-    `;
-            } else if (isUserRegistered) {
-                if (hasWorkoutFinished(session)) {
-                    actionBtn = `
-        <div class="session-action-group">
-            <button
-                class="session-action-btn registered"
-                disabled>
-                נרשמת בהצלחה
-            </button>
+                actions.appendChild(actionGroup);
 
-            <button
-                onclick="completeWorkout('${session._id}')"
-                class="session-action-btn complete">
-                סיימתי את האימון
-            </button>
-        </div>
-    `;
-                } else {
-                    actionBtn = `
-            <button
-                class="session-action-btn registered"
-                disabled>
-                נרשמת בהצלחה
-            </button>
-        `;
-                }
-            } else if (isFull) {
-                actionBtn = `
-        <button
-            class="session-action-btn full"
-            disabled>
-            האימון מלא
-        </button>
-    `;
             } else {
-                actionBtn = `
-        <button
-            onclick="registerForSession('${session._id}')"
-            class="session-action-btn register">
-            הרשמה לשיעור
-        </button>
-    `;
+
+                actions.appendChild(
+                    createActionButton(
+                        'נרשמת בהצלחה',
+                        'registered',
+                        null,
+                        true
+                    )
+                );
             }
 
-            return `
-    <div class="session-item">
-        <div class="session-main">
-            <span class="session-time">
-                ${session.time}
-            </span>
+        } else if (isFull) {
 
-            <h4 class="session-title">
-                ${session.title}
-            </h4>
+            actions.appendChild(
+                createActionButton(
+                    'האימון מלא',
+                    'full',
+                    null,
+                    true
+                )
+            );
 
-            <p class="session-meta">
-                מדריך: ${session.instructor}
-            </p>
-        </div>
+        } else {
 
-        <div class="session-actions">
-            <span class="session-meta">
-                ${registeredCount}/${session.maxParticipants} רשומים
-            </span>
+            actions.appendChild(
+                createActionButton(
+                    'הרשמה לשיעור',
+                    'register',
+                    () => window.registerForSession(session._id)
+                )
+            );
+        }
 
-            ${actionBtn}
-        </div>
-    </div>
-`;
-        }).join('');
-    }
+        // הרכבת כרטיס האימון
+        item.append(main, actions);
+
+        fragment.appendChild(item);
+    });
+
+    // הצגת האימונים
+    container.replaceChildren(fragment);
+}
+
+
 
     // מעבר לחודש הקודם
     document.getElementById('prev-btn').addEventListener('click', () => {
@@ -278,7 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // ניקוי הלוח
-        grid.innerHTML = '';
+        grid.replaceChildren();
 
         // באיזה יום בשבוע מתחיל החודש
         const firstDay = new Date(year, month, 1).getDay();

@@ -7,8 +7,7 @@
 
     <title>VitaliFit - תזונה</title>
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/nutrition.css">
@@ -40,8 +39,9 @@
                 <a href="contact.html">צרו קשר</a>
                 <a href="blog.html">בלוג</a>
 
-                <a href="admin.html" id="admin-nav-link"
-                    style="display: none;">פאנל ניהול</a>
+                <a href="admin.html" id="admin-nav-link" class="nav-link admin-nav-link admin-link-hidden">
+                    פאנל ניהול
+                </a>
             </nav>
 
             <div class="nav-actions">
@@ -115,30 +115,19 @@
                     <div class="form-group">
                         <label for="meal-name">שם הארוחה</label>
 
-                        <input
-                            type="text"
-                            id="meal-name"
-                            placeholder="לדוגמה: חזה עוף עם אורז"
-                            required>
+                        <input type="text" id="meal-name" placeholder="לדוגמה: חזה עוף עם אורז" required>
                     </div>
 
                     <div class="form-group">
                         <label for="meal-image">תמונה של הארוחה</label>
 
-                        <input
-                            type="file"
-                            id="meal-image"
-                            accept="image/*"
-                            required>
+                        <input type="file" id="meal-image" accept="image/*" required>
                     </div>
 
                     <div class="form-group">
                         <label for="meal-date">תאריך</label>
 
-                        <input
-                            type="date"
-                            id="meal-date"
-                            required>
+                        <input type="date" id="meal-date" required>
                     </div>
 
                     <button type="submit" class="meal-submit-btn">
@@ -196,8 +185,7 @@
 
                 <div class="newsletter-shell">
                     <button type="button" class="newsletter-btn">שליחה</button>
-                    <input type="email" placeholder="כתובת אימייל"
-                        aria-label="כתובת אימייל">
+                    <input type="email" placeholder="כתובת אימייל" aria-label="כתובת אימייל">
                 </div>
 
                 <div class="social-links">
@@ -250,4 +238,5 @@
     <script src="js/nutrition.js"></script>
 
 </body>
+
 </html>

@@ -104,48 +104,82 @@ function updateDashboard(data) {
 
 function renderRecentActivities(activities) {
     const container = document.getElementById('activity-history');
+
     if (!container) return;
 
     const lastFour = activities.slice(0, 4);
 
+    // אם אין פעילויות, מציגים הודעה
     if (!lastFour.length) {
-        container.innerHTML = `
-            <div class="empty-history-message">
-                עדיין לא נוספו פעילויות או אימונים.
-            </div>`;
+        const message = document.createElement('div');
+
+        message.className = 'empty-history-message';
+        message.textContent = 'עדיין לא נוספו פעילויות או אימונים.';
+
+        container.replaceChildren(message);
+
         return;
     }
 
-    container.innerHTML = lastFour.map(activity => {
+    // הכנת רשימת הפעילויות
+    const fragment = document.createDocumentFragment();
+
+    lastFour.forEach(activity => {
         const name = activity.title || 'פעילות';
+
         const date = activity.date
             ? new Date(activity.date).toLocaleDateString('he-IL')
             : '';
+
+        const duration = Number(activity.durationMinutes || 0);
         const calories = Number(activity.caloriesBurned || 0);
 
-        return `
-            <div class="activity-history-item">
-                <div class="activity-history-details">
-                    <div class="activity-history-icon">🏃</div>
+        // כרטיס הפעילות
+        const item = document.createElement('div');
+        item.className = 'activity-history-item';
 
-                    <div class="activity-history-info">
-                        <div class="activity-history-name">
-                            ${escapeHtml(name)}
-                        </div>
+        // אזור הפרטים
+        const details = document.createElement('div');
+        details.className = 'activity-history-details';
 
-                        <div class="activity-history-date">
-                            ${escapeHtml(date)} · ${Number(activity.durationMinutes || 0)} דק'
-                        </div>
-                    </div>
-                </div>
+        // אייקון הפעילות
+        const icon = document.createElement('div');
+        icon.className = 'activity-history-icon';
+        icon.textContent = '🏃';
 
-                <div class="activity-history-calories">
-                    ${calories.toLocaleString('he-IL')} Kcal
-                </div>
-            </div>`;
-    }).join('');
+        // פרטי הפעילות
+        const info = document.createElement('div');
+        info.className = 'activity-history-info';
+
+        // שם הפעילות
+        const nameElement = document.createElement('div');
+        nameElement.className = 'activity-history-name';
+        nameElement.textContent = name;
+
+        // תאריך ומשך הפעילות
+        const dateElement = document.createElement('div');
+        dateElement.className = 'activity-history-date';
+        dateElement.textContent = `${date} · ${duration} דק'`;
+
+        // הרכבת אזור הפרטים
+        info.append(nameElement, dateElement);
+        details.append(icon, info);
+
+        // קלוריות שנשרפו
+        const caloriesElement = document.createElement('div');
+        caloriesElement.className = 'activity-history-calories';
+        caloriesElement.textContent =
+            `${calories.toLocaleString('he-IL')} Kcal`;
+
+        // הרכבת כרטיס הפעילות
+        item.append(details, caloriesElement);
+
+        fragment.appendChild(item);
+    });
+
+    // הצגת כל הפעילויות
+    container.replaceChildren(fragment);
 }
-
 
 
 // הוספת פעילות עצמאית
@@ -207,41 +241,64 @@ async function addWeight(event) {
     }
 }
 
+
 async function loadWeightHistory() {
     const container = document.getElementById('weight-history');
+
     if (!container) return;
 
     try {
         const history = await apiRequest(`${API_URL}/weight/history`);
 
+        // אם אין היסטוריית משקל
         if (!history.length) {
-            container.innerHTML = `
-                <div class="empty-history-message">
-                    עדיין אין היסטוריית משקל.
-                </div>`;
+            const message = document.createElement('div');
+
+            message.className = 'empty-history-message';
+            message.textContent = 'עדיין אין היסטוריית משקל.';
+
+            container.replaceChildren(message);
+
             return;
         }
 
-        container.innerHTML = history.slice().reverse().map(record => {
+        // הכנת רשימת היסטוריית המשקל
+        const fragment = document.createDocumentFragment();
+
+        history.slice().reverse().forEach(record => {
             const date = new Date(record.date).toLocaleDateString('he-IL');
+            const weight = Number(record.weight);
 
-            return `
-                <div class="weight-history-item">
-                    <span class="weight-history-date">
-                        ${escapeHtml(date)}
-                    </span>
+            // יצירת כרטיס היסטוריה
+            const item = document.createElement('div');
+            item.className = 'weight-history-item';
 
-                    <strong class="weight-history-value">
-                        ${Number(record.weight).toFixed(1)} ק"ג
-                    </strong>
-                </div>`;
-        }).join('');
+            // תאריך
+            const dateElement = document.createElement('span');
+            dateElement.className = 'weight-history-date';
+            dateElement.textContent = date;
+
+            // משקל
+            const weightElement = document.createElement('strong');
+            weightElement.className = 'weight-history-value';
+            weightElement.textContent = `${weight.toFixed(1)} ק"ג`;
+
+            // הרכבת הכרטיס
+            item.append(dateElement, weightElement);
+
+            fragment.appendChild(item);
+        });
+
+        // הצגת כל הרשומות
+        container.replaceChildren(fragment);
 
     } catch (error) {
-        container.innerHTML = `
-            <div class="weight-history-error">
-                לא ניתן לטעון היסטוריה.
-            </div>`;
+        const message = document.createElement('div');
+
+        message.className = 'weight-history-error';
+        message.textContent = 'לא ניתן לטעון היסטוריה.';
+
+        container.replaceChildren(message);
     }
 }
 

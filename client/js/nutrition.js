@@ -189,89 +189,98 @@ async function addMeal(event) {
     }
 }
 
-// יצירת כרטיס ארוחה
+// יצירת כרטיס ארוחה בצורה בטוחה
 function createMealCard(meal) {
-
     const item = document.createElement('div');
-
     item.className = 'meal-card';
 
-    item.innerHTML = `
-        <details class="meal-details">
+    const details = document.createElement('details');
+    details.className = 'meal-details';
 
-            <summary class="meal-summary">
-                <div class="meal-summary-row">
+    const summary = document.createElement('summary');
+    summary.className = 'meal-summary';
 
-                    <div class="meal-summary-info">
-                        <h3 class="meal-name-title">
-                            ${meal.mealName}
-                        </h3>
+    const summaryRow = document.createElement('div');
+    summaryRow.className = 'meal-summary-row';
 
-                        <p class="meal-date">
-                            ${formatDate(meal.date)}
-                        </p>
-                    </div>
+    const summaryInfo = document.createElement('div');
+    summaryInfo.className = 'meal-summary-info';
 
-                    <span class="meal-calories">
-                        ${meal.calories || 0} Kcal
-                    </span>
+    const mealName = document.createElement('h3');
+    mealName.className = 'meal-name-title';
+    mealName.textContent = meal.mealName ?? '';
 
-                </div>
-            </summary>
+    const mealDate = document.createElement('p');
+    mealDate.className = 'meal-date';
+    mealDate.textContent = formatDate(meal.date);
 
-            <div class="meal-details-content">
+    summaryInfo.append(mealName, mealDate);
 
-                ${
-                    meal.imageUrl
-                        ? `
-                            <img
-                                src="${window.API_BASE_URL}${meal.imageUrl}"
-                                alt="${meal.mealName}"
-                                class="meal-image">
-                        `
-                        : ''
-                }
+    const calories = Number(meal.calories) || 0;
 
-                <div class="nutrition-values">
+    const mealCalories = document.createElement('span');
+    mealCalories.className = 'meal-calories';
+    mealCalories.textContent = `${calories} Kcal`;
 
-                    <div class="nutrition-value-card">
-                        <p class="nutrition-label">קלוריות</p>
-                        <p class="nutrition-value">
-                            ${meal.calories || 0} Kcal
-                        </p>
-                    </div>
+    summaryRow.append(summaryInfo, mealCalories);
+    summary.appendChild(summaryRow);
 
-                    <div class="nutrition-value-card">
-                        <p class="nutrition-label">חלבון</p>
-                        <p class="nutrition-value">
-                            ${meal.protein || 0}g
-                        </p>
-                    </div>
+    const detailsContent = document.createElement('div');
+    detailsContent.className = 'meal-details-content';
 
-                    <div class="nutrition-value-card">
-                        <p class="nutrition-label">פחמימות</p>
-                        <p class="nutrition-value">
-                            ${meal.carbs || 0}g
-                        </p>
-                    </div>
+    // הוספת תמונה, אם קיימת
+    if (meal.imageUrl) {
+        const image = document.createElement('img');
 
-                    <div class="nutrition-value-card">
-                        <p class="nutrition-label">שומנים</p>
-                        <p class="nutrition-value">
-                            ${meal.fats || 0}g
-                        </p>
-                    </div>
+        image.className = 'meal-image';
+        image.alt = meal.mealName ?? '';
 
-                </div>
+        // קבלת כתובת התמונה מהשרת
+        const imageUrl = new URL(
+            meal.imageUrl,
+            window.API_BASE_URL
+        );
 
-            </div>
+        // הצגת תמונות רק מאותו מקור של השרת
+        if (imageUrl.origin === new URL(window.API_BASE_URL).origin) {
+            image.src = imageUrl.href;
+            detailsContent.appendChild(image);
+        }
+    }
 
-        </details>
-    `;
+    const nutritionValues = document.createElement('div');
+    nutritionValues.className = 'nutrition-values';
+
+    const nutritionItems = [
+        { label: 'קלוריות', value: calories, unit: ' Kcal' },
+        { label: 'חלבון', value: Number(meal.protein) || 0, unit: 'g' },
+        { label: 'פחמימות', value: Number(meal.carbs) || 0, unit: 'g' },
+        { label: 'שומנים', value: Number(meal.fats) || 0, unit: 'g' }
+    ];
+
+    nutritionItems.forEach(nutritionItem => {
+        const card = document.createElement('div');
+        card.className = 'nutrition-value-card';
+
+        const label = document.createElement('p');
+        label.className = 'nutrition-label';
+        label.textContent = nutritionItem.label;
+
+        const value = document.createElement('p');
+        value.className = 'nutrition-value';
+        value.textContent = `${nutritionItem.value}${nutritionItem.unit}`;
+
+        card.append(label, value);
+        nutritionValues.appendChild(card);
+    });
+
+    detailsContent.appendChild(nutritionValues);
+
+    details.append(summary, detailsContent);
+    item.appendChild(details);
 
     return item;
 }
-
 // הצגת הארוחות של היום
 function displayMeals(meals) {
 
@@ -280,8 +289,7 @@ function displayMeals(meals) {
 
     if (!container) return;
 
-    container.innerHTML = '';
-
+    container.replaceChildren();
     let totalCalories = 0;
     let totalProtein = 0;
     let totalCarbs = 0;
@@ -330,9 +338,7 @@ function displayHistory(meals) {
 
     if (!container) return;
 
-    container.innerHTML = '';
-
-    if (meals.length === 0) {
+    container.replaceChildren(); if (meals.length === 0) {
 
         const message = document.createElement('p');
 

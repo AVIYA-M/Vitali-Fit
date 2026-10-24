@@ -395,7 +395,10 @@ a {
     justify-content: flex-end;
 }
 
-
+/* הסתרת קישור הניהול כברירת מחדל */
+.admin-link-hidden {
+    display: none !important;
+}
 /* =========================
    Responsive
    ========================= */

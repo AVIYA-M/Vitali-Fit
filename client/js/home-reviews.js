@@ -17,44 +17,54 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     // שליפת המלצות מאושרות מהשרת ושילובן עם ההמלצות לדוגמה
-    async function loadReviews() {
-        try {
-            const response = await fetch(`${window.API_BASE_URL}/api/reviews/approved`);
-            let serverReviews = [];
-            if (response.ok) {
-                serverReviews = await response.json();
-            }
-            
-            const allReviews = [...serverReviews, ...dummyReviews];
+async function loadReviews() {
+    try {
+        const response = await fetch(`${window.API_BASE_URL}/api/reviews/approved`);
 
-            reviewsContainer.innerHTML = allReviews.map(review => `
-                <div class="review-item-card">
-                    <p>"${review.text}"</p>
-                    <div class="review-item-footer">
-                        <div class="review-item-avatar">
-                            ${review.name.charAt(0)}
-                        </div>
-                        <h4 class="review-item-name">${review.name}</h4>
-                    </div>
-                </div>
-            `).join('');
+        let serverReviews = [];
 
-            setupCarousel();
-        } catch (error) {
-            reviewsContainer.innerHTML = dummyReviews.map(review => `
-                <div class="review-item-card">
-                    <p>"${review.text}"</p>
-                    <div class="review-item-footer">
-                        <div class="review-item-avatar">
-                            ${review.name.charAt(0)}
-                        </div>
-                        <h4 class="review-item-name">${review.name}</h4>
-                    </div>
-                </div>
-            `).join('');
-            setupCarousel();
+        if (response.ok) {
+            serverReviews = await response.json();
         }
+
+        const allReviews = [...serverReviews, ...dummyReviews];
+
+        displayReviews(allReviews);
+
+    } catch (error) {
+        displayReviews(dummyReviews);
     }
+}
+
+// הצגת הביקורות בצורה בטוחה
+function displayReviews(reviews) {
+    reviewsContainer.replaceChildren();
+
+    reviews.forEach(review => {
+        const card = document.createElement('div');
+        card.className = 'review-item-card';
+
+        const reviewText = document.createElement('p');
+        reviewText.textContent = `"${review.text ?? ''}"`;
+
+        const footer = document.createElement('div');
+        footer.className = 'review-item-footer';
+
+        const avatar = document.createElement('div');
+        avatar.className = 'review-item-avatar';
+        avatar.textContent = String(review.name ?? '').charAt(0);
+
+        const name = document.createElement('h4');
+        name.className = 'review-item-name';
+        name.textContent = review.name ?? '';
+
+        footer.append(avatar, name);
+        card.append(reviewText, footer);
+        reviewsContainer.appendChild(card);
+    });
+
+    setupCarousel();
+}
 
     // מנגנון ניווט דינמי בגלגלת (מתאים את עצמו בדיוק לרוחב 3 כרטיסיות)
     function setupCarousel() {

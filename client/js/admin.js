@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchAdminReviews();
     fetchContactMessages();
 });
-
 // ==========================================
 // ניהול משתמשים במערכת
 // ==========================================
@@ -22,45 +21,96 @@ async function fetchUsersList() {
 
     try {
         const response = await fetch(`${API_URL_ADMIN}/users`, {
-            headers: { 'Authorization': `Bearer ${token}` }
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
 
-        if (!response.ok) throw new Error('שגיאה בשליפת המשתמשים');
+        if (!response.ok) {
+            throw new Error('שגיאה בשליפת המשתמשים');
+        }
 
         const users = await response.json();
 
-        tableBody.innerHTML = users.map(user => `
-            <tr>
-                <td class="admin-cell-strong">
-                    ${user.fullName || 'ללא שם'}
-                </td>
+        // יצירת שורות הטבלה בצורה בטוחה
+        const fragment = document.createDocumentFragment();
 
-                <td class="admin-cell-muted">
-                    ${user.email}
-                </td>
+        users.forEach(user => {
+            const row = document.createElement('tr');
 
-                <td class="${user.role === 'admin' ? 'admin-role-admin' : 'admin-role-user'}">
-                    ${user.role}
-                </td>
+            // שם המשתמש
+            const nameCell = document.createElement('td');
+            nameCell.className = 'admin-cell-strong';
+            nameCell.textContent = user.fullName || 'ללא שם';
 
-                <td class="admin-table-center">
-                    <button
-                        onclick="updateUserRole('${user._id}', '${user.role === 'admin' ? 'user' : 'admin'}')"
-                        class="admin-action-button admin-action-role">
-                        ${user.role === 'admin' ? 'הפוך לרגיל' : 'הפוך למנהל'}
-                    </button>
+            // כתובת אימייל
+            const emailCell = document.createElement('td');
+            emailCell.className = 'admin-cell-muted';
+            emailCell.textContent = user.email || '';
 
-                    <button
-                        onclick="deleteUser('${user._id}')"
-                        class="admin-action-button admin-action-delete">
-                        מחק
-                    </button>
-                </td>
-            </tr>
-        `).join('');
+            // תפקיד המשתמש
+            const roleCell = document.createElement('td');
+            const isAdmin = user.role === 'admin';
+
+            roleCell.className = isAdmin
+                ? 'admin-role-admin'
+                : 'admin-role-user';
+
+            roleCell.textContent = user.role || 'user';
+
+            // תא הכפתורים
+            const actionsCell = document.createElement('td');
+            actionsCell.className = 'admin-table-center';
+
+            // כפתור שינוי תפקיד
+            const roleButton = document.createElement('button');
+
+            roleButton.type = 'button';
+            roleButton.className =
+                'admin-action-button admin-action-role';
+
+            roleButton.textContent = isAdmin
+                ? 'הפוך לרגיל'
+                : 'הפוך למנהל';
+
+            roleButton.addEventListener('click', () => {
+                updateUserRole(
+                    user._id,
+                    isAdmin ? 'user' : 'admin'
+                );
+            });
+
+            // כפתור מחיקת משתמש
+            const deleteButton = document.createElement('button');
+
+            deleteButton.type = 'button';
+            deleteButton.className =
+                'admin-action-button admin-action-delete';
+
+            deleteButton.textContent = 'מחק';
+
+            deleteButton.addEventListener('click', () => {
+                deleteUser(user._id);
+            });
+
+            // הרכבת השורה
+            actionsCell.append(roleButton, deleteButton);
+
+            row.append(
+                nameCell,
+                emailCell,
+                roleCell,
+                actionsCell
+            );
+
+            fragment.appendChild(row);
+        });
+
+        // החלפת תוכן הטבלה
+        tableBody.replaceChildren(fragment);
 
     } catch (error) {
-        console.error(error);
+        console.error('שגיאה בטעינת רשימת המשתמשים:', error);
     }
 }
 
@@ -119,7 +169,7 @@ async function updateUserRole(userId, newRole) {
 }
 
 // ==========================================
-// ניהול אימונים (הוספה, עריכה ומחיקה)
+// הצגת אימונים בטבלת הניהול
 // ==========================================
 async function fetchAdminWorkouts() {
     const tableBody = document.getElementById('workouts-table-body');
@@ -135,51 +185,100 @@ async function fetchAdminWorkouts() {
 
         const workouts = await response.json();
 
+        // אין אימונים להצגה
         if (workouts.length === 0) {
-            tableBody.innerHTML = `
-                <tr>
-                    <td colspan="4" class="admin-table-empty">
-                        אין אימונים במערכת כרגע.
-                    </td>
-                </tr>
-            `;
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+
+            cell.colSpan = 4;
+            cell.className = 'admin-table-empty';
+            cell.textContent = 'אין אימונים במערכת כרגע.';
+
+            row.appendChild(cell);
+            tableBody.replaceChildren(row);
+
             return;
         }
 
-        tableBody.innerHTML = workouts.map(workout => `
-            <tr>
-                <td class="admin-cell-strong">
-                    ${workout.title}
-                </td>
+        // הכנת הטבלה
+        const fragment = document.createDocumentFragment();
 
-                <td class="admin-cell-muted">
-                    ${workout.date ? workout.date.split('T')[0] : ''}
-                    -
-                    ${workout.time || ''}
-                </td>
+        workouts.forEach(workout => {
+            const row = document.createElement('tr');
 
-                <td class="admin-cell-muted">
-                    ${workout.instructor || ''}
-                </td>
+            // שם האימון
+            const titleCell = document.createElement('td');
 
-                <td class="admin-table-center">
-                    <button
-                        onclick='openEditWorkoutModal(${JSON.stringify(workout)})'
-                        class="admin-action-button admin-action-edit">
-                        ערוך
-                    </button>
+            titleCell.className = 'admin-cell-strong';
+            titleCell.textContent = workout.title || '';
 
-                    <button
-                        onclick="deleteWorkout('${workout._id}')"
-                        class="admin-action-button admin-action-delete">
-                        מחק
-                    </button>
-                </td>
-            </tr>
-        `).join('');
+            // תאריך ושעה
+            const dateCell = document.createElement('td');
+
+            dateCell.className = 'admin-cell-muted';
+
+            const workoutDate = workout.date
+                ? workout.date.split('T')[0]
+                : '';
+
+            dateCell.textContent =
+                `${workoutDate} - ${workout.time || ''}`;
+
+            // שם המדריך
+            const instructorCell = document.createElement('td');
+
+            instructorCell.className = 'admin-cell-muted';
+            instructorCell.textContent = workout.instructor || '';
+
+            // תא פעולות
+            const actionsCell = document.createElement('td');
+
+            actionsCell.className = 'admin-table-center';
+
+            // כפתור עריכה
+            const editButton = document.createElement('button');
+
+            editButton.type = 'button';
+            editButton.className =
+                'admin-action-button admin-action-edit';
+
+            editButton.textContent = 'ערוך';
+
+            editButton.addEventListener('click', () => {
+                openEditWorkoutModal(workout);
+            });
+
+            // כפתור מחיקה
+            const deleteButton = document.createElement('button');
+
+            deleteButton.type = 'button';
+            deleteButton.className =
+                'admin-action-button admin-action-delete';
+
+            deleteButton.textContent = 'מחק';
+
+            deleteButton.addEventListener('click', () => {
+                deleteWorkout(workout._id);
+            });
+
+            // הרכבת התא והשורה
+            actionsCell.append(editButton, deleteButton);
+
+            row.append(
+                titleCell,
+                dateCell,
+                instructorCell,
+                actionsCell
+            );
+
+            fragment.appendChild(row);
+        });
+
+        // הצגת כל השורות בטבלה
+        tableBody.replaceChildren(fragment);
 
     } catch (error) {
-        console.error(error);
+        console.error('שגיאה בטעינת האימונים:', error);
     }
 }
 
@@ -326,6 +425,7 @@ async function deleteWorkout(workoutId) {
     }
 }
 
+
 // ==========================================
 // ניהול המלצות קהילה (אישור / דחייה)
 // ==========================================
@@ -338,7 +438,9 @@ async function fetchAdminReviews() {
 
     try {
         const response = await fetch(`${API_URL_REVIEWS}/admin/all`, {
-            headers: { 'Authorization': `Bearer ${token}` }
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
 
         if (!response.ok) {
@@ -347,66 +449,119 @@ async function fetchAdminReviews() {
 
         const reviews = await response.json();
 
+        // אם אין המלצות, מציגים הודעה
         if (reviews.length === 0) {
-            reviewsTableBody.innerHTML = `
-                <tr>
-                    <td colspan="4" class="admin-table-empty">
-                        אין המלצות במערכת כרגע.
-                    </td>
-                </tr>
-            `;
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+
+            cell.colSpan = 4;
+            cell.className = 'admin-table-empty';
+            cell.textContent = 'אין המלצות במערכת כרגע.';
+
+            row.appendChild(cell);
+            reviewsTableBody.replaceChildren(row);
+
             return;
         }
 
-        reviewsTableBody.innerHTML = reviews.map(review => `
-            <tr>
-                <td class="admin-cell-strong">
-                    ${review.name}
-                </td>
+        // הכנת שורות הטבלה
+        const fragment = document.createDocumentFragment();
 
-                <td class="admin-cell-muted admin-review-text"
-                    title="${review.text}">
-                    "${review.text}"
-                </td>
+        reviews.forEach(review => {
+            const row = document.createElement('tr');
 
-                <td>
-                    <span class="admin-status ${
-                        review.status === 'approved'
-                            ? 'admin-status-approved'
-                            : review.status === 'rejected'
-                                ? 'admin-status-rejected'
-                                : 'admin-status-pending'
-                    }">
-                        ${
-                            review.status === 'approved'
-                                ? 'מאושר (מוצג באתר)'
-                                : review.status === 'rejected'
-                                    ? 'נדחה'
-                                    : 'ממתין לאישור'
-                        }
-                    </span>
-                </td>
+            // שם הממליץ
+            const nameCell = document.createElement('td');
 
-                <td class="admin-table-center">
-                    <button
-                        onclick="updateReviewStatus('${review._id}', 'approved')"
-                        class="admin-action-button admin-action-approve">
-                        אשר
-                    </button>
+            nameCell.className = 'admin-cell-strong';
+            nameCell.textContent = review.name || '';
 
-                    <button
-                        onclick="updateReviewStatus('${review._id}', 'rejected')"
-                        class="admin-action-button admin-action-reject">
-                        דחה
-                    </button>
-                </td>
-            </tr>
-        `).join('');
+            // תוכן ההמלצה
+            const textCell = document.createElement('td');
+
+            textCell.className =
+                'admin-cell-muted admin-review-text';
+
+            textCell.textContent = `"${review.text || ''}"`;
+
+            // מאפיין title מוצג בבטחה באמצעות מאפיין DOM
+            textCell.title = review.text || '';
+
+            // סטטוס ההמלצה
+            const statusCell = document.createElement('td');
+            const statusLabel = document.createElement('span');
+
+            statusLabel.classList.add('admin-status');
+
+            let statusText;
+
+            if (review.status === 'approved') {
+                statusLabel.classList.add('admin-status-approved');
+                statusText = 'מאושר (מוצג באתר)';
+            } else if (review.status === 'rejected') {
+                statusLabel.classList.add('admin-status-rejected');
+                statusText = 'נדחה';
+            } else {
+                statusLabel.classList.add('admin-status-pending');
+                statusText = 'ממתין לאישור';
+            }
+
+            statusLabel.textContent = statusText;
+            statusCell.appendChild(statusLabel);
+
+            // תא פעולות
+            const actionsCell = document.createElement('td');
+
+            actionsCell.className = 'admin-table-center';
+
+            // כפתור אישור
+            const approveButton = document.createElement('button');
+
+            approveButton.type = 'button';
+            approveButton.className =
+                'admin-action-button admin-action-approve';
+
+            approveButton.textContent = 'אשר';
+
+            approveButton.addEventListener('click', () => {
+                window.updateReviewStatus(review._id, 'approved');
+            });
+
+            // כפתור דחייה
+            const rejectButton = document.createElement('button');
+
+            rejectButton.type = 'button';
+            rejectButton.className =
+                'admin-action-button admin-action-reject';
+
+            rejectButton.textContent = 'דחה';
+
+            rejectButton.addEventListener('click', () => {
+                window.updateReviewStatus(review._id, 'rejected');
+            });
+
+            // הרכבת השורה
+            actionsCell.append(approveButton, rejectButton);
+
+            row.append(
+                nameCell,
+                textCell,
+                statusCell,
+                actionsCell
+            );
+
+            fragment.appendChild(row);
+        });
+
+        // הצגת השורות בטבלה
+        reviewsTableBody.replaceChildren(fragment);
 
     } catch (error) {
-        console.error('Error loading reviews:', error);
+        console.error('שגיאה בטעינת ההמלצות:', error);
     }
 }
+
+
 
 window.updateReviewStatus = async function(id, status) {
     const token = localStorage.getItem('token');
@@ -445,7 +600,9 @@ async function fetchContactMessages() {
 
     try {
         const response = await fetch(`${API_URL_CONTACT}/admin/all`, {
-            headers: { 'Authorization': `Bearer ${token}` }
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
 
         if (!response.ok) {
@@ -454,53 +611,85 @@ async function fetchContactMessages() {
 
         const messages = await response.json();
 
+        // אם אין פניות, מציגים הודעה
         if (messages.length === 0) {
-            tableBody.innerHTML = `
-                <tr>
-                    <td colspan="6" class="admin-table-empty">
-                        עדיין לא התקבלו פניות.
-                    </td>
-                </tr>
-            `;
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+
+            cell.colSpan = 6;
+            cell.className = 'admin-table-empty';
+            cell.textContent = 'עדיין לא התקבלו פניות.';
+
+            row.appendChild(cell);
+            tableBody.replaceChildren(row);
+
             return;
         }
 
-        tableBody.innerHTML = messages.map(message => `
-            <tr>
-                <td>
-                    ${message.createdAt
-                        ? new Date(message.createdAt).toLocaleDateString('he-IL')
-                        : '-'}
-                </td>
+        // יצירת שורות הטבלה בצורה בטוחה
+        const fragment = document.createDocumentFragment();
 
-                <td>${escapeContactText(message.name)}</td>
+        messages.forEach(message => {
+            const row = document.createElement('tr');
 
-                <td>${escapeContactText(message.email)}</td>
+            // תאריך קבלת הפנייה
+            const dateCell = document.createElement('td');
 
-                <td>${escapeContactText(message.subject)}</td>
+            dateCell.textContent = message.createdAt
+                ? new Date(message.createdAt).toLocaleDateString('he-IL')
+                : '-';
 
-                <td class="admin-preserve-whitespace">
-                    ${escapeContactText(message.message)}
-                </td>
+            // שם הפונה
+            const nameCell = document.createElement('td');
 
-                <td>
-                    ${message.status === 'read'
-                        ? 'נקראה'
-                        : message.status === 'closed'
-                            ? 'טופלה'
-                            : 'חדשה'}
-                </td>
-            </tr>
-        `).join('');
+            nameCell.textContent = message.name || '';
+
+            // כתובת אימייל
+            const emailCell = document.createElement('td');
+
+            emailCell.textContent = message.email || '';
+
+            // נושא הפנייה
+            const subjectCell = document.createElement('td');
+
+            subjectCell.textContent = message.subject || '';
+
+            // תוכן הפנייה
+            const messageCell = document.createElement('td');
+
+            messageCell.className = 'admin-preserve-whitespace';
+            messageCell.textContent = message.message || '';
+
+            // סטטוס הפנייה
+            const statusCell = document.createElement('td');
+
+            if (message.status === 'read') {
+                statusCell.textContent = 'נקראה';
+            } else if (message.status === 'closed') {
+                statusCell.textContent = 'טופלה';
+            } else {
+                statusCell.textContent = 'חדשה';
+            }
+
+            // הרכבת השורה
+            row.append(
+                dateCell,
+                nameCell,
+                emailCell,
+                subjectCell,
+                messageCell,
+                statusCell
+            );
+
+            fragment.appendChild(row);
+        });
+
+        // הצגת כל השורות בטבלה
+        tableBody.replaceChildren(fragment);
 
     } catch (error) {
         console.error('שגיאה בטעינת הפניות:', error);
     }
 }
 
-function escapeContactText(value) {
-    const element = document.createElement('span');
-    element.textContent = value ?? '';
-    return element.innerHTML;
-}
 

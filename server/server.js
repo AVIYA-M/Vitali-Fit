@@ -12,8 +12,11 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 
 // שתי השורות האלו קריטיות כדי שהשרת יבין נתונים שנשלחים אליו (כמו קלוריות ומשקל)
-app.use(express.json());
-app.use(express.urlencoded({ extended: true })); 
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({
+    extended: true,
+    limit: '1mb'
+}));
 
 app.use('/uploads', express.static('uploads'));
 import reviewRoutes from './routes/reviewRoutes.js';
@@ -58,9 +61,17 @@ app.get('/api/status', (req, res) => {
 import errorHandler from './middlewares/error.middleware.js';
 app.use(errorHandler);
 
+
 // ========================================
 // MongoDB + Server Start
 // ========================================
+
+// בדיקה שכתובת החיבור למסד הנתונים קיימת
+if (!process.env.MONGO_URI) {
+    console.error('❌ חסר MONGO_URI בקובץ .env');
+    process.exit(1);
+}
+
 mongoose
     .connect(process.env.MONGO_URI, {
         serverSelectionTimeoutMS: 10000,
@@ -69,7 +80,7 @@ mongoose
     })
     .then(() => {
         console.log('✅ Connected to MongoDB Atlas successfully!');
-        
+
         app.listen(PORT, () => {
             console.log(`🚀 Server is running on port ${PORT}`);
             console.log(`🌐 API: http://localhost:${PORT}/api/status`);

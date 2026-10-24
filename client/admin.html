@@ -7,8 +7,7 @@
 
     <title>VitaliFit - ניהול מערכת ומשתמשים</title>
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/admin.css">
@@ -41,10 +40,7 @@
                 <a href="contact.html">צרו קשר</a>
                 <a href="blog.html">בלוג</a>
 
-                <a href="admin.html"
-                   id="admin-nav-link"
-                   class="nav-link"
-                   style="display: none;">
+                <a href="admin.html" id="admin-nav-link" class="nav-link admin-nav-link admin-link-hidden">
                     פאנל ניהול
                 </a>
             </nav>
@@ -75,9 +71,7 @@
             </div>
 
             <div class="admin-heading-actions">
-                <button type="button"
-                        onclick="openAddWorkoutModal()"
-                        class="admin-button admin-button-primary">
+                <button type="button" onclick="openAddWorkoutModal()" class="admin-button admin-button-primary">
                     <i class="fa-solid fa-plus"></i>
                     הוסף אימון חדש
                 </button>
@@ -93,34 +87,23 @@
                 <div class="admin-modal-heading">
                     <h3>הוספת שיעור/אימון ללוח</h3>
 
-                    <button type="button"
-                            onclick="closeAddWorkoutModal()"
-                            class="admin-modal-close"
-                            aria-label="סגירה">
+                    <button type="button" onclick="closeAddWorkoutModal()" class="admin-modal-close" aria-label="סגירה">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
 
-                <form id="create-workout-form"
-                      onsubmit="handleCreateWorkout(event)"
-                      class="admin-form">
+                <form id="create-workout-form" onsubmit="handleCreateWorkout(event)" class="admin-form">
 
                     <div class="admin-form-group">
                         <label for="w-title">כותרת האימון</label>
 
-                        <input type="text"
-                               id="w-title"
-                               required
-                               placeholder="למשל: אימון כוח מתקדם">
+                        <input type="text" id="w-title" required placeholder="למשל: אימון כוח מתקדם">
                     </div>
 
                     <div class="admin-form-group">
                         <label for="w-desc">תיאור קצר</label>
 
-                        <input type="text"
-                               id="w-desc"
-                               required
-                               placeholder="למשל: אימון ממוקד לפלג גוף עליון">
+                        <input type="text" id="w-desc" required placeholder="למשל: אימון ממוקד לפלג גוף עליון">
                     </div>
 
                     <div class="admin-form-row">
@@ -132,10 +115,7 @@
 
                         <div class="admin-form-group">
                             <label for="w-time">שעה</label>
-                            <input type="text"
-                                   id="w-time"
-                                   required
-                                   placeholder="09:00">
+                            <input type="text" id="w-time" required placeholder="09:00">
                         </div>
 
                     </div>
@@ -145,19 +125,13 @@
                         <div class="admin-form-group">
                             <label for="w-instructor">שם המדריך</label>
 
-                            <input type="text"
-                                   id="w-instructor"
-                                   required
-                                   placeholder="ישראל ישראלי">
+                            <input type="text" id="w-instructor" required placeholder="ישראל ישראלי">
                         </div>
 
                         <div class="admin-form-group">
                             <label for="w-max">מקסימום משתתפים</label>
 
-                            <input type="number"
-                                   id="w-max"
-                                   required
-                                   value="30">
+                            <input type="number" id="w-max" required value="30">
                         </div>
 
                     </div>
@@ -167,21 +141,13 @@
                         <div class="admin-form-group">
                             <label for="w-duration">משך האימון (בדקות)</label>
 
-                            <input type="number"
-                                   id="w-duration"
-                                   required
-                                   min="1"
-                                   placeholder="45">
+                            <input type="number" id="w-duration" required min="1" placeholder="45">
                         </div>
 
                         <div class="admin-form-group">
                             <label for="w-calories">קלוריות משוערות</label>
 
-                            <input type="number"
-                                   id="w-calories"
-                                   required
-                                   min="0"
-                                   placeholder="400">
+                            <input type="number" id="w-calories" required min="0" placeholder="400">
                         </div>
 
                     </div>
@@ -206,8 +172,7 @@
                         </select>
                     </div>
 
-                    <button type="submit"
-                            class="admin-button admin-button-primary admin-button-full">
+                    <button type="submit" class="admin-button admin-button-primary admin-button-full">
                         שמור אימון במערכת
                     </button>
 
@@ -224,17 +189,13 @@
                 <div class="admin-modal-heading">
                     <h3>עריכת אימון קיים</h3>
 
-                    <button type="button"
-                            onclick="closeEditWorkoutModal()"
-                            class="admin-modal-close"
-                            aria-label="סגירה">
+                    <button type="button" onclick="closeEditWorkoutModal()" class="admin-modal-close"
+                        aria-label="סגירה">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
 
-                <form id="edit-workout-form"
-                      onsubmit="handleUpdateWorkout(event)"
-                      class="admin-form">
+                <form id="edit-workout-form" onsubmit="handleUpdateWorkout(event)" class="admin-form">
 
                     <input type="hidden" id="edit-w-id">
 
@@ -280,24 +241,17 @@
 
                         <div class="admin-form-group">
                             <label for="edit-w-duration">משך האימון (בדקות)</label>
-                            <input type="number"
-                                   id="edit-w-duration"
-                                   required
-                                   min="1">
+                            <input type="number" id="edit-w-duration" required min="1">
                         </div>
 
                         <div class="admin-form-group">
                             <label for="edit-w-calories">קלוריות משוערות</label>
-                            <input type="number"
-                                   id="edit-w-calories"
-                                   required
-                                   min="0">
+                            <input type="number" id="edit-w-calories" required min="0">
                         </div>
 
                     </div>
 
-                    <button type="submit"
-                            class="admin-button admin-button-primary admin-button-full">
+                    <button type="submit" class="admin-button admin-button-primary admin-button-full">
                         עדכן אימון
                     </button>
 
@@ -429,9 +383,7 @@
                 <div class="newsletter-shell">
                     <button type="button" class="newsletter-btn">שליחה</button>
 
-                    <input type="email"
-                           placeholder="כתובת אימייל"
-                           aria-label="כתובת אימייל">
+                    <input type="email" placeholder="כתובת אימייל" aria-label="כתובת אימייל">
                 </div>
 
                 <div class="social-links">
@@ -484,5 +436,5 @@
     <script src="js/admin.js"></script>
 
 </body>
-</html>
 
+</html>

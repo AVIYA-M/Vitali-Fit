@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,8 @@
     <title>VitaliFit - התחברות</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/login.css">
@@ -39,7 +41,7 @@
                 <a href="contact.html">צרו קשר</a>
                 <a href="blog.html">בלוג</a>
 
-                <a href="admin.html" id="admin-nav-link" style="display: none;">
+                <a href="admin.html" id="admin-nav-link" class="nav-link admin-nav-link admin-link-hidden">
                     פאנל ניהול
                 </a>
             </nav>
@@ -82,23 +84,13 @@
                 <div class="login-form-group">
                     <label for="email">כתובת אימייל</label>
 
-                    <input
-                        type="email"
-                        id="email"
-                        required
-                        placeholder="israel@example.com"
-                    >
+                    <input type="email" id="email" required placeholder="israel@example.com">
                 </div>
 
                 <div class="login-form-group">
                     <label for="password">סיסמה</label>
 
-                    <input
-                        type="password"
-                        id="password"
-                        required
-                        placeholder="••••••••"
-                    >
+                    <input type="password" id="password" required placeholder="••••••••">
                 </div>
 
                 <button type="submit" class="login-submit-button">
@@ -125,11 +117,7 @@
                 <div class="newsletter-shell">
                     <button type="button" class="newsletter-btn">שליחה</button>
 
-                    <input
-                        type="email"
-                        placeholder="כתובת אימייל"
-                        aria-label="כתובת אימייל"
-                    >
+                    <input type="email" placeholder="כתובת אימייל" aria-label="כתובת אימייל">
                 </div>
 
                 <div class="social-links">
@@ -182,4 +170,5 @@
     <script src="js/auth.js"></script>
 
 </body>
+
 </html>

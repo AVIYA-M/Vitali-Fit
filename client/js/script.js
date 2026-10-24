@@ -10,82 +10,108 @@ function checkUserLoginStatus() {
         const adminLink = document.getElementById('admin-nav-link');
 
         // כברירת מחדל, מסתירים את כפתור הניהול
+        // כברירת מחדל, מסתירים את קישור הניהול
         if (adminLink) {
-            adminLink.style.display = 'none';
+            adminLink.classList.add('admin-link-hidden');
         }
 
-        if (!userStr) return; // אם אין משתמש, הכפתור נשאר מוסתר
+        // אם אין משתמש מחובר, משאירים את התפריט המקורי
+        if (!userStr) return;
 
         const user = JSON.parse(userStr);
 
-        // 1. שינוי התפריט העליון להצגת שם המשתמש המחובר וכפתור התנתקות בעיצוב תואם לאתר
+        // הצגת שם המשתמש וכפתור ההתנתקות
         if (user && user.fullName && navActions) {
+            const userMenu = document.createElement('div');
+            userMenu.className = 'user-menu';
 
-            navActions.innerHTML = `
-               <div class="user-menu">
-                <span class="user-menu-name">שלום, ${user.fullName}</span>
+            const userName = document.createElement('span');
+            userName.className = 'user-menu-name';
+            userName.textContent = `שלום, ${user.fullName}`;
 
-                  <button
-                    onclick="logout()"
-                    title="התנתק"
-                    class="logout-button">
-                    התנתק
-                  </button>
-               </div>
-           `;
+            const logoutButton = document.createElement('button');
+            logoutButton.className = 'logout-button';
+            logoutButton.title = 'התנתק';
+            logoutButton.textContent = 'התנתק';
 
+            logoutButton.addEventListener('click', logout);
 
+            userMenu.append(userName, logoutButton);
+
+            navActions.replaceChildren(userMenu);
         }
 
-        // 2. בדיקה האם המשתמש הוא מנהל מערכת - רק אז מציגים את הכפתור
+        // הצגת קישור הניהול למנהלים בלבד
+        // הצגת קישור הניהול למנהלים בלבד
         if (user && user.role === 'admin' && adminLink) {
-            adminLink.style.display = 'flex';
+            adminLink.classList.remove('admin-link-hidden');
         }
     } catch (error) {
-        console.error("Error checking login status:", error);
+        console.error('Error checking login status:', error);
     }
-};
+}
 
 
-function logout() { 
-    console.log('פונקציית logout הופעלה'); 
-    showCustomModal('התנתקת בהצלחה מהמערכת', () => { 
-        console.log('כפתור האישור נלחץ'); 
-    localStorage.removeItem('token'); 
-    localStorage.removeItem('user'); 
-    window.location.href = 'index.html'; }); }
+function logout() {
+    console.log('פונקציית logout הופעלה');
+    showCustomModal('התנתקת בהצלחה מהמערכת', () => {
+        console.log('כפתור האישור נלחץ');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = 'index.html';
+    });
+}
 
 
 function injectNotificationModal() {
     if (document.getElementById('custom-modal-overlay')) return;
 
-    const modalHTML = `
-        <div id="custom-modal-overlay" class="modal-overlay hidden">
-            <div class="modal-box" id="custom-modal-box">
+    // יצירת הרקע של החלונית
+    const overlay = document.createElement('div');
+    overlay.id = 'custom-modal-overlay';
+    overlay.className = 'modal-overlay hidden';
 
-                <div class="modal-icon">
-                    <i class="fa-solid fa-check"></i>
-                </div>
+    // יצירת גוף החלונית
+    const box = document.createElement('div');
+    box.className = 'modal-box';
+    box.id = 'custom-modal-box';
 
-                <h3 id="custom-modal-title" class="modal-title">
-                    הודעת מערכת
-                </h3>
+    // אייקון
+    const iconContainer = document.createElement('div');
+    iconContainer.className = 'modal-icon';
 
-                <p id="custom-modal-message" class="modal-message"></p>
+    const icon = document.createElement('i');
+    icon.className = 'fa-solid fa-check';
 
-                <button
-                    id="custom-modal-btn"
-                    onclick="closeCustomModal()"
-                    class="modal-button">
-                    אישור
-                </button>
+    iconContainer.appendChild(icon);
 
-            </div>
-        </div>
-    `;
+    // כותרת
+    const title = document.createElement('h3');
+    title.id = 'custom-modal-title';
+    title.className = 'modal-title';
+    title.textContent = 'הודעת מערכת';
 
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    // הודעה
+    const message = document.createElement('p');
+    message.id = 'custom-modal-message';
+    message.className = 'modal-message';
+
+    // כפתור אישור
+    const button = document.createElement('button');
+    button.id = 'custom-modal-btn';
+    button.className = 'modal-button';
+    button.textContent = 'אישור';
+
+    button.addEventListener('click', closeCustomModal);
+
+    // הרכבת החלונית
+    box.append(iconContainer, title, message, button);
+    overlay.appendChild(box);
+
+    // הוספת החלונית לדף
+    document.body.appendChild(overlay);
 }
+
 
 window.showCustomModal = function (
     message,
@@ -129,38 +155,58 @@ window.closeCustomModal = function () {
         }
     }, 200);
 };
+
+
 window.showModalMessage = function (message) {
-// מחיקת פופ-אפ קודם אם קיים
-const existingModal = document.getElementById('custom-modal-popup');
-if (existingModal) existingModal.remove();
 
+    // מחיקת חלונית קודמת אם קיימת
+    const existingModal = document.getElementById('custom-modal-popup');
 
-// יצירת הרקע של החלונית
-const modalOverlay = document.createElement('div');
-modalOverlay.id = 'custom-modal-popup';
-modalOverlay.className = 'custom-popup-overlay';
+    if (existingModal) {
+        existingModal.remove();
+    }
 
-// יצירת תוכן החלונית
-modalOverlay.innerHTML = `
-    <div class="custom-popup-box">
-        <div class="custom-popup-icon">✨</div>
-        <h3 class="custom-popup-title">VitaliFit</h3>
-        <p class="custom-popup-message"></p>
-        <button class="custom-popup-button"
-            onclick="document.getElementById('custom-modal-popup').remove()">
-            אישור
-        </button>
-    </div>
-`;
+    // יצירת הרקע של החלונית
+    const modalOverlay = document.createElement('div');
+    modalOverlay.id = 'custom-modal-popup';
+    modalOverlay.className = 'custom-popup-overlay';
 
-// הוספת ההודעה לחלונית
-modalOverlay.querySelector('.custom-popup-message').textContent = message;
+    // יצירת גוף החלונית
+    const modalBox = document.createElement('div');
+    modalBox.className = 'custom-popup-box';
 
-// הצגת החלונית בדף
-document.body.appendChild(modalOverlay);
+    // אייקון
+    const icon = document.createElement('div');
+    icon.className = 'custom-popup-icon';
+    icon.textContent = '✨';
 
+    // כותרת
+    const title = document.createElement('h3');
+    title.className = 'custom-popup-title';
+    title.textContent = 'VitaliFit';
 
+    // הודעה
+    const messageElement = document.createElement('p');
+    messageElement.className = 'custom-popup-message';
+    messageElement.textContent = message;
+
+    // כפתור אישור
+    const button = document.createElement('button');
+    button.className = 'custom-popup-button';
+    button.textContent = 'אישור';
+
+    button.addEventListener('click', () => {
+        modalOverlay.remove();
+    });
+
+    // הרכבת החלונית
+    modalBox.append(icon, title, messageElement, button);
+    modalOverlay.appendChild(modalBox);
+
+    // הצגת החלונית
+    document.body.appendChild(modalOverlay);
 };
+
 
 function showCustomMessageBox(message) {
     const modal = document.getElementById('custom-message-box');
@@ -185,7 +231,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const scrollBtn = document.createElement('button'); // נהפוך את זה לכפתור אמיתי
         scrollBtn.className = 'floating-scroll-btn';
         scrollBtn.setAttribute('aria-label', 'גלול לפוטר');
-       scrollBtn.innerHTML = '<i class="fa-solid fa-arrow-down floating-scroll-icon"></i>';
+
+        const icon = document.createElement('i');
+        icon.className = 'fa-solid fa-arrow-down floating-scroll-icon';
+
+        scrollBtn.appendChild(icon);
+
+
         // פעולת גלילה חלקה לפוטר בכל עמוד באופן אוטומטי
         scrollBtn.addEventListener('click', () => {
             const footer = document.querySelector('footer') || document.getElementById('footer');
