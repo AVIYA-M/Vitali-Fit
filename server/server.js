@@ -2,6 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { createDayBlocker } from './middlewares/custom.middleware.js';
 import { UPLOADS_DIR } from './middlewares/upload.middleware.js';
@@ -17,6 +19,9 @@ import activityRoutes from './routes/activityRoutes.js';
 import weightRoutes from './routes/weightRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -79,6 +84,15 @@ app.use('/api/activities', activityRoutes);
 app.use('/api/weight', weightRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/contact', contactRoutes);
+
+// ========================================
+// הגשת צד הלקוח (Client Static Files)
+// ========================================
+app.use(express.static(path.join(__dirname, '../client')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/index.html'));
+});
 
 // נתיב API שלא קיים - תשובת JSON במקום דף HTML
 app.use('/api', (req, res, next) => {
