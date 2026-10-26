@@ -1,5 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
-import fs from 'fs';
+import fs from 'fs/promises';
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY
@@ -8,7 +8,7 @@ const ai = new GoogleGenAI({
 
 async function analyzeMealImage(imagePath, mimeType, mealName) {
 
-    const imageData = fs.readFileSync(imagePath);
+    const imageData = await fs.readFile(imagePath);
     const base64Image = imageData.toString('base64');
 
 

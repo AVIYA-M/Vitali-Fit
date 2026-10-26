@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitButton.textContent = 'שולחת...';
 
         try {
-            const response = await fetch(API_URL_CONTACT, {
+            const response = await window.apiFetch(API_URL_CONTACT, {
                 method: 'POST',
 
                 headers: {

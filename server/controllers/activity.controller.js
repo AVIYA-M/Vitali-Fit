@@ -1,38 +1,13 @@
 import Activity from '../models/Activity.js';
 import User from '../models/User.js';
+import { calculateCalories } from '../utils/helpers.js';
+import { ACTIVITY_MET } from '../constants/index.js';
 
-// חישוב קלוריות לפי MET
-function calculateCalories(weight, durationMinutes, met) {
-  return Math.round((met * 3.5 * weight / 200) * durationMinutes);
-}
-
-// הוספת פעילות עצמאית
-export const addActivity = async (req, res) => {
+// הוספת פעילות עצמאית (סוג ומשך כבר נבדקו ב-Joi)
+export const addActivity = async (req, res, next) => {
   try {
     const userId = req.user.userId;
     const { activityType, durationMinutes, date } = req.body;
-
-    if (!activityType || !durationMinutes) {
-      return res.status(400).json({ message: 'יש למלא סוג פעילות ומשך פעילות.' });
-    }
-
-    const duration = Number(durationMinutes);
-    if (duration <= 0) {
-      return res.status(400).json({ message: 'משך הפעילות חייב להיות גדול מ-0.' });
-    }
-
-    const activityMET = {
-      walking: 3.5,
-      running: 8.0,
-      stairs: 8.8,
-      cycling: 7.5,
-      homeWorkout: 5.0,
-      other: 4.0
-    };
-
-    if (!activityMET[activityType]) {
-      return res.status(400).json({ message: 'סוג פעילות לא תקין.' });
-    }
 
     const user = await User.findById(userId);
     if (!user) {
@@ -45,24 +20,22 @@ export const addActivity = async (req, res) => {
       return res.status(400).json({ message: 'לא ניתן להוסיף פעילות בשבת.' });
     }
 
-    // התיקון הקריטי: אם אין למשתמש משקל, נשתמש ב-70 ק"ג כברירת מחדל כדי לא לקרוס (NaN)
+    // אם אין למשתמש משקל, נשתמש ב-70 ק"ג כברירת מחדל כדי לא לקבל NaN
     const userWeight = user.weight ? Number(user.weight) : 70;
 
     const caloriesBurned = calculateCalories(
       userWeight,
-      duration,
-      activityMET[activityType]
+      durationMinutes,
+      ACTIVITY_MET[activityType]
     );
 
-    const activity = new Activity({
+    const activity = await Activity.create({
       userId,
       activityType,
-      durationMinutes: duration,
+      durationMinutes,
       caloriesBurned,
       date: selectedDate
     });
-
-    await activity.save();
 
     res.status(201).json({
       message: 'הפעילות נוספה בהצלחה.',
@@ -70,18 +43,17 @@ export const addActivity = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('שגיאה בהוספת פעילות:', error);
-    res.status(500).json({ message: 'שגיאה בהוספת הפעילות.', error: error.message });
+    next(error);
   }
 };
 
 // שליפת הפעילויות של המשתמש
-export const getUserActivities = async (req, res) => {
+export const getUserActivities = async (req, res, next) => {
   try {
     const userId = req.user.userId;
     const activities = await Activity.find({ userId }).sort({ date: -1 });
     res.status(200).json(activities);
   } catch (error) {
-    res.status(500).json({ message: 'שגיאה בשליפת הפעילויות.', error: error.message });
+    next(error);
   }
 };

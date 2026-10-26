@@ -1,27 +1,37 @@
-import mongoose from 'mongoose';
 import Workout from '../models/Workout.js';
 import Tracking from '../models/Tracking.js';
 
-// בדיקת תקינות מזהה האימון
-const isValidWorkoutId = (id) => {
-    return mongoose.Types.ObjectId.isValid(id);
-};
+// מונע מתווים מיוחדים בחיפוש (כמו .* או ( ) להתפרש כביטוי רגולרי
+const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // שליפת כל האימונים
-export const getAllWorkouts = async (req, res) => {
+export const getAllWorkouts = async (req, res, next) => {
     try {
-        const workouts = await Workout.find({});
+        const query = {};
+
+        const { search, category, type } = req.query;
+
+        if (typeof search === 'string' && search.trim()) {
+            query.title = { $regex: escapeRegex(search.trim()), $options: 'i' };
+        }
+
+        if (typeof category === 'string' && category) {
+            query.category = category;
+        }
+
+        if (typeof type === 'string' && type) {
+            query.type = type;
+        }
+
+        const workouts = await Workout.find(query);
         return res.status(200).json(workouts);
     } catch (error) {
-        console.error('שגיאה בשליפת האימונים:', error);
-        return res.status(500).json({
-            message: 'שגיאה בשליפת האימונים'
-        });
+        next(error);
     }
 };
 
 // הוספת אימון חדש (למנהל)
-export const createWorkout = async (req, res) => {
+export const createWorkout = async (req, res, next) => {
     try {
         const newWorkout = new Workout(req.body);
         const savedWorkout = await newWorkout.save();
@@ -31,25 +41,15 @@ export const createWorkout = async (req, res) => {
             workout: savedWorkout
         });
     } catch (error) {
-        console.error('שגיאה ביצירת האימון:', error);
-
-        return res.status(400).json({
-            message: 'שגיאה ביצירת האימון',
-            error: error.message
-        });
+        next(error);
     }
 };
 
 // עריכת אימון קיים (למנהל)
-export const updateWorkout = async (req, res) => {
+export const updateWorkout = async (req, res, next) => {
     try {
         const { id } = req.params;
 
-        if (!isValidWorkoutId(id)) {
-            return res.status(400).json({
-                message: 'מזהה האימון אינו תקין'
-            });
-        }
 
         const updatedWorkout = await Workout.findByIdAndUpdate(
             id,
@@ -71,28 +71,15 @@ export const updateWorkout = async (req, res) => {
             workout: updatedWorkout
         });
     } catch (error) {
-        console.error('שגיאה בעדכון האימון:', error);
-
-        const statusCode = error.name === 'ValidationError' ||
-            error.name === 'CastError' ? 400 : 500;
-
-        return res.status(statusCode).json({
-            message: 'שגיאה בעדכון האימון',
-            error: error.message
-        });
+        next(error);
     }
 };
 
 // מחיקת אימון תוך שמירת היסטוריית המעקב
-export const deleteWorkout = async (req, res) => {
+export const deleteWorkout = async (req, res, next) => {
     try {
         const { id } = req.params;
 
-        if (!isValidWorkoutId(id)) {
-            return res.status(400).json({
-                message: 'מזהה האימון אינו תקין'
-            });
-        }
 
         const workout = await Workout.findById(id);
 
@@ -113,26 +100,16 @@ export const deleteWorkout = async (req, res) => {
             message: 'האימון נמחק מהמערכת וההיסטוריה נשמרה בהצלחה'
         });
     } catch (error) {
-        console.error('שגיאה במחיקת האימון:', error);
-
-        return res.status(500).json({
-            message: 'שגיאה במחיקת האימון',
-            error: error.message
-        });
+        next(error);
     }
 };
 
 // הרשמת משתמש לאימון
-export const registerForWorkout = async (req, res) => {
+export const registerForWorkout = async (req, res, next) => {
     try {
         const { id } = req.params;
         const userId = req.user.userId;
 
-        if (!isValidWorkoutId(id)) {
-            return res.status(400).json({
-                message: 'מזהה האימון אינו תקין'
-            });
-        }
 
         const workout = await Workout.findOneAndUpdate(
             {
@@ -183,11 +160,6 @@ export const registerForWorkout = async (req, res) => {
             message: 'האימון מלא, לא ניתן להירשם'
         });
     } catch (error) {
-        console.error('שגיאה בהרשמה לאימון:', error);
-
-        return res.status(500).json({
-            message: 'שגיאה בהרשמה לאימון',
-            error: error.message
-        });
+        next(error);
     }
 };

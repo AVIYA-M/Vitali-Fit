@@ -2,18 +2,12 @@ import User from '../models/User.js';
 import WeightHistory from '../models/WeightHistory.js';
 
 // ========================================
-// הוספת / עדכון משקל
+// הוספת / עדכון משקל (המשקל נבדק ב-Joi)
 // ========================================
-export const addWeight = async (req, res) => {
+export const addWeight = async (req, res, next) => {
     try {
         const userId = req.user.userId;
-        const weight = Number(req.body.weight);
-
-        if (!weight || weight <= 0) {
-            return res.status(400).json({
-                message: 'המשקל חייב להיות גדול מ-0.'
-            });
-        }
+        const weight = req.body.weight;
 
         const user = await User.findById(userId);
         if (!user) {
@@ -22,25 +16,25 @@ export const addWeight = async (req, res) => {
             });
         }
 
-        // 1. מציאת השקילה האחרונה שהייתה *לפני* ההוספה הנוכחית (השקילה הקודמת)
+        // 1. השקילה האחרונה והראשונה *לפני* ההוספה הנוכחית
         const lastRecord = await WeightHistory.findOne({ userId }).sort({ date: -1, _id: -1 });
-
-        // 2. מציאת המשקל ההתחלתי (הראשון אי פעם)
         let firstWeight = await WeightHistory.findOne({ userId }).sort({ date: 1, _id: 1 });
 
-        if (!firstWeight) {
+        // 2. משתמש שכבר היה לו משקל שמור אבל אין היסטוריה - שומרים אותו כנקודת התחלה.
+        //    (אם אין שום משקל קודם, השקילה הנוכחית היא נקודת ההתחלה ולא יוצרים רשומה כפולה)
+        if (!firstWeight && user.weight) {
             firstWeight = await WeightHistory.create({
                 userId,
-                weight: user.weight ? Number(user.weight) : weight,
+                weight: Number(user.weight),
                 date: user.createdAt || new Date()
             });
         }
 
+        // השקילה הקודמת להשוואה (אם אין היסטוריה, נקודת ההתחלה שנוצרה הרגע)
+        const previousRecord = lastRecord || firstWeight;
+
         // 3. עדכון המשתמש
         user.weight = weight;
-        if (!user.weighInDay) {
-            user.weighInDay = 'sunday'; 
-        }
         await user.save();
 
         // 4. שמירת ההיסטוריה החדשה
@@ -50,14 +44,16 @@ export const addWeight = async (req, res) => {
             date: new Date()
         });
 
-        // 5. חישוב השינוי מהמשקל ההתחלתי
+        if (!firstWeight) {
+            firstWeight = weightRecord;
+        }
+
+        // 5. חישוב השינוי מהמשקל ההתחלתי ומהשקילה הקודמת
         const weightChange = Number((weight - Number(firstWeight.weight)).toFixed(1));
 
-        // 6. חישוב השינוי מהשקילה הקודמת (אם קיימת שקילה לפני כן)
-        let previousWeightDiff = 0;
-        if (lastRecord) {
-            previousWeightDiff = Number((weight - Number(lastRecord.weight)).toFixed(1));
-        }
+        const previousWeightDiff = previousRecord
+            ? Number((weight - Number(previousRecord.weight)).toFixed(1))
+            : 0;
 
         res.status(201).json({
             message: 'המשקל עודכן בהצלחה.',
@@ -69,18 +65,14 @@ export const addWeight = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('שגיאה בעדכון משקל:', error);
-        res.status(500).json({
-            message: 'שגיאה בעדכון המשקל.',
-            error: error.message
-        });
+        next(error);
     }
 };
 
 // ========================================
 // היסטוריית משקל - 6 חודשים
 // ========================================
-export const getWeightHistory = async (req, res) => {
+export const getWeightHistory = async (req, res, next) => {
     try {
         const userId = req.user.userId;
         const sixMonthsAgo = new Date();
@@ -94,10 +86,6 @@ export const getWeightHistory = async (req, res) => {
         res.status(200).json(history);
 
     } catch (error) {
-        console.error('שגיאה בשליפת היסטוריית משקל:', error);
-        res.status(500).json({
-            message: 'שגיאה בשליפת היסטוריית המשקל.',
-            error: error.message
-        });
+        next(error);
     }
 };

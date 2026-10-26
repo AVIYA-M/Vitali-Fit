@@ -241,3 +241,29 @@
     }
 }
 
+/* =====================================================
+   ליטוש עיצוב (קל) - אפשר למחוק את כל הבלוק הזה כדי לחזור לקודם
+   ===================================================== */
+
+.blog-card {
+    border-radius: 24px;
+}
+
+.blog-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 38px rgba(17, 45, 38, 0.13);
+}
+
+.blog-card-icon {
+    background: linear-gradient(135deg, #E8F5F1 0%, #cdeee3 100%);
+}
+
+.blog-heading h1::after {
+    content: "";
+    display: block;
+    width: 64px;
+    height: 4px;
+    margin: 14px auto 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #1E4630, #5FE3C4);
+}

@@ -1,7 +1,8 @@
 import Joi from 'joi';
+import { ACTIVITY_TYPES } from '../../constants/index.js';
 
 export const activitySchema = Joi.object({
-    activityType: Joi.string().valid('walking', 'running', 'stairs', 'cycling', 'homeWorkout', 'other').required().messages({
+    activityType: Joi.string().valid(...ACTIVITY_TYPES).required().messages({
         'any.only': 'סוג פעילות לא תקין.',
         'any.required': 'יש לבחור סוג פעילות.'
     }),
@@ -14,14 +15,3 @@ export const activitySchema = Joi.object({
         'date.base': 'תאריך הפעילות אינו תקין.'
     })
 });
-
-export const validateActivity = (schema) => {
-    return (req, res, next) => {
-        const { error } = schema.validate(req.body, { abortEarly: false });
-        if (error) {
-            const errorMessage = error.details.map(detail => detail.message).join(', ');
-            return res.status(400).json({ message: errorMessage });
-        }
-        next();
-    };
-};

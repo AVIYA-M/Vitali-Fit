@@ -44,7 +44,7 @@ async function loadMeals() {
 
     try {
 
-        const response = await fetch(API_URL_NUTRITION, {
+        const response = await window.apiFetch(API_URL_NUTRITION, {
             method: 'GET',
             cache: 'no-store',
             headers: {
@@ -149,7 +149,7 @@ async function addMeal(event) {
 
     try {
 
-        const response = await fetch(API_URL_NUTRITION_ANALYZE, {
+        const response = await window.apiFetch(API_URL_NUTRITION_ANALYZE, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`

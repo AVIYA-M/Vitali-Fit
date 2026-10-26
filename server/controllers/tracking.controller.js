@@ -4,51 +4,13 @@ import Activity from '../models/Activity.js';
 import Nutrition from '../models/Nutrition.js';
 import User from '../models/User.js';
 import WeightHistory from '../models/WeightHistory.js';
-
-
-// ========================================
-// תחילת שבוע לפי יום שקילה
-// ========================================
-function getStartOfUserWeek(date, weighInDay) {
-    const dayNumbers = {
-        sunday: 0,
-        monday: 1,
-        tuesday: 2,
-        wednesday: 3,
-        thursday: 4,
-        friday: 5,
-        saturday: 6
-    };
-
-    /*
-     * משתמשים ישנים יכולים להיות בלי
-     * weighInDay. במקרה כזה נשתמש בראשון
-     * כברירת מחדל כדי לא להפיל את השרת.
-     */
-    const targetDay =
-        dayNumbers[weighInDay] !== undefined
-            ? dayNumbers[weighInDay]
-            : 0;
-
-    const result = new Date(date);
-    result.setHours(0, 0, 0, 0);
-
-    const currentDay = result.getDay();
-    let difference = currentDay - targetDay;
-
-    if (difference < 0) {
-        difference += 7;
-    }
-
-    result.setDate(result.getDate() - difference);
-    return result;
-}
+import { getStartOfWeek } from '../utils/helpers.js';
 
 
 // ========================================
 // סימון אימון כהושלם
 // ========================================
-export const completeWorkout = async (req, res) => {
+export const completeWorkout = async (req, res, next) => {
     try {
         const userId = req.user.userId;
         const workoutId = req.params.workoutId;
@@ -100,11 +62,7 @@ export const completeWorkout = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('שגיאה בסימון אימון:', error);
-        res.status(500).json({
-            message: 'שגיאה בסימון האימון.',
-            error: error.message
-        });
+        next(error);
     }
 };
 
@@ -112,7 +70,7 @@ export const completeWorkout = async (req, res) => {
 // ========================================
 // לוח המעקב
 // ========================================
-export const getTrackingDashboard = async (req, res) => {
+export const getTrackingDashboard = async (req, res, next) => {
     try {
         const userId = req.user.userId;
 
@@ -129,10 +87,7 @@ export const getTrackingDashboard = async (req, res) => {
         // ========================================
         // שבוע
         // ========================================
-        const startOfWeek = getStartOfUserWeek(
-            now,
-            user.weighInDay
-        );
+        const startOfWeek = getStartOfWeek(now);
 
         const endOfWeek = new Date(startOfWeek);
         endOfWeek.setDate(endOfWeek.getDate() + 7);
@@ -242,7 +197,9 @@ export const getTrackingDashboard = async (req, res) => {
         }
 
         const initialWeight = Number(firstWeight.weight) || 0;
-        const currentWeight = Number(user.weight) || 0;
+        // משקל נוכחי: הערך השמור אצל המשתמש, ואם אין - השקילה האחרונה בהיסטוריה
+        const lastRecord = weightHistory.length > 0 ? weightHistory[weightHistory.length - 1] : null;
+        const currentWeight = Number(user.weight) || Number(lastRecord?.weight) || 0;
 
         const weightChange = Number(
             (currentWeight - initialWeight).toFixed(1)
@@ -293,7 +250,6 @@ export const getTrackingDashboard = async (req, res) => {
             initialWeight,
             weightChange,
             previousWeightDiff, // הפרש מהשקילה הקודמת
-            weighInDay: user.weighInDay || null,
 
             weeklyFoodCalories: foodCalories,
 
@@ -315,14 +271,6 @@ export const getTrackingDashboard = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(
-            'שגיאה בלוח המעקב:',
-            error
-        );
-
-        res.status(500).json({
-            message: 'שגיאה בשליפת נתוני המעקב.',
-            error: error.message
-        });
+        next(error);
     }
 };

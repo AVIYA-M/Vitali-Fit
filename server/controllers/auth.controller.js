@@ -1,9 +1,9 @@
 import User from '../models/User.js';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import { signToken, publicUser } from '../utils/token.js';
 
-// הרשמה (הבדיקות מתבצעות כעת בעזרת Joi ב-Middleware)
-export const registerUser = async (req, res) => {
+// הרשמה (הבדיקות מתבצעות ב-Joi ב-Middleware)
+export const registerUser = async (req, res, next) => {
   try {
     const { fullName, email, password } = req.body;
 
@@ -25,25 +25,17 @@ export const registerUser = async (req, res) => {
 
     res.status(201).json({
       message: 'המשתמש נוצר בהצלחה!',
-      user: {
-        id: newUser._id,
-        fullName: newUser.fullName,
-        email: newUser.email,
-        role: newUser.role
-      }
+      token: signToken(newUser),
+      user: publicUser(newUser)
     });
 
   } catch (error) {
-    console.error('שגיאה בהרשמה:', error);
-    res.status(500).json({
-      message: 'שגיאה ביצירת משתמש.',
-      error: error.message
-    });
+    next(error);
   }
 };
 
 // התחברות
-export const loginUser = async (req, res) => {
+export const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -57,40 +49,13 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: 'אימייל או סיסמה שגויים.' });
     }
 
-    const token = jwt.sign(
-      { userId: user._id, role: user.role },
-      process.env.JWT_SECRET || 'fallback_secret_key',
-      { expiresIn: '1d' }
-    );
-
     res.status(200).json({
       message: 'התחברת בהצלחה!',
-      token,
-      user: {
-        id: user._id,
-        fullName: user.fullName,
-        email: user.email,
-        role: user.role
-      }
+      token: signToken(user),
+      user: publicUser(user)
     });
 
   } catch (error) {
-    res.status(500).json({
-      message: 'שגיאה בהתחברות.',
-      error: error.message
-    });
-  }
-};
-
-// שליפת כל המשתמשים למנהל
-export const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find().select('-password');
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({
-      message: 'שגיאה בשליפת המשתמשים.',
-      error: error.message
-    });
+    next(error);
   }
 };

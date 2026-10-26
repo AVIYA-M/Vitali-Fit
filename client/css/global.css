@@ -731,3 +731,103 @@ background: #163524;
 .floating-scroll-icon {
     font-size: 1.125rem;
 }
+
+/* =====================================================
+   ליטוש עיצוב (קל) - אפשר למחוק את כל הבלוק הזה כדי לחזור לקודם
+   ===================================================== */
+
+:root {
+    --vf-green: #1E4630;
+    --vf-green-dark: #163524;
+    --vf-green-light: #2D6A4F;
+    --vf-mint: #E8F5F1;
+    --vf-mint-border: #A3D9C9;
+    --vf-radius: 20px;
+    --vf-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+    --vf-shadow-lift: 0 16px 36px rgba(15, 23, 42, 0.12);
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+}
+
+::selection {
+    background: var(--vf-mint-border);
+    color: #112d26;
+}
+
+/* מסגרת ברורה למי שמנווט במקלדת (נגישות) */
+:focus-visible {
+    outline: 3px solid var(--vf-mint-border);
+    outline-offset: 3px;
+}
+
+.site-header {
+    backdrop-filter: blur(10px);
+}
+
+.main-menu a {
+    transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.main-menu a:hover {
+    transform: translateY(-1px);
+}
+
+.join-button {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.join-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 24px rgba(18, 58, 43, 0.3);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--vf-green) 0%, var(--vf-green-light) 100%);
+    border-radius: 14px;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--vf-green-dark) 0%, var(--vf-green) 100%);
+    box-shadow: 0 14px 26px rgba(30, 70, 48, 0.28);
+}
+
+.soft-card {
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.modal-box,
+.custom-popup-box {
+    border-radius: 28px;
+}
+
+.modal-button,
+.custom-popup-button {
+    font-size: 0.85rem;
+    padding: 12px;
+}
+
+.modal-message,
+.custom-popup-message {
+    font-size: 0.85rem;
+}
+
+.footer-list a,
+.social-link {
+    transition: color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.footer-list a:hover {
+    transform: translateX(-3px);
+}
+
+/* מי שביקש פחות תנועה במכשיר - מכבים אנימציות */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}

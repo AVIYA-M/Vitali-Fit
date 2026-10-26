@@ -21,7 +21,7 @@ async function handleRegister(event) {
     const password = passwordInput.value;
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/api/auth/register`, {
+        const response = await window.apiFetch(`${window.API_BASE_URL}/api/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -39,18 +39,25 @@ async function handleRegister(event) {
             throw new Error(data.message || 'שגיאה ביצירת החשבון');
         }
 
+        if (!data.token || !data.user) {
+            throw new Error('ההרשמה הסתיימה אך לא התקבלו פרטי התחברות מהשרת.');
+        }
+
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+
         // הצגת הודעת הצלחה מרגיעה למשתמשת
         if (msgBox) {
             msgBox.className = 'register-message register-message-success';
-            msgBox.textContent = 'החשבון נוצר בהצלחה! מעביר אותך לדף ההתחברות...';
+            msgBox.textContent = 'החשבון נוצר בהצלחה! מעבירה אותך ללוח המעקב...';
             msgBox.classList.remove('hidden');
         } else {
-            alert('החשבון נוצר בהצלחה! מעביר אותך לדף ההתחברות...');
+            alert('החשבון נוצר בהצלחה! מעבירה אותך ללוח המעקב...');
         }
 
-        // מעבר אוטומטי לדף ההתחברות אחרי שנייה וחצי
+        // מעבר אוטומטי ללוח המעקב אחרי שנייה וחצי
         setTimeout(() => {
-            window.location.href = 'login.html';
+            window.location.href = 'tracking.html';
         }, 1500);
 
     } catch (error) {
@@ -76,7 +83,7 @@ async function handleLogin(event) {
     const password = passwordInput.value;
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/api/auth/login`, {
+        const response = await window.apiFetch(`${window.API_BASE_URL}/api/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })

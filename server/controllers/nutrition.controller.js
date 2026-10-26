@@ -1,11 +1,8 @@
 import Nutrition from '../models/Nutrition.js';
 import analyzeMealImage from '../services/nutritionAI.service.js';
 
-export const analyzeMeal = async (req, res) => {
+export const analyzeMeal = async (req, res, next) => {
   try {
-    console.log('FILE:', req.file);
-    console.log('BODY:', req.body);
-
     // בדיקה שהמשתמש שלח תמונה
     if (!req.file) {
       return res.status(400).json({
@@ -13,23 +10,15 @@ export const analyzeMeal = async (req, res) => {
       });
     }
 
-    // הנתונים שהגיעו מהטופס
+    // הנתונים שהגיעו מהטופס (נבדקו ב-Joi)
     const { mealName, date } = req.body;
 
-    if (!mealName) {
-      return res.status(400).json({
-        message: 'יש להזין שם ארוחה'
-      });
-    }
-
-    console.log('מתחילים לשלוח את התמונה ל-Gemini...');
     // ניתוח התמונה באמצעות Gemini
     const nutritionData = await analyzeMealImage(
       req.file.path,
       req.file.mimetype,
       mealName
     );
-    console.log('קיבלנו תשובה מ-Gemini:', nutritionData);
 
     // יצירת הארוחה למסד הנתונים עם הנתיב המקומי
     const newMeal = new Nutrition({
@@ -52,24 +41,17 @@ export const analyzeMeal = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('שגיאה בניתוח הארוחה:', error);
-    res.status(500).json({
-      message: 'שגיאה בניתוח הארוחה',
-      error: error.message
-    });
+    next(error);
   }
 };
 
 // הצגת היסטוריית הארוחות של המשתמש המחובר
-export const getUserMeals = async (req, res) => {
+export const getUserMeals = async (req, res, next) => {
   try {
     const userId = req.user.userId;
     const meals = await Nutrition.find({ userId });
     res.status(200).json(meals);
   } catch (error) {
-    res.status(500).json({
-      message: 'שגיאה בשליפת הארוחות',
-      error: error.message
-    });
+    next(error);
   }
 };

@@ -22,7 +22,7 @@ async function apiRequest(url, options = {}) {
     if (token) headers.Authorization = `Bearer ${token}`;
     if (options.body && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
 
-    const response = await fetch(url, { ...options, headers });
+    const response = await window.apiFetch(url, { ...options, headers });
     let data = null;
     
     try { data = await response.json(); } 

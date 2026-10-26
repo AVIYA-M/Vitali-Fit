@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // שליפת המלצות מאושרות מהשרת ושילובן עם ההמלצות לדוגמה
 async function loadReviews() {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/api/reviews/approved`);
+        const response = await window.apiFetch(`${window.API_BASE_URL}/api/reviews/approved`);
 
         let serverReviews = [];
 
@@ -32,6 +32,7 @@ async function loadReviews() {
         displayReviews(allReviews);
 
     } catch (error) {
+        console.error('שגיאה בטעינת ההמלצות:', error);
         displayReviews(dummyReviews);
     }
 }
@@ -140,7 +141,7 @@ function displayReviews(reviews) {
             const name = nameInput.value;
 
             try {
-                const response = await fetch(`${window.API_BASE_URL}/api/reviews`, {
+                const response = await window.apiFetch(`${window.API_BASE_URL}/api/reviews`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -169,7 +170,7 @@ function displayReviews(reviews) {
                     alert(`שגיאה: ${data.message || 'שליחת ההמלצה נכשלה.'}`);
                 }
             } catch (error) {
-                alert('שגיאת תקשורת מול השרת.');
+                alert(error.message);
             }
         });
     }

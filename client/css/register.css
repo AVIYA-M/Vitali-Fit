@@ -216,3 +216,53 @@
         font-size: 1.35rem;
     }
 }
+
+/* =====================================================
+   ליטוש עיצוב (קל) - אפשר למחוק את כל הבלוק הזה כדי לחזור לקודם
+   ===================================================== */
+
+.register-card {
+    border-top: 5px solid #1E4630;
+    border-radius: 28px;
+}
+
+.register-heading h1 {
+    font-size: 1.65rem;
+    letter-spacing: -0.01em;
+}
+
+.register-heading p {
+    font-size: 0.85rem;
+}
+
+.register-form-group label {
+    font-size: 0.85rem;
+}
+
+.register-form-group input {
+    font-size: 0.9rem;
+    padding: 13px 16px;
+}
+
+.register-form-group input:focus {
+    box-shadow: 0 0 0 3px rgba(30, 70, 48, 0.14);
+    background-color: #ffffff;
+}
+
+.register-tab {
+    font-size: 0.85rem;
+}
+
+.register-submit-button {
+    background: linear-gradient(135deg, #1E4630 0%, #2D6A4F 100%);
+    font-size: 0.9rem;
+}
+
+.register-submit-button:hover {
+    background: linear-gradient(135deg, #163524 0%, #1E4630 100%);
+    box-shadow: 0 10px 20px rgba(30, 70, 48, 0.22);
+}
+
+.register-message {
+    font-size: 0.85rem;
+}

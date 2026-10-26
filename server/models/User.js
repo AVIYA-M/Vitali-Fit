@@ -25,10 +25,23 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['user', 'admin'],
         default: 'user'
+    },
+
+    // משקל נוכחי (ק"ג) - לא מוזן בהרשמה, מתעדכן בלוח המעקב דרך /api/weight
+    // בלי השדה הזה mongoose זורק את הערך בשקט ולא שומר אותו
+    weight: {
+        type: Number,
+        default: null
     }
 
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: {
+        transform: (doc, ret) => {
+            delete ret.password;
+            return ret;
+        }
+    }
 });
 
 // הצפנת הסיסמה לפני שמירת משתמש במסד הנתונים

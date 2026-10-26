@@ -465,5 +465,56 @@
     overflow-wrap: anywhere;
 }
 
+/* =====================================================
+   ליטוש עיצוב (קל) - אפשר למחוק את כל הבלוק הזה כדי לחזור לקודם
+   ===================================================== */
 
+.admin-page .soft-card {
+    border-radius: 20px;
+}
 
+.admin-heading {
+    border-top: 4px solid #1E4630;
+}
+
+.admin-button-primary {
+    background: linear-gradient(135deg, #1E4630 0%, #2D6A4F 100%);
+}
+
+.admin-button-primary:hover {
+    background: linear-gradient(135deg, #163524 0%, #1E4630 100%);
+    box-shadow: 0 10px 20px rgba(30, 70, 48, 0.22);
+}
+
+.admin-table thead {
+    background-color: #E8F5F1;
+    color: #1E4630;
+}
+
+.admin-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #F3FAF7;
+}
+
+.admin-action-button {
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.admin-action-button:hover {
+    transform: translateY(-1px);
+}
+
+.admin-form-group input:focus,
+.admin-form-group select:focus {
+    box-shadow: 0 0 0 3px rgba(30, 70, 48, 0.14);
+}
+
+.admin-button:focus-visible,
+.admin-action-button:focus-visible,
+.admin-modal-close:focus-visible {
+    outline: 3px solid #A3D9C9;
+    outline-offset: 2px;
+}

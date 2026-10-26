@@ -20,7 +20,7 @@ async function fetchUsersList() {
     if (!tableBody) return;
 
     try {
-        const response = await fetch(`${API_URL_ADMIN}/users`, {
+        const response = await window.apiFetch(`${API_URL_ADMIN}/users`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -120,7 +120,7 @@ async function deleteUser(userId) {
     const token = localStorage.getItem('token');
 
     try {
-        const res = await fetch(`${API_URL_ADMIN}/users/${userId}`, {
+        const res = await window.apiFetch(`${API_URL_ADMIN}/users/${userId}`, {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -145,7 +145,7 @@ async function updateUserRole(userId, newRole) {
     const token = localStorage.getItem('token');
 
     try {
-        const res = await fetch(`${API_URL_ADMIN}/users/${userId}/role`, {
+        const res = await window.apiFetch(`${API_URL_ADMIN}/users/${userId}/role`, {
             method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -177,7 +177,7 @@ async function fetchAdminWorkouts() {
     if (!tableBody) return;
 
     try {
-        const response = await fetch(API_URL_WORKOUTS);
+        const response = await window.apiFetch(API_URL_WORKOUTS);
 
         if (!response.ok) {
             throw new Error('שגיאה בשליפת האימונים');
@@ -309,7 +309,7 @@ async function handleCreateWorkout(event) {
     };
 
     try {
-        const response = await fetch(API_URL_WORKOUTS, {
+        const response = await window.apiFetch(API_URL_WORKOUTS, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -373,7 +373,7 @@ async function handleUpdateWorkout(event) {
     };
 
     try {
-        const response = await fetch(`${API_URL_WORKOUTS}/${workoutId}`, {
+        const response = await window.apiFetch(`${API_URL_WORKOUTS}/${workoutId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -406,7 +406,7 @@ async function deleteWorkout(workoutId) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`${API_URL_WORKOUTS}/${workoutId}`, {
+        const response = await window.apiFetch(`${API_URL_WORKOUTS}/${workoutId}`, {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -437,7 +437,7 @@ async function fetchAdminReviews() {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`${API_URL_REVIEWS}/admin/all`, {
+        const response = await window.apiFetch(`${API_URL_REVIEWS}/admin/all`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -567,7 +567,7 @@ window.updateReviewStatus = async function(id, status) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`${API_URL_REVIEWS}/admin/${id}/status`, {
+        const response = await window.apiFetch(`${API_URL_REVIEWS}/admin/${id}/status`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -584,7 +584,7 @@ window.updateReviewStatus = async function(id, status) {
         }
 
     } catch (error) {
-        alert('שגיאת תקשורת מול השרת.');
+        alert(error.message);
     }
 };
 
@@ -599,7 +599,7 @@ async function fetchContactMessages() {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`${API_URL_CONTACT}/admin/all`, {
+        const response = await window.apiFetch(`${API_URL_CONTACT}/admin/all`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -691,5 +691,4 @@ async function fetchContactMessages() {
         console.error('שגיאה בטעינת הפניות:', error);
     }
 }
-
 

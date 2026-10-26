@@ -72,29 +72,3 @@ export const loginSchema = Joi.object({
         })
 
 });
-
-// Middleware כללי להפעלת הוולידציה
-export const validate = (schema) => {
-    return (req, res, next) => {
-
-        const { error, value } = schema.validate(req.body, {
-            abortEarly: false,
-            convert: true
-        });
-
-        if (error) {
-            const errorMessage = error.details
-                .map(detail => detail.message)
-                .join(', ');
-
-            return res.status(400).json({
-                message: errorMessage
-            });
-        }
-
-        // שמירת הנתונים לאחר התאמות כמו הסרת רווחים
-        req.body = value;
-
-        next();
-    };
-};

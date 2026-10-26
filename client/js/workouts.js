@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // שליפת האימונים מהשרת
     async function fetchWorkouts() {
         try {
-            const response = await fetch(API_URL_WORKOUTS);
+            const response = await window.apiFetch(API_URL_WORKOUTS);
 
             if (!response.ok) {
                 throw new Error('שגיאה בשליפת הנתונים');
@@ -435,7 +435,7 @@ function renderSelectedDaySessions() {
 
         try {
 
-            const response = await fetch(
+            const response = await window.apiFetch(
                 `${API_URL_WORKOUTS}/${workoutId}/register`,
                 {
                     method: 'POST',
@@ -481,7 +481,7 @@ function renderSelectedDaySessions() {
 
         try {
 
-            const response = await fetch(
+            const response = await window.apiFetch(
                 `${API_URL_TRACKING}/${workoutId}/complete`,
                 {
                     method: 'POST',

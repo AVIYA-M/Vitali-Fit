@@ -1,9 +1,18 @@
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+// נתיב מוחלט לתיקיית ההעלאות (server/uploads), בלי תלות בתיקייה שממנה הרצנו את השרת
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+export const UPLOADS_DIR = path.join(__dirname, '..', 'uploads');
+
+// התיקייה לא נשמרת ב-Git (.gitignore), לכן יוצרים אותה אם היא חסרה - אחרת ב-Render ההעלאה תיכשל
+fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    cb(null, UPLOADS_DIR);
   },
 
   filename: (req, file, cb) => {
@@ -12,13 +21,30 @@ const storage = multer.diskStorage({
 
     cb(
       null,
-      uniqueSuffix + path.extname(file.originalname)
+      uniqueSuffix + path.extname(file.originalname).toLowerCase()
     );
   }
 });
 
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+
+// מאפשרים רק תמונות
+const fileFilter = (req, file, cb) => {
+  if (ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+    return cb(null, true);
+  }
+
+  const error = new Error('ניתן להעלות רק תמונות מסוג JPG, PNG או WEBP.');
+  error.statusCode = 400;
+  cb(error);
+};
+
 const upload = multer({
-  storage: storage
+  storage,
+  fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB
+  }
 });
 
 export default upload;
