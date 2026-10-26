@@ -1,5 +1,12 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import { USER_ROLES } from "../constants/index.js";
+import Activity from "./Activity.js";
+import Nutrition from "./Nutrition.js";
+import Review from "./Review.js";
+import Tracking from "./Tracking.js";
+import WeightHistory from "./WeightHistory.js";
+import Workout from "./Workout.js";
 
 const userSchema = new mongoose.Schema({
     fullName: {
@@ -23,12 +30,11 @@ const userSchema = new mongoose.Schema({
 
     role: {
         type: String,
-        enum: ['user', 'admin'],
+        enum: USER_ROLES,
         default: 'user'
     },
 
-    // משקל נוכחי (ק"ג) - לא מוזן בהרשמה, מתעדכן בלוח המעקב דרך /api/weight
-    // בלי השדה הזה mongoose זורק את הערך בשקט ולא שומר אותו
+    
     weight: {
         type: Number,
         default: null
@@ -44,14 +50,31 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-// הצפנת הסיסמה לפני שמירת משתמש במסד הנתונים
 userSchema.pre('save', async function () {
-    // אם הסיסמה לא השתנתה, אין צורך להצפין אותה שוב
     if (!this.isModified('password')) {
         return;
     }
 
     this.password = await bcrypt.hash(this.password, 10);
+});
+
+userSchema.post('findOneAndDelete', async function (deletedUser) {
+    if (!deletedUser) {
+        return;
+    }
+
+    const userId = deletedUser._id;
+    await Promise.all([
+        Activity.deleteMany({ userId }),
+        Nutrition.deleteMany({ userId }),
+        Review.deleteMany({ userId }),
+        Tracking.deleteMany({ userId }),
+        WeightHistory.deleteMany({ userId }),
+        Workout.updateMany(
+            { registeredUsers: userId },
+            { $pull: { registeredUsers: userId } }
+        )
+    ]);
 });
 
 export default mongoose.model('User', userSchema);

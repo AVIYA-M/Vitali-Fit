@@ -1,43 +1,32 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const reviewsContainer = document.getElementById('reviews-container');
-    const reviewFormSection = document.getElementById('review-form-section');
-    const reviewForm = document.getElementById('review-form');
-    const nameInput = document.getElementById('review-name');
-    const anonymousCheckbox = document.getElementById('anonymous-checkbox');
-    const successMsg = document.getElementById('review-success-msg');
-    
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const wrapper = document.getElementById('carousel-wrapper');
-    let currentIndex = 0;
+import { listApprovedReviews, submitReview } from '../services/reviews.js';
+import { getToken, getUser } from '../shared/session.js';
+import { showMessage } from '../shared/ui/modal.js';
 
-    // המלצות לדוגמה כדי שהגלגלת תופיע מיד ותציג תוכן חי ועשיר
-    const dummyReviews = [
+const reviewsContainer = document.getElementById('reviews-container');
+const reviewFormSection = document.getElementById('review-form-section');
+const reviewForm = document.getElementById('review-form');
+const nameInput = document.getElementById('review-name');
+const anonymousCheckbox = document.getElementById('anonymous-checkbox');
+const successMsg = document.getElementById('review-success-msg');
+const prevButton = document.getElementById('prev-btn');
+const nextButton = document.getElementById('next-btn');
+const carouselWrapper = document.getElementById('carousel-wrapper');
+let currentIndex = 0;
 
-    ];
+if (reviewsContainer) {
+    loadReviews();
+    initializeReviewForm();
+}
 
-    // שליפת המלצות מאושרות מהשרת ושילובן עם ההמלצות לדוגמה
 async function loadReviews() {
     try {
-        const response = await window.apiFetch(`${window.API_BASE_URL}/api/reviews/approved`);
-
-        let serverReviews = [];
-
-        if (response.ok) {
-            serverReviews = await response.json();
-        }
-
-        const allReviews = [...serverReviews, ...dummyReviews];
-
-        displayReviews(allReviews);
-
+        displayReviews(await listApprovedReviews());
     } catch (error) {
         console.error('שגיאה בטעינת ההמלצות:', error);
-        displayReviews(dummyReviews);
+        displayReviews([]);
     }
 }
 
-// הצגת הביקורות בצורה בטוחה
 function displayReviews(reviews) {
     reviewsContainer.replaceChildren();
 
@@ -45,8 +34,8 @@ function displayReviews(reviews) {
         const card = document.createElement('div');
         card.className = 'review-item-card';
 
-        const reviewText = document.createElement('p');
-        reviewText.textContent = `"${review.text ?? ''}"`;
+        const text = document.createElement('p');
+        text.textContent = `"${review.text ?? ''}"`;
 
         const footer = document.createElement('div');
         footer.className = 'review-item-footer';
@@ -60,118 +49,82 @@ function displayReviews(reviews) {
         name.textContent = review.name ?? '';
 
         footer.append(avatar, name);
-        card.append(reviewText, footer);
-        reviewsContainer.appendChild(card);
+        card.append(text, footer);
+        reviewsContainer.append(card);
     });
 
     setupCarousel();
 }
 
-    // מנגנון ניווט דינמי בגלגלת (מתאים את עצמו בדיוק לרוחב 3 כרטיסיות)
-    function setupCarousel() {
-        const cards = reviewsContainer.children;
-        if (cards.length === 0) return;
+function setupCarousel() {
+    const firstCard = reviewsContainer.firstElementChild;
+    if (!firstCard || !carouselWrapper) return;
 
-        function updateCarousel() {
-            // חישוב דינמי של רוחב הכרטיס כולל המרווח (Gap)
-            const cardWidth = cards[0].offsetWidth + 20; 
-            const maxVisible = Math.floor(wrapper.offsetWidth / cardWidth);
-            const maxIndex = cards.length - Math.max(1, maxVisible);
+    const updateCarousel = () => {
+        const cardWidth = firstCard.offsetWidth + 20;
+        const maxVisible = Math.floor(carouselWrapper.offsetWidth / cardWidth);
+        const maxIndex = Math.max(0, reviewsContainer.children.length - Math.max(1, maxVisible));
+        currentIndex = Math.min(Math.max(currentIndex, 0), maxIndex);
+        reviewsContainer.style.transform = `translateX(${currentIndex * cardWidth}px)`;
+    };
 
-            if (currentIndex < 0) currentIndex = 0;
-            if (currentIndex > maxIndex) currentIndex = maxIndex > 0 ? maxIndex : 0;
+    nextButton?.addEventListener('click', () => {
+        currentIndex = Math.max(0, currentIndex - 1);
+        updateCarousel();
+    });
+    prevButton?.addEventListener('click', () => {
+        currentIndex += 1;
+        updateCarousel();
+    });
+    addEventListener('resize', updateCarousel);
+    updateCarousel();
+}
 
-            reviewsContainer.style.transform = `translateX(${currentIndex * cardWidth}px)`;
-        }
-
-        if(nextBtn) {
-            nextBtn.onclick = () => {
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    updateCarousel();
-                }
-            };
-        }
-        if(prevBtn) {
-            prevBtn.onclick = () => {
-                const cardWidth = cards[0].offsetWidth + 20;
-                const maxVisible = Math.floor(wrapper.offsetWidth / cardWidth);
-                const maxIndex = cards.length - Math.max(1, maxVisible);
-                if (currentIndex < maxIndex) {
-                    currentIndex++;
-                    updateCarousel();
-                }
-            };
-        }
-    }
-
-    loadReviews();
-
-    // ניהול תצוגת הטופס (רק למשתמשים מחוברים שיש להם טוקן)
-    const token = localStorage.getItem('token');
-    if (token && reviewFormSection) {
+function initializeReviewForm() {
+    if (getToken() && reviewFormSection) {
         reviewFormSection.style.display = 'block';
-        let storedName = localStorage.getItem('userName') || localStorage.getItem('name') || '';
-        if (nameInput) nameInput.value = storedName;
+        if (nameInput) nameInput.value = getUser()?.fullName || localStorage.getItem('userName') || '';
     }
 
-    // טיפול בסימון "אנונימי"
     if (anonymousCheckbox && nameInput) {
         let originalName = nameInput.value;
-        anonymousCheckbox.addEventListener('change', (e) => {
-            if (e.target.checked) {
+        anonymousCheckbox.addEventListener('change', () => {
+            if (anonymousCheckbox.checked) {
                 originalName = nameInput.value;
                 nameInput.value = '';
                 nameInput.disabled = true;
                 nameInput.placeholder = 'יוצג כמשתמש/ת אנונימי/ת';
             } else {
                 nameInput.disabled = false;
-                nameInput.value = originalName || localStorage.getItem('userName') || '';
+                nameInput.value = originalName || getUser()?.fullName || '';
                 nameInput.placeholder = 'איך תרצי להופיע באתר?';
             }
         });
     }
 
-    // שליחת הטופס לשרת
-    if (reviewForm) {
-        reviewForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const text = document.getElementById('review-text').value;
-            const isAnonymous = anonymousCheckbox.checked;
-            const name = nameInput.value;
+    reviewForm?.addEventListener('submit', async event => {
+        event.preventDefault();
+        try {
+            await submitReview({
+                text: document.getElementById('review-text').value,
+                name: nameInput?.value || '',
+                isAnonymous: Boolean(anonymousCheckbox?.checked)
+            });
 
-            try {
-                const response = await window.apiFetch(`${window.API_BASE_URL}/api/reviews`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ text, name, isAnonymous })
-                });
-
-                if (response.ok) {
-                    reviewForm.style.display = 'none';
-                    successMsg.style.display = 'block';
-
-                    // חזרה לטופס נקי לאחר 3.5 שניות
-                    setTimeout(() => {
-                        successMsg.style.display = 'none';
-                        reviewForm.reset();
-                        if (anonymousCheckbox) anonymousCheckbox.checked = false;
-                        if (nameInput) {
-                            nameInput.disabled = false;
-                            nameInput.value = localStorage.getItem('userName') || '';
-                        }
-                        reviewForm.style.display = 'flex';
-                    }, 3500);
-                } else {
-                    const data = await response.json();
-                    alert(`שגיאה: ${data.message || 'שליחת ההמלצה נכשלה.'}`);
+            reviewForm.style.display = 'none';
+            if (successMsg) successMsg.style.display = 'block';
+            setTimeout(() => {
+                if (successMsg) successMsg.style.display = 'none';
+                reviewForm.reset();
+                if (anonymousCheckbox) anonymousCheckbox.checked = false;
+                if (nameInput) {
+                    nameInput.disabled = false;
+                    nameInput.value = getUser()?.fullName || '';
                 }
-            } catch (error) {
-                alert(error.message);
-            }
-        });
-    }
-});
+                reviewForm.style.display = 'flex';
+            }, 3500);
+        } catch (error) {
+            showMessage(error.message);
+        }
+    });
+}

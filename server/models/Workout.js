@@ -1,4 +1,11 @@
 import mongoose from "mongoose";
+import {
+    MIN_CALORIES,
+    MIN_WORKOUT_DURATION_MINUTES,
+    MIN_WORKOUT_PARTICIPANTS,
+    WORKOUT_CATEGORIES,
+    WORKOUT_TYPES
+} from "../constants/index.js";
 
 const workoutSchema = new mongoose.Schema({
 
@@ -34,7 +41,7 @@ const workoutSchema = new mongoose.Schema({
     maxParticipants: {
         type: Number,
         required: true,
-        min: [1, 'מספר המשתתפים חייב להיות לפחות 1'],
+        min: [MIN_WORKOUT_PARTICIPANTS, 'מספר המשתתפים חייב להיות לפחות 1'],
         validate: {
             validator: Number.isInteger,
             message: 'מספר המשתתפים חייב להיות מספר שלם'
@@ -44,7 +51,7 @@ const workoutSchema = new mongoose.Schema({
     durationMinutes: {
         type: Number,
         required: true,
-        min: [1, 'משך האימון חייב להיות לפחות דקה'],
+        min: [MIN_WORKOUT_DURATION_MINUTES, 'משך האימון חייב להיות לפחות דקה'],
         validate: {
             validator: Number.isInteger,
             message: 'משך האימון חייב להיות מספר שלם'
@@ -54,19 +61,21 @@ const workoutSchema = new mongoose.Schema({
     estimatedCalories: {
         type: Number,
         required: true,
-        min: [0, 'מספר הקלוריות לא יכול להיות שלילי']
+        min: [MIN_CALORIES, 'מספר הקלוריות לא יכול להיות שלילי']
     },
 
     type: {
         type: String,
         default: 'studio',
-        trim: true
+        trim: true,
+        enum: WORKOUT_TYPES
     },
 
     category: {
         type: String,
         default: 'general',
-        trim: true
+        trim: true,
+        enum: WORKOUT_CATEGORIES
     },
 
     registeredUsers: [

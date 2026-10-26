@@ -1,10 +1,8 @@
-const API_URL_CONTACT = `${window.API_BASE_URL}/api/contact`;
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('contact-form');
+import { submitContact } from '../services/contact.js';
 
-    if (!form) {
-        return;
-    }
+const form = document.getElementById('contact-form');
+
+if (form) {
 
     const status = document.getElementById('contact-form-status');
     const submitButton = document.getElementById('contact-submit-button');
@@ -35,23 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitButton.textContent = 'שולחת...';
 
         try {
-            const response = await window.apiFetch(API_URL_CONTACT, {
-                method: 'POST',
-
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-
-                body: JSON.stringify(payload)
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(
-                    data.message || 'שליחת הפנייה נכשלה.'
-                );
-            }
+            const data = await submitContact(payload);
 
             // הודעת הצלחה רק לאחר שהשרת אישר את השמירה
             showStatus(
@@ -93,4 +75,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-});
+}

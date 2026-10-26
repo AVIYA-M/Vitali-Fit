@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { MIN_WEIGHT } from "../constants/index.js";
 const weightHistorySchema = new mongoose.Schema({
 
   userId: {
@@ -10,7 +11,7 @@ const weightHistorySchema = new mongoose.Schema({
   weight: {
     type: Number,
     required: true,
-    min: 1
+    min: MIN_WEIGHT
   },
 
   date: {

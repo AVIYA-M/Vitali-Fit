@@ -1,4 +1,8 @@
 import mongoose from "mongoose";
+import {
+    MIN_ACTIVITY_DURATION_MINUTES,
+    MIN_CALORIES
+} from "../constants/index.js";
 
 const trackingSchema = new mongoose.Schema({
 
@@ -22,13 +26,13 @@ const trackingSchema = new mongoose.Schema({
     durationMinutes: {
         type: Number,
         required: true,
-        min: [1, 'משך הפעילות חייב להיות לפחות דקה']
+        min: [MIN_ACTIVITY_DURATION_MINUTES, 'משך הפעילות חייב להיות לפחות דקה']
     },
 
     caloriesBurned: {
         type: Number,
         required: true,
-        min: [0, 'מספר הקלוריות לא יכול להיות שלילי']
+        min: [MIN_CALORIES, 'מספר הקלוריות לא יכול להיות שלילי']
     }
 
 }, {

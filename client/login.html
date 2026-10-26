@@ -79,7 +79,7 @@
             <!-- אזור להצגת הודעות שגיאה או הצלחה -->
             <div id="login-message" class="hidden login-message"></div>
 
-            <form onsubmit="handleLogin(event)" class="login-form">
+            <form id="login-form" class="login-form">
 
                 <div class="login-form-group">
                     <label for="email">כתובת אימייל</label>
@@ -165,9 +165,8 @@
 
     </footer>
 
-    <script src="js/api-config.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/auth.js"></script>
+    <script type="module" src="js/script.js"></script>
+    <script type="module" src="js/auth.js"></script>
 
 </body>
 

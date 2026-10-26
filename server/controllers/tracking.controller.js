@@ -5,22 +5,18 @@ import Nutrition from '../models/Nutrition.js';
 import User from '../models/User.js';
 import WeightHistory from '../models/WeightHistory.js';
 import { getStartOfWeek } from '../utils/helpers.js';
+import AppError from '../utils/AppError.js';
 
 
-// ========================================
-// סימון אימון כהושלם
-// ========================================
+
 export const completeWorkout = async (req, res, next) => {
-    try {
         const userId = req.user.userId;
         const workoutId = req.params.workoutId;
 
         const workout = await Workout.findById(workoutId);
 
         if (!workout) {
-            return res.status(404).json({
-                message: 'האימון לא נמצא.'
-            });
+            return next(new AppError('האימון לא נמצא.', 404));
         }
 
         const isRegistered =
@@ -30,9 +26,7 @@ export const completeWorkout = async (req, res, next) => {
             );
 
         if (!isRegistered) {
-            return res.status(403).json({
-                message: 'אפשר לסמן כהושלם רק אימון שנרשמת אליו.'
-            });
+            return next(new AppError('אפשר לסמן כהושלם רק אימון שנרשמת אליו.', 403));
         }
 
         const existingTracking = await Tracking.findOne({
@@ -41,9 +35,7 @@ export const completeWorkout = async (req, res, next) => {
         });
 
         if (existingTracking) {
-            return res.status(400).json({
-                message: 'האימון כבר סומן כהושלם.'
-            });
+            return next(new AppError('האימון כבר סומן כהושלם.', 400));
         }
 
         const tracking = new Tracking({
@@ -61,41 +53,26 @@ export const completeWorkout = async (req, res, next) => {
             tracking: savedTracking
         });
 
-    } catch (error) {
-        next(error);
-    }
 };
 
 
-// ========================================
-// לוח המעקב
-// ========================================
 export const getTrackingDashboard = async (req, res, next) => {
-    try {
         const userId = req.user.userId;
 
         const user = await User.findById(userId);
 
         if (!user) {
-            return res.status(404).json({
-                message: 'המשתמש לא נמצא.'
-            });
+            return next(new AppError('המשתמש לא נמצא.', 404));
         }
 
         const now = new Date();
 
-        // ========================================
-        // שבוע
-        // ========================================
         const startOfWeek = getStartOfWeek(now);
 
         const endOfWeek = new Date(startOfWeek);
         endOfWeek.setDate(endOfWeek.getDate() + 7);
 
 
-        // ========================================
-        // אימונים
-        // ========================================
         const weeklyWorkouts = await Tracking.find({
             userId,
             completedAt: {
@@ -118,10 +95,6 @@ export const getTrackingDashboard = async (req, res, next) => {
             0
         );
 
-
-        // ========================================
-        // פעילות נוספת
-        // ========================================
         const weeklyActivities = await Activity.find({
             userId,
             date: {
@@ -147,9 +120,7 @@ export const getTrackingDashboard = async (req, res, next) => {
         );
 
 
-        // ========================================
-        // אוכל
-        // ========================================
+ 
         const weeklyMeals = await Nutrition.find({
             userId,
             date: {
@@ -166,9 +137,6 @@ export const getTrackingDashboard = async (req, res, next) => {
         );
 
 
-        // ========================================
-        // סיכום קלורי
-        // ========================================
         const totalBurnedCalories =
             workoutCalories +
             activityCalories;
@@ -178,9 +146,6 @@ export const getTrackingDashboard = async (req, res, next) => {
             foodCalories;
 
 
-        // ========================================
-        // משקל התחלתי והפרשים
-        // ========================================
         const weightHistory = await WeightHistory.find({
             userId
         }).sort({
@@ -197,7 +162,6 @@ export const getTrackingDashboard = async (req, res, next) => {
         }
 
         const initialWeight = Number(firstWeight.weight) || 0;
-        // משקל נוכחי: הערך השמור אצל המשתמש, ואם אין - השקילה האחרונה בהיסטוריה
         const lastRecord = weightHistory.length > 0 ? weightHistory[weightHistory.length - 1] : null;
         const currentWeight = Number(user.weight) || Number(lastRecord?.weight) || 0;
 
@@ -205,7 +169,6 @@ export const getTrackingDashboard = async (req, res, next) => {
             (currentWeight - initialWeight).toFixed(1)
         );
 
-        // חישוב הפרש מהשקילה הקודמת (דרישה 1)
         let previousWeightDiff = 0;
         if (weightHistory.length >= 2) {
             const prevW = Number(weightHistory[weightHistory.length - 2].weight);
@@ -213,10 +176,6 @@ export const getTrackingDashboard = async (req, res, next) => {
             previousWeightDiff = Number((currentW - prevW).toFixed(1));
         }
 
-
-        // ========================================
-        // היסטוריית פעילויות - 4 בלבד
-        // ========================================
         const activityHistory = await Activity.find({
             userId
         })
@@ -226,9 +185,7 @@ export const getTrackingDashboard = async (req, res, next) => {
         .limit(4);
 
 
-        // ========================================
-        // היסטוריית אימונים
-        // ========================================
+ 
         const history = await Tracking.find({
             userId
         })
@@ -241,15 +198,11 @@ export const getTrackingDashboard = async (req, res, next) => {
         })
         .limit(10);
 
-
-        // ========================================
-        // תשובה
-        // ========================================
         res.status(200).json({
             weight: currentWeight,
             initialWeight,
             weightChange,
-            previousWeightDiff, // הפרש מהשקילה הקודמת
+            previousWeightDiff, 
 
             weeklyFoodCalories: foodCalories,
 
@@ -270,7 +223,4 @@ export const getTrackingDashboard = async (req, res, next) => {
             activityHistory
         });
 
-    } catch (error) {
-        next(error);
-    }
 };

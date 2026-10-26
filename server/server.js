@@ -6,6 +6,7 @@ import cors from 'cors';
 import { createDayBlocker } from './middlewares/custom.middleware.js';
 import { UPLOADS_DIR } from './middlewares/upload.middleware.js';
 import errorHandler from './middlewares/error.middleware.js';
+import AppError from './utils/AppError.js';
 
 import authRoutes from './routes/authRoutes.js';
 import workoutRoutes from './routes/workoutRoutes.js';
@@ -23,7 +24,7 @@ const PORT = process.env.PORT || 5000;
 // ========================================
 // בדיקת משתני סביבה חובה לפני שמתחילים
 // ========================================
-for (const name of ['MONGO_URI', 'JWT_SECRET']) {
+for (const name of ['MONGO_URI', 'JWT_SECRET', 'CLIENT_URL']) {
     if (!process.env[name]) {
         console.error(`❌ חסר ${name} בקובץ .env`);
         process.exit(1);
@@ -33,7 +34,28 @@ for (const name of ['MONGO_URI', 'JWT_SECRET']) {
 // ========================================
 // Middlewares
 // ========================================
-app.use(cors());
+const allowedOrigins = (process.env.CLIENT_URL || '')
+    .split(',')
+    .map(origin => origin.trim())
+    .filter(Boolean);
+
+app.use(cors({
+    origin(origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+
+        return callback(new AppError('מקור הבקשה אינו מורשה.', 403));
+    }
+}));
+
+// בדיקת שרת נשארת זמינה גם בזמן חסימת שבת
+app.get('/api/status', (req, res) => {
+    res.status(200).json({
+        message: 'VitaliFit Server is up and running!'
+    });
+});
+
 app.use(createDayBlocker([6]));
 
 // כדי שהשרת יבין נתונים שנשלחים אליו (כמו קלוריות ומשקל)
@@ -58,18 +80,9 @@ app.use('/api/weight', weightRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/contact', contactRoutes);
 
-// ========================================
-// בדיקת שרת
-// ========================================
-app.get('/api/status', (req, res) => {
-    res.status(200).json({
-        message: 'VitaliFit Server is up and running!'
-    });
-});
-
 // נתיב API שלא קיים - תשובת JSON במקום דף HTML
-app.use('/api', (req, res) => {
-    res.status(404).json({ message: 'הנתיב המבוקש לא נמצא.' });
+app.use('/api', (req, res, next) => {
+    next(new AppError('הנתיב המבוקש לא נמצא.', 404));
 });
 
 // ========================================

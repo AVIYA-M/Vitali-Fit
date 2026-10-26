@@ -3,11 +3,9 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 
-// נתיב מוחלט לתיקיית ההעלאות (server/uploads), בלי תלות בתיקייה שממנה הרצנו את השרת
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const UPLOADS_DIR = path.join(__dirname, '..', 'uploads');
 
-// התיקייה לא נשמרת ב-Git (.gitignore), לכן יוצרים אותה אם היא חסרה - אחרת ב-Render ההעלאה תיכשל
 fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
 const storage = multer.diskStorage({
@@ -28,7 +26,6 @@ const storage = multer.diskStorage({
 
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
-// מאפשרים רק תמונות
 const fileFilter = (req, file, cb) => {
   if (ALLOWED_MIME_TYPES.includes(file.mimetype)) {
     return cb(null, true);

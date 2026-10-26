@@ -1,694 +1,297 @@
+import {
+    deleteUser as removeUser,
+    listUsers,
+    updateUserRole as changeUserRole
+} from '../services/admin.js';
+import {
+    createWorkout,
+    deleteWorkout as removeWorkout,
+    listWorkouts,
+    updateWorkout
+} from '../services/workouts.js';
+import { listAdminReviews, updateReviewStatus } from '../services/reviews.js';
+import { listContactMessages } from '../services/contact.js';
+import { requireAuth } from '../shared/session.js';
+import { closeModal, confirmMessage, openModal, showMessage } from '../shared/ui/modal.js';
 
-const API_URL_ADMIN = `${window.API_BASE_URL}/api/admin`;
-const API_URL_WORKOUTS = `${window.API_BASE_URL}/api/workouts`;
-const API_URL_REVIEWS = `${window.API_BASE_URL}/api/reviews`;
-const API_URL_CONTACT = `${window.API_BASE_URL}/api/contact`;
+if (requireAuth('admin')) {
+    initializeAdmin();
+}
 
-document.addEventListener("DOMContentLoaded", () => {
-    fetchUsersList();
-    fetchAdminWorkouts();
-    fetchAdminReviews();
-    fetchContactMessages();
-});
-// ==========================================
-// ניהול משתמשים במערכת
-// ==========================================
-async function fetchUsersList() {
-    const token = localStorage.getItem('token');
-    const tableBody = document.getElementById('users-table-body');
+function initializeAdmin() {
+    document.getElementById('add-workout-button')?.addEventListener('click', () =>
+        openModal(document.getElementById('add-workout-modal'))
+    );
+    document.querySelectorAll('[data-modal-close]').forEach(button => {
+        button.addEventListener('click', () => closeModal(
+            document.getElementById(button.dataset.modalClose)
+        ));
+    });
+    document.getElementById('create-workout-form')?.addEventListener('submit', handleCreateWorkout);
+    document.getElementById('edit-workout-form')?.addEventListener('submit', handleUpdateWorkout);
+    loadAdminData();
+}
 
-    if (!tableBody) return;
+async function loadAdminData() {
+    await Promise.all([
+        loadUsers(),
+        loadWorkouts(),
+        loadReviews(),
+        loadContactMessages()
+    ]);
+}
 
+async function loadUsers() {
+    const body = document.getElementById('users-table-body');
+    if (!body) return;
     try {
-        const response = await window.apiFetch(`${API_URL_ADMIN}/users`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('שגיאה בשליפת המשתמשים');
-        }
-
-        const users = await response.json();
-
-        // יצירת שורות הטבלה בצורה בטוחה
+        const users = await listUsers();
+        if (!users.length) return renderEmptyRow(body, 4, 'אין משתמשים להצגה.');
         const fragment = document.createDocumentFragment();
-
         users.forEach(user => {
             const row = document.createElement('tr');
+            const name = cell(user.fullName || 'ללא שם', 'admin-cell-strong');
+            const email = cell(user.email || '', 'admin-cell-muted');
+            const role = cell(user.role || 'user', user.role === 'admin' ? 'admin-role-admin' : 'admin-role-user');
+            const actions = cell('', 'admin-table-center');
 
-            // שם המשתמש
-            const nameCell = document.createElement('td');
-            nameCell.className = 'admin-cell-strong';
-            nameCell.textContent = user.fullName || 'ללא שם';
-
-            // כתובת אימייל
-            const emailCell = document.createElement('td');
-            emailCell.className = 'admin-cell-muted';
-            emailCell.textContent = user.email || '';
-
-            // תפקיד המשתמש
-            const roleCell = document.createElement('td');
-            const isAdmin = user.role === 'admin';
-
-            roleCell.className = isAdmin
-                ? 'admin-role-admin'
-                : 'admin-role-user';
-
-            roleCell.textContent = user.role || 'user';
-
-            // תא הכפתורים
-            const actionsCell = document.createElement('td');
-            actionsCell.className = 'admin-table-center';
-
-            // כפתור שינוי תפקיד
-            const roleButton = document.createElement('button');
-
-            roleButton.type = 'button';
-            roleButton.className =
-                'admin-action-button admin-action-role';
-
-            roleButton.textContent = isAdmin
-                ? 'הפוך לרגיל'
-                : 'הפוך למנהל';
-
-            roleButton.addEventListener('click', () => {
-                updateUserRole(
-                    user._id,
-                    isAdmin ? 'user' : 'admin'
-                );
-            });
-
-            // כפתור מחיקת משתמש
-            const deleteButton = document.createElement('button');
-
-            deleteButton.type = 'button';
-            deleteButton.className =
-                'admin-action-button admin-action-delete';
-
-            deleteButton.textContent = 'מחק';
-
-            deleteButton.addEventListener('click', () => {
-                deleteUser(user._id);
-            });
-
-            // הרכבת השורה
-            actionsCell.append(roleButton, deleteButton);
-
-            row.append(
-                nameCell,
-                emailCell,
-                roleCell,
-                actionsCell
-            );
-
-            fragment.appendChild(row);
+            const roleButton = makeButton(user.role === 'admin' ? 'הפוך לרגיל' : 'הפוך למנהל', 'admin-action-button admin-action-role');
+            roleButton.addEventListener('click', () => updateRole(user._id, user.role === 'admin' ? 'user' : 'admin'));
+            const deleteButton = makeButton('מחק', 'admin-action-button admin-action-delete');
+            deleteButton.addEventListener('click', () => deleteUser(user._id));
+            actions.append(roleButton, deleteButton);
+            row.append(name, email, role, actions);
+            fragment.append(row);
         });
-
-        // החלפת תוכן הטבלה
-        tableBody.replaceChildren(fragment);
-
+        body.replaceChildren(fragment);
     } catch (error) {
-        console.error('שגיאה בטעינת רשימת המשתמשים:', error);
+        reportLoadError(body, 4, error);
     }
 }
 
-async function deleteUser(userId) {
-    if (!confirm('האם את בטוחה שברצונך למחוק משתמש זה?')) return;
-
-    const token = localStorage.getItem('token');
-
+async function deleteUser(id) {
+    if (!await confirmMessage('האם את בטוחה שברצונך למחוק משתמש זה?')) return;
     try {
-        const res = await window.apiFetch(`${API_URL_ADMIN}/users/${userId}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            throw new Error(data.message || 'שגיאה במחיקת המשתמש');
-        }
-
-        alert('המשתמש נמחק בהצלחה');
-        fetchUsersList();
-
+        await removeUser(id);
+        showMessage('המשתמש נמחק בהצלחה');
+        await loadUsers();
     } catch (error) {
-        alert(error.message);
+        showMessage(error.message);
     }
 }
 
-async function updateUserRole(userId, newRole) {
-    if (!confirm(`האם לשנות הרשאה ל-${newRole}?`)) return;
-
-    const token = localStorage.getItem('token');
-
+async function updateRole(id, role) {
+    if (!await confirmMessage(`האם לשנות הרשאה ל-${role}?`)) return;
     try {
-        const res = await window.apiFetch(`${API_URL_ADMIN}/users/${userId}/role`, {
-            method: 'PATCH',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ role: newRole })
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            throw new Error(data.message || 'שגיאה בעדכון ההרשאה');
-        }
-
-        alert('ההרשאה עודכנה בהצלחה');
-        fetchUsersList();
-
+        await changeUserRole(id, role);
+        showMessage('ההרשאה עודכנה בהצלחה');
+        await loadUsers();
     } catch (error) {
-        console.error(error);
+        showMessage(error.message);
     }
 }
 
-// ==========================================
-// הצגת אימונים בטבלת הניהול
-// ==========================================
-async function fetchAdminWorkouts() {
-    const tableBody = document.getElementById('workouts-table-body');
-
-    if (!tableBody) return;
-
+async function loadWorkouts() {
+    const body = document.getElementById('workouts-table-body');
+    if (!body) return;
     try {
-        const response = await window.apiFetch(API_URL_WORKOUTS);
-
-        if (!response.ok) {
-            throw new Error('שגיאה בשליפת האימונים');
-        }
-
-        const workouts = await response.json();
-
-        // אין אימונים להצגה
-        if (workouts.length === 0) {
-            const row = document.createElement('tr');
-            const cell = document.createElement('td');
-
-            cell.colSpan = 4;
-            cell.className = 'admin-table-empty';
-            cell.textContent = 'אין אימונים במערכת כרגע.';
-
-            row.appendChild(cell);
-            tableBody.replaceChildren(row);
-
-            return;
-        }
-
-        // הכנת הטבלה
+        const workouts = await listWorkouts();
+        if (!workouts.length) return renderEmptyRow(body, 4, 'אין אימונים במערכת כרגע.');
         const fragment = document.createDocumentFragment();
-
         workouts.forEach(workout => {
             const row = document.createElement('tr');
-
-            // שם האימון
-            const titleCell = document.createElement('td');
-
-            titleCell.className = 'admin-cell-strong';
-            titleCell.textContent = workout.title || '';
-
-            // תאריך ושעה
-            const dateCell = document.createElement('td');
-
-            dateCell.className = 'admin-cell-muted';
-
-            const workoutDate = workout.date
-                ? workout.date.split('T')[0]
-                : '';
-
-            dateCell.textContent =
-                `${workoutDate} - ${workout.time || ''}`;
-
-            // שם המדריך
-            const instructorCell = document.createElement('td');
-
-            instructorCell.className = 'admin-cell-muted';
-            instructorCell.textContent = workout.instructor || '';
-
-            // תא פעולות
-            const actionsCell = document.createElement('td');
-
-            actionsCell.className = 'admin-table-center';
-
-            // כפתור עריכה
-            const editButton = document.createElement('button');
-
-            editButton.type = 'button';
-            editButton.className =
-                'admin-action-button admin-action-edit';
-
-            editButton.textContent = 'ערוך';
-
-            editButton.addEventListener('click', () => {
-                openEditWorkoutModal(workout);
-            });
-
-            // כפתור מחיקה
-            const deleteButton = document.createElement('button');
-
-            deleteButton.type = 'button';
-            deleteButton.className =
-                'admin-action-button admin-action-delete';
-
-            deleteButton.textContent = 'מחק';
-
-            deleteButton.addEventListener('click', () => {
-                deleteWorkout(workout._id);
-            });
-
-            // הרכבת התא והשורה
-            actionsCell.append(editButton, deleteButton);
-
+            const date = workout.date ? workout.date.split('T')[0] : '';
             row.append(
-                titleCell,
-                dateCell,
-                instructorCell,
-                actionsCell
+                cell(workout.title || '', 'admin-cell-strong'),
+                cell(`${date} - ${workout.time || ''}`, 'admin-cell-muted'),
+                cell(workout.instructor || '', 'admin-cell-muted')
             );
-
-            fragment.appendChild(row);
+            const actions = cell('', 'admin-table-center');
+            const editButton = makeButton('ערוך', 'admin-action-button admin-action-edit');
+            editButton.addEventListener('click', () => openEditWorkout(workout));
+            const deleteButton = makeButton('מחק', 'admin-action-button admin-action-delete');
+            deleteButton.addEventListener('click', () => deleteWorkout(workout._id));
+            actions.append(editButton, deleteButton);
+            row.append(actions);
+            fragment.append(row);
         });
-
-        // הצגת כל השורות בטבלה
-        tableBody.replaceChildren(fragment);
-
+        body.replaceChildren(fragment);
     } catch (error) {
-        console.error('שגיאה בטעינת האימונים:', error);
+        reportLoadError(body, 4, error);
     }
 }
 
-function openAddWorkoutModal() {
-    document.getElementById('add-workout-modal').classList.remove('hidden');
-}
-
-function closeAddWorkoutModal() {
-    document.getElementById('add-workout-modal').classList.add('hidden');
+function openEditWorkout(workout) {
+    setValue('edit-w-id', workout._id);
+    setValue('edit-w-title', workout.title);
+    setValue('edit-w-desc', workout.description);
+    setValue('edit-w-date', workout.date?.split('T')[0]);
+    setValue('edit-w-time', workout.time);
+    setValue('edit-w-instructor', workout.instructor);
+    setValue('edit-w-max', workout.maxParticipants);
+    setValue('edit-w-duration', workout.durationMinutes);
+    setValue('edit-w-calories', workout.estimatedCalories);
+    openModal(document.getElementById('edit-workout-modal'));
 }
 
 async function handleCreateWorkout(event) {
     event.preventDefault();
-
-    const token = localStorage.getItem('token');
-
-    const bodyData = {
-        title: document.getElementById('w-title').value.trim(),
-        description: document.getElementById('w-desc').value.trim(),
-        date: document.getElementById('w-date').value,
-        time: document.getElementById('w-time').value.trim(),
-        instructor: document.getElementById('w-instructor').value.trim(),
-        maxParticipants: Number(document.getElementById('w-max').value),
-        durationMinutes: Number(document.getElementById('w-duration').value),
-        estimatedCalories: Number(document.getElementById('w-calories').value),
-        type: document.getElementById('w-type').value,
-        category: document.getElementById('w-category').value
-    };
-
     try {
-        const response = await window.apiFetch(API_URL_WORKOUTS, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(bodyData)
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.message || 'שגיאה ביצירת האימון');
-        }
-
-        alert('האימון נוסף בהצלחה!');
-
-        closeAddWorkoutModal();
-        document.getElementById('create-workout-form').reset();
-
-        fetchAdminWorkouts();
-
+        await createWorkout(readWorkoutForm('w-'));
+        closeModal(document.getElementById('add-workout-modal'));
+        event.currentTarget.reset();
+        showMessage('האימון נוסף בהצלחה!');
+        await loadWorkouts();
     } catch (error) {
-        alert(error.message);
+        showMessage(error.message);
     }
-}
-
-function openEditWorkoutModal(workout) {
-    document.getElementById('edit-w-id').value = workout._id;
-    document.getElementById('edit-w-title').value = workout.title || '';
-    document.getElementById('edit-w-desc').value = workout.description || '';
-    document.getElementById('edit-w-date').value =
-        workout.date ? workout.date.split('T')[0] : '';
-    document.getElementById('edit-w-time').value = workout.time || '';
-    document.getElementById('edit-w-instructor').value = workout.instructor || '';
-    document.getElementById('edit-w-max').value = workout.maxParticipants || 30;
-    document.getElementById('edit-w-duration').value = workout.durationMinutes || 45;
-    document.getElementById('edit-w-calories').value = workout.estimatedCalories || 400;
-
-    document.getElementById('edit-workout-modal').classList.remove('hidden');
-}
-
-function closeEditWorkoutModal() {
-    document.getElementById('edit-workout-modal').classList.add('hidden');
 }
 
 async function handleUpdateWorkout(event) {
     event.preventDefault();
+    try {
+        const id = document.getElementById('edit-w-id').value;
+        await updateWorkout(id, readWorkoutForm('edit-w-'));
+        closeModal(document.getElementById('edit-workout-modal'));
+        showMessage('האימון עודכן בהצלחה!');
+        await loadWorkouts();
+    } catch (error) {
+        showMessage(error.message);
+    }
+}
 
-    const workoutId = document.getElementById('edit-w-id').value;
-    const token = localStorage.getItem('token');
-
-    const updatedData = {
-        title: document.getElementById('edit-w-title').value.trim(),
-        description: document.getElementById('edit-w-desc').value.trim(),
-        date: document.getElementById('edit-w-date').value,
-        time: document.getElementById('edit-w-time').value.trim(),
-        instructor: document.getElementById('edit-w-instructor').value.trim(),
-        maxParticipants: Number(document.getElementById('edit-w-max').value),
-        durationMinutes: Number(document.getElementById('edit-w-duration').value),
-        estimatedCalories: Number(document.getElementById('edit-w-calories').value)
+function readWorkoutForm(prefix) {
+    const payload = {
+        title: getValue(`${prefix}title`).trim(),
+        description: getValue(`${prefix}desc`).trim(),
+        date: getValue(`${prefix}date`),
+        time: getValue(`${prefix}time`).trim(),
+        instructor: getValue(`${prefix}instructor`).trim(),
+        maxParticipants: Number(getValue(`${prefix}max`)),
+        durationMinutes: Number(getValue(`${prefix}duration`)),
+        estimatedCalories: Number(getValue(`${prefix}calories`))
     };
+    if (!prefix.startsWith('edit-')) {
+        payload.type = getValue('w-type');
+        payload.category = getValue('w-category');
+    }
+    return payload;
+}
 
+async function deleteWorkout(id) {
+    if (!await confirmMessage('האם את בטוחה שברצונך למחוק אימון זה? ההיסטוריה של המשתתפים תישמר.')) return;
     try {
-        const response = await window.apiFetch(`${API_URL_WORKOUTS}/${workoutId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(updatedData)
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.message || 'שגיאה בעדכון האימון');
-        }
-
-        alert('האימון עודכן בהצלחה!');
-
-        closeEditWorkoutModal();
-        fetchAdminWorkouts();
-
+        await removeWorkout(id);
+        showMessage('האימון נמחק בהצלחה!');
+        await loadWorkouts();
     } catch (error) {
-        alert(error.message);
+        showMessage(error.message);
     }
 }
 
-async function deleteWorkout(workoutId) {
-    if (!confirm('האם את בטוחה שברצונך למחוק אימון זה? (ההיסטוריה של המשתמשים שהשתתפו בו תישמר).')) {
-        return;
-    }
-
-    const token = localStorage.getItem('token');
-
+async function loadReviews() {
+    const body = document.getElementById('reviews-table-body');
+    if (!body) return;
     try {
-        const response = await window.apiFetch(`${API_URL_WORKOUTS}/${workoutId}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.message || 'שגיאה במחיקת האימון');
-        }
-
-        alert('האימון נמחק בהצלחה!');
-        fetchAdminWorkouts();
-
-    } catch (error) {
-        alert(error.message);
-    }
-}
-
-
-// ==========================================
-// ניהול המלצות קהילה (אישור / דחייה)
-// ==========================================
-async function fetchAdminReviews() {
-    const reviewsTableBody = document.getElementById('reviews-table-body');
-
-    if (!reviewsTableBody) return;
-
-    const token = localStorage.getItem('token');
-
-    try {
-        const response = await window.apiFetch(`${API_URL_REVIEWS}/admin/all`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('שגיאה בטעינת ההמלצות');
-        }
-
-        const reviews = await response.json();
-
-        // אם אין המלצות, מציגים הודעה
-        if (reviews.length === 0) {
-            const row = document.createElement('tr');
-            const cell = document.createElement('td');
-
-            cell.colSpan = 4;
-            cell.className = 'admin-table-empty';
-            cell.textContent = 'אין המלצות במערכת כרגע.';
-
-            row.appendChild(cell);
-            reviewsTableBody.replaceChildren(row);
-
-            return;
-        }
-
-        // הכנת שורות הטבלה
+        const reviews = await listAdminReviews();
+        if (!reviews.length) return renderEmptyRow(body, 4, 'אין המלצות במערכת כרגע.');
         const fragment = document.createDocumentFragment();
-
         reviews.forEach(review => {
             const row = document.createElement('tr');
-
-            // שם הממליץ
-            const nameCell = document.createElement('td');
-
-            nameCell.className = 'admin-cell-strong';
-            nameCell.textContent = review.name || '';
-
-            // תוכן ההמלצה
-            const textCell = document.createElement('td');
-
-            textCell.className =
-                'admin-cell-muted admin-review-text';
-
-            textCell.textContent = `"${review.text || ''}"`;
-
-            // מאפיין title מוצג בבטחה באמצעות מאפיין DOM
-            textCell.title = review.text || '';
-
-            // סטטוס ההמלצה
-            const statusCell = document.createElement('td');
+            row.append(cell(review.name || '', 'admin-cell-strong'));
+            const text = cell(`"${review.text || ''}"`, 'admin-cell-muted admin-review-text');
+            text.title = review.text || '';
+            const status = document.createElement('td');
             const statusLabel = document.createElement('span');
-
-            statusLabel.classList.add('admin-status');
-
-            let statusText;
-
-            if (review.status === 'approved') {
-                statusLabel.classList.add('admin-status-approved');
-                statusText = 'מאושר (מוצג באתר)';
-            } else if (review.status === 'rejected') {
-                statusLabel.classList.add('admin-status-rejected');
-                statusText = 'נדחה';
-            } else {
-                statusLabel.classList.add('admin-status-pending');
-                statusText = 'ממתין לאישור';
-            }
-
-            statusLabel.textContent = statusText;
-            statusCell.appendChild(statusLabel);
-
-            // תא פעולות
-            const actionsCell = document.createElement('td');
-
-            actionsCell.className = 'admin-table-center';
-
-            // כפתור אישור
-            const approveButton = document.createElement('button');
-
-            approveButton.type = 'button';
-            approveButton.className =
-                'admin-action-button admin-action-approve';
-
-            approveButton.textContent = 'אשר';
-
-            approveButton.addEventListener('click', () => {
-                window.updateReviewStatus(review._id, 'approved');
-            });
-
-            // כפתור דחייה
-            const rejectButton = document.createElement('button');
-
-            rejectButton.type = 'button';
-            rejectButton.className =
-                'admin-action-button admin-action-reject';
-
-            rejectButton.textContent = 'דחה';
-
-            rejectButton.addEventListener('click', () => {
-                window.updateReviewStatus(review._id, 'rejected');
-            });
-
-            // הרכבת השורה
-            actionsCell.append(approveButton, rejectButton);
-
-            row.append(
-                nameCell,
-                textCell,
-                statusCell,
-                actionsCell
-            );
-
-            fragment.appendChild(row);
+            statusLabel.className = `admin-status admin-status-${review.status || 'pending'}`;
+            statusLabel.textContent = ({
+                approved: 'מאושר (מוצג באתר)',
+                rejected: 'נדחה',
+                pending: 'ממתין לאישור'
+            })[review.status] || 'ממתין לאישור';
+            status.append(statusLabel);
+            const actions = cell('', 'admin-table-center');
+            const approve = makeButton('אשר', 'admin-action-button admin-action-approve');
+            approve.addEventListener('click', () => setReviewStatus(review._id, 'approved'));
+            const reject = makeButton('דחה', 'admin-action-button admin-action-reject');
+            reject.addEventListener('click', () => setReviewStatus(review._id, 'rejected'));
+            actions.append(approve, reject);
+            row.append(text, status, actions);
+            fragment.append(row);
         });
-
-        // הצגת השורות בטבלה
-        reviewsTableBody.replaceChildren(fragment);
-
+        body.replaceChildren(fragment);
     } catch (error) {
-        console.error('שגיאה בטעינת ההמלצות:', error);
+        reportLoadError(body, 4, error);
     }
 }
 
-
-
-window.updateReviewStatus = async function(id, status) {
-    const token = localStorage.getItem('token');
-
+async function setReviewStatus(id, status) {
     try {
-        const response = await window.apiFetch(`${API_URL_REVIEWS}/admin/${id}/status`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ status })
-        });
-
-        if (response.ok) {
-            fetchAdminReviews();
-        } else {
-            const data = await response.json();
-            alert(`שגיאה בעדכון: ${data.message}`);
-        }
-
+        await updateReviewStatus(id, status);
+        await loadReviews();
     } catch (error) {
-        alert(error.message);
+        showMessage(error.message);
     }
-};
+}
 
-// ==========================================
-// הצגת פניות שהתקבלו מטופס יצירת קשר
-// ==========================================
-async function fetchContactMessages() {
-    const tableBody = document.getElementById('contact-messages-table-body');
-
-    if (!tableBody) return;
-
-    const token = localStorage.getItem('token');
-
+async function loadContactMessages() {
+    const body = document.getElementById('contact-messages-table-body');
+    if (!body) return;
     try {
-        const response = await window.apiFetch(`${API_URL_CONTACT}/admin/all`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('שגיאה בטעינת הפניות');
-        }
-
-        const messages = await response.json();
-
-        // אם אין פניות, מציגים הודעה
-        if (messages.length === 0) {
-            const row = document.createElement('tr');
-            const cell = document.createElement('td');
-
-            cell.colSpan = 6;
-            cell.className = 'admin-table-empty';
-            cell.textContent = 'עדיין לא התקבלו פניות.';
-
-            row.appendChild(cell);
-            tableBody.replaceChildren(row);
-
-            return;
-        }
-
-        // יצירת שורות הטבלה בצורה בטוחה
+        const messages = await listContactMessages();
+        if (!messages.length) return renderEmptyRow(body, 6, 'עדיין לא התקבלו פניות.');
         const fragment = document.createDocumentFragment();
-
         messages.forEach(message => {
             const row = document.createElement('tr');
-
-            // תאריך קבלת הפנייה
-            const dateCell = document.createElement('td');
-
-            dateCell.textContent = message.createdAt
-                ? new Date(message.createdAt).toLocaleDateString('he-IL')
-                : '-';
-
-            // שם הפונה
-            const nameCell = document.createElement('td');
-
-            nameCell.textContent = message.name || '';
-
-            // כתובת אימייל
-            const emailCell = document.createElement('td');
-
-            emailCell.textContent = message.email || '';
-
-            // נושא הפנייה
-            const subjectCell = document.createElement('td');
-
-            subjectCell.textContent = message.subject || '';
-
-            // תוכן הפנייה
-            const messageCell = document.createElement('td');
-
-            messageCell.className = 'admin-preserve-whitespace';
-            messageCell.textContent = message.message || '';
-
-            // סטטוס הפנייה
-            const statusCell = document.createElement('td');
-
-            if (message.status === 'read') {
-                statusCell.textContent = 'נקראה';
-            } else if (message.status === 'closed') {
-                statusCell.textContent = 'טופלה';
-            } else {
-                statusCell.textContent = 'חדשה';
-            }
-
-            // הרכבת השורה
             row.append(
-                dateCell,
-                nameCell,
-                emailCell,
-                subjectCell,
-                messageCell,
-                statusCell
+                cell(message.createdAt ? new Date(message.createdAt).toLocaleDateString('he-IL') : '-'),
+                cell(message.name || ''),
+                cell(message.email || ''),
+                cell(message.subject || ''),
+                cell(message.message || '', 'admin-preserve-whitespace'),
+                cell(({ read: 'נקראה', closed: 'טופלה' })[message.status] || 'חדשה')
             );
-
-            fragment.appendChild(row);
+            fragment.append(row);
         });
-
-        // הצגת כל השורות בטבלה
-        tableBody.replaceChildren(fragment);
-
+        body.replaceChildren(fragment);
     } catch (error) {
-        console.error('שגיאה בטעינת הפניות:', error);
+        reportLoadError(body, 6, error);
     }
 }
 
+function cell(text, className = '') {
+    const element = document.createElement('td');
+    element.textContent = text;
+    if (className) element.className = className;
+    return element;
+}
+
+function makeButton(text, className) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = className;
+    button.textContent = text;
+    return button;
+}
+
+function renderEmptyRow(body, columns, message) {
+    const row = document.createElement('tr');
+    const empty = cell(message, 'admin-table-empty');
+    empty.colSpan = columns;
+    row.append(empty);
+    body.replaceChildren(row);
+}
+
+function reportLoadError(body, columns, error) {
+    console.error('Failed to load admin data:', error);
+    renderEmptyRow(body, columns, error.message || 'טעינת הנתונים נכשלה.');
+}
+
+function getValue(id) {
+    return document.getElementById(id)?.value || '';
+}
+
+function setValue(id, value) {
+    const input = document.getElementById(id);
+    if (input) input.value = value ?? '';
+}

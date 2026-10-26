@@ -1,17 +1,3 @@
-// בדיקת עשן אוטומטית ל-VitaliFit API
-//
-// הרצה (השרת צריך להיות דלוק בטרמינל אחר עם: npm run dev):
-//   node scripts/smoke-test.mjs
-//
-// אופציונלי - כדי לבדוק גם פעולות מנהל (יצירת אימון, הרשמה, סימון כהושלם):
-//   ADMIN_EMAIL=admin@mail.com ADMIN_PASSWORD=123456 node scripts/smoke-test.mjs
-//
-// כתובת אחרת (למשל השרת ב-Render):
-//   BASE_URL=https://your-app.onrender.com node scripts/smoke-test.mjs
-//
-// שימו לב: הבדיקה יוצרת משתמש בדיקה אחד במסד (smoke-...@example.com) ואימון בדיקה אם סופק מנהל.
-// האימון נמחק בסוף. את משתמש הבדיקה אפשר למחוק מלוח הניהול.
-
 const BASE = process.env.BASE_URL || 'http://localhost:5000';
 const stamp = Date.now();
 const email = `smoke-${stamp}@example.com`;
@@ -50,10 +36,6 @@ const section = (title) => console.log(`\n▶ ${title}`);
 async function run() {
     section('שרת');
     const status = await call('GET', '/api/status');
-    if (status.status === 403) {
-        console.log('  ⚠️  השרת חסום היום (חסימת שבת). הריצי שוב ביום אחר.');
-        process.exit(2);
-    }
     check('GET /api/status מחזיר 200', status.status === 200, `(קיבלתי ${status.status})`);
 
     const unknown = await call('GET', '/api/does-not-exist');

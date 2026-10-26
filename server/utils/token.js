@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 
-// יצירת טוקן התחברות - במקום קוד כפול בהרשמה ובהתחברות
 export function signToken(user) {
     if (!process.env.JWT_SECRET) {
         throw new Error('JWT_SECRET לא מוגדר בקובץ .env');
@@ -13,7 +12,6 @@ export function signToken(user) {
     );
 }
 
-// הפרטים של המשתמש שמותר להחזיר ללקוח (בלי סיסמה)
 export function publicUser(user) {
     return {
         id: user._id,

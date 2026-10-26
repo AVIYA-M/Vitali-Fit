@@ -1,6 +1,5 @@
 import Joi from 'joi';
 
-// הבדיקה רצה אחרי multer, לכן השדות מגיעים כטקסט מהטופס
 export const mealSchema = Joi.object({
     mealName: Joi.string().trim().min(1).max(100).required().messages({
         'string.empty': 'יש להזין שם ארוחה',

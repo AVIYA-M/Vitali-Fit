@@ -39,7 +39,7 @@
                 <a href="contact.html">צרו קשר</a>
                 <a href="blog.html">בלוג</a>
 
-                <a href="admin.html" id="admin-nav-link" style="display: none;">
+                <a href="admin.html" id="admin-nav-link" class="nav-link admin-nav-link admin-link-hidden">
                     פאנל ניהול
                 </a>
             </nav>
@@ -77,7 +77,7 @@
             <!-- אזור להצגת הודעות הצלחה או שגיאה -->
             <div id="register-message" class="hidden register-message"></div>
 
-            <form onsubmit="handleRegister(event)" class="register-form">
+            <form id="register-form" class="register-form">
 
                 <div class="register-form-group">
                     <label for="fullName">שם מלא</label>
@@ -189,10 +189,8 @@
 
     </footer>
 
-    <script src="js/api-config.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/auth.js"></script>
+    <script type="module" src="js/script.js"></script>
+    <script type="module" src="js/auth.js"></script>
 
 </body>
 </html>
-

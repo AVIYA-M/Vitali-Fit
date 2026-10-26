@@ -71,7 +71,7 @@
             </div>
 
             <div class="admin-heading-actions">
-                <button type="button" onclick="openAddWorkoutModal()" class="admin-button admin-button-primary">
+                <button type="button" id="add-workout-button" class="admin-button admin-button-primary">
                     <i class="fa-solid fa-plus"></i>
                     הוסף אימון חדש
                 </button>
@@ -80,19 +80,19 @@
         </section>
 
         <!-- חלון הוספת אימון -->
-        <div id="add-workout-modal" class="admin-modal hidden">
+        <div id="add-workout-modal" class="modal-overlay admin-modal hidden" aria-hidden="true">
 
-            <div class="admin-modal-box">
+            <div class="modal-box admin-modal-box">
 
                 <div class="admin-modal-heading">
                     <h3>הוספת שיעור/אימון ללוח</h3>
 
-                    <button type="button" onclick="closeAddWorkoutModal()" class="admin-modal-close" aria-label="סגירה">
+                    <button type="button" data-modal-close="add-workout-modal" class="admin-modal-close" aria-label="סגירה">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
 
-                <form id="create-workout-form" onsubmit="handleCreateWorkout(event)" class="admin-form">
+                <form id="create-workout-form" class="admin-form">
 
                     <div class="admin-form-group">
                         <label for="w-title">כותרת האימון</label>
@@ -182,20 +182,20 @@
         </div>
 
         <!-- חלון עריכת אימון -->
-        <div id="edit-workout-modal" class="admin-modal hidden">
+        <div id="edit-workout-modal" class="modal-overlay admin-modal hidden" aria-hidden="true">
 
-            <div class="admin-modal-box">
+            <div class="modal-box admin-modal-box">
 
                 <div class="admin-modal-heading">
                     <h3>עריכת אימון קיים</h3>
 
-                    <button type="button" onclick="closeEditWorkoutModal()" class="admin-modal-close"
+                    <button type="button" data-modal-close="edit-workout-modal" class="admin-modal-close"
                         aria-label="סגירה">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
 
-                <form id="edit-workout-form" onsubmit="handleUpdateWorkout(event)" class="admin-form">
+                <form id="edit-workout-form" class="admin-form">
 
                     <input type="hidden" id="edit-w-id">
 
@@ -431,9 +431,8 @@
 
     </footer>
 
-    <script src="js/api-config.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/admin.js"></script>
+    <script type="module" src="js/script.js"></script>
+    <script type="module" src="js/admin.js"></script>
 
 </body>
 

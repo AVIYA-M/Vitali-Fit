@@ -1,12 +1,10 @@
 import Workout from '../models/Workout.js';
 import Tracking from '../models/Tracking.js';
+import AppError from '../utils/AppError.js';
 
-// מונע מתווים מיוחדים בחיפוש (כמו .* או ( ) להתפרש כביטוי רגולרי
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-// שליפת כל האימונים
 export const getAllWorkouts = async (req, res, next) => {
-    try {
         const query = {};
 
         const { search, category, type } = req.query;
@@ -25,14 +23,9 @@ export const getAllWorkouts = async (req, res, next) => {
 
         const workouts = await Workout.find(query);
         return res.status(200).json(workouts);
-    } catch (error) {
-        next(error);
-    }
 };
 
-// הוספת אימון חדש (למנהל)
 export const createWorkout = async (req, res, next) => {
-    try {
         const newWorkout = new Workout(req.body);
         const savedWorkout = await newWorkout.save();
 
@@ -40,14 +33,9 @@ export const createWorkout = async (req, res, next) => {
             message: 'האימון נוסף בהצלחה',
             workout: savedWorkout
         });
-    } catch (error) {
-        next(error);
-    }
 };
 
-// עריכת אימון קיים (למנהל)
 export const updateWorkout = async (req, res, next) => {
-    try {
         const { id } = req.params;
 
 
@@ -61,32 +49,23 @@ export const updateWorkout = async (req, res, next) => {
         );
 
         if (!updatedWorkout) {
-            return res.status(404).json({
-                message: 'האימון לא נמצא'
-            });
+            return next(new AppError('האימון לא נמצא', 404));
         }
 
         return res.status(200).json({
             message: 'האימון עודכן בהצלחה',
             workout: updatedWorkout
         });
-    } catch (error) {
-        next(error);
-    }
 };
 
-// מחיקת אימון תוך שמירת היסטוריית המעקב
 export const deleteWorkout = async (req, res, next) => {
-    try {
         const { id } = req.params;
 
 
         const workout = await Workout.findById(id);
 
         if (!workout) {
-            return res.status(404).json({
-                message: 'האימון לא נמצא'
-            });
+            return next(new AppError('האימון לא נמצא', 404));
         }
 
         await Tracking.updateMany(
@@ -99,14 +78,9 @@ export const deleteWorkout = async (req, res, next) => {
         return res.status(200).json({
             message: 'האימון נמחק מהמערכת וההיסטוריה נשמרה בהצלחה'
         });
-    } catch (error) {
-        next(error);
-    }
 };
 
-// הרשמת משתמש לאימון
 export const registerForWorkout = async (req, res, next) => {
-    try {
         const { id } = req.params;
         const userId = req.user.userId;
 
@@ -143,23 +117,14 @@ export const registerForWorkout = async (req, res, next) => {
         const existingWorkout = await Workout.findById(id);
 
         if (!existingWorkout) {
-            return res.status(404).json({
-                message: 'האימון לא נמצא'
-            });
+            return next(new AppError('האימון לא נמצא', 404));
         }
 
         if (existingWorkout.registeredUsers.some(
             registeredUser => registeredUser.toString() === userId.toString()
         )) {
-            return res.status(400).json({
-                message: 'אתה כבר רשום לאימון זה'
-            });
+            return next(new AppError('אתה כבר רשום לאימון זה', 400));
         }
 
-        return res.status(400).json({
-            message: 'האימון מלא, לא ניתן להירשם'
-        });
-    } catch (error) {
-        next(error);
-    }
+        return next(new AppError('האימון מלא, לא ניתן להירשם', 400));
 };

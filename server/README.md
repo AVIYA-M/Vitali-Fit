@@ -10,7 +10,7 @@ Node.js (ES Modules), Express 5, MongoDB + Mongoose, JWT (הרשאות), bcrypt 
 
 ## הרצה מקומית
 
-1. יוצרים קובץ `.env` בתיקיית `server` (אפשר להעתיק את `.env.example`).
+1. מעתיקים את `.env.example` מתיקיית השורש ל-`server/.env` ומגדירים את הערכים.
 2. מתקינים ומריצים:
 
 ```bash
@@ -28,9 +28,11 @@ npm run dev
 |---|---|---|
 | `MONGO_URI` | כן | כתובת החיבור ל-MongoDB Atlas. בלעדיה השרת לא עולה |
 | `JWT_SECRET` | כן | מפתח סודי לחתימת טוקנים. בלעדיו השרת לא עולה |
+| `CLIENT_URL` | כן | Origin של לקוח האינטרנט; אפשר כמה Origins מופרדים בפסיקים |
+| `SHABBAT_BLOCKING_ENABLED` | לא | `false` מבטל את חסימת השבת; ברירת המחדל היא חסימה |
 | `GEMINI_API_KEY` | לניתוח ארוחות | מפתח ל-Gemini |
 | `PORT` | לא | פורט (ברירת מחדל 5000) |
-| `NODE_ENV` | לא | `development` מציג stack של שגיאות בתשובה |
+| `NODE_ENV` | לא | `development` מציג stack; `production` כותב שגיאות ל-`server/logs/error.log` |
 
 ## מבנה התיקיות
 
@@ -92,6 +94,9 @@ server/
 | שינוי תפקיד | PATCH | `/api/admin/users/:id/role` | מנהל | `role` |
 
 שגיאות חוזרות בפורמט אחיד: `{ "success": false, "status": 400, "message": "..." }`.
+שגיאות צפויות נוצרות כ-`AppError` ומועברות למטפל השגיאות המרכזי; Express 5
+מעביר אליו אוטומטית שגיאות מ-Promise של בקרות async. בפיתוח השגיאות נרשמות
+לקונסול, וב-production לקובץ `logs/error.log`.
 
 ## מסד הנתונים
 
@@ -118,12 +123,15 @@ erDiagram
 | `ContactMessage` | name, email, subject, message, status | - |
 
 בשמירת משתמש רץ hook מסוג `pre('save')` שמצפין את הסיסמה עם bcrypt, וב-`toJSON` הסיסמה מוסרת מכל תשובה. סוגי המדיה באתר: טקסט (תכנים, שמות, תיאורים) ותמונות (תמונות ארוחה).
+מחיקת משתמש מפעילה hook של Mongoose שמוחק את נתוני הפעילות, התזונה, המעקב,
+המשקל וההמלצות שלו, ומסיר אותו מרשימות הנרשמים לאימונים.
 
 ## Middlewares
 
 - **`validate(schema, source)`** - middleware אחד לכל הוולידציות. מקבל סכמת Joi ובודק את `body` או `params`, מנקה רווחים ושדות לא מוכרים, ומחזיר 400 עם הודעה בעברית.
 - **`verifyToken` / `isAdmin`** - אימות JWT והרשאת מנהל.
-- **`createDayBlocker([6])`** (מותאם אישית) - חוסם את כל השרת ביום שבת. הבדיקה לפי שעון השרת (ב-Render זה UTC).
+- **`createDayBlocker([6])`** (מותאם אישית) - חוסם את ממשקי ה-API בשבת לפי `Asia/Jerusalem`; `/api/status` נשאר זמין. ניתן לבטל את כל חסימות השבת באמצעות `SHABBAT_BLOCKING_ENABLED=false`.
+- **CORS** - מאפשר רק Origins המוגדרים ב-`CLIENT_URL`.
 - **`upload`** - העלאת תמונות בלבד (JPG, PNG, WEBP) עד 5MB, לתיקיית `uploads`.
 - **`errorHandler`** - מטפל מרוכז בכל השגיאות (multer, Mongoose, מזהה לא תקין, ערך כפול).
 
@@ -131,7 +139,8 @@ erDiagram
 
 1. מעלים את הפרויקט ל-GitHub.
 2. ב-Render יוצרים **Web Service** מהריפו, עם **Root Directory** = `server`, **Build Command** = `npm install`, **Start Command** = `npm start`.
-3. מגדירים ב-Environment את `MONGO_URI`, `JWT_SECRET`, `GEMINI_API_KEY` ו-`NODE_ENV=production`.
+3. מגדירים ב-Environment את `MONGO_URI`, `JWT_SECRET`, `CLIENT_URL` ו-`NODE_ENV=production`;
+   מוסיפים `GEMINI_API_KEY` אם נדרשת אנליזת ארוחות.
 4. ב-MongoDB Atlas, תחת Network Access, מאשרים גישה מהשרת (`0.0.0.0/0`).
 5. אחרי שהשרת עלה, מעדכנים את כתובת השרת בקובץ ההגדרות של הלקוח, עושים קומיט, ורק אז מעלים את הלקוח.
 

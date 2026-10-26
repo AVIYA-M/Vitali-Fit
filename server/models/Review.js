@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { REVIEW_STATUSES } from '../constants/index.js';
 const reviewSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -16,8 +17,8 @@ const reviewSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'approved', 'rejected'],
-        default: 'pending' // כל המלצה מתחילה כממתינה לאישור
+        enum: REVIEW_STATUSES,
+        default: 'pending' 
     },
     createdAt: {
         type: Date,

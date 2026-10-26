@@ -1,4 +1,11 @@
-const API_URL = `${window.API_BASE_URL}/api`;
+import {
+    addActivity,
+    addWeight,
+    getDashboard,
+    getWeightHistory
+} from '../services/tracking.js';
+import { requireAuth } from '../shared/session.js';
+import { showMessage } from '../shared/ui/modal.js';
 
 const ACTIVITY_NAMES = {
     walking: 'הליכה',
@@ -11,71 +18,27 @@ const ACTIVITY_NAMES = {
     other: 'פעילות אחרת'
 };
 
-function getToken() {
-    return localStorage.getItem('token');
-}
+const activityForm = document.getElementById('activity-form');
+const weightForm = document.getElementById('weight-form');
 
-async function apiRequest(url, options = {}) {
-    const token = getToken();
-    const headers = { ...(options.headers || {}) };
-
-    if (token) headers.Authorization = `Bearer ${token}`;
-    if (options.body && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
-
-    const response = await window.apiFetch(url, { ...options, headers });
-    let data = null;
-    
-    try { data = await response.json(); } 
-    catch { data = {}; }
-
-    if (!response.ok) {
-        throw new Error(data.message || `שגיאה מהשרת (${response.status})`);
-    }
-    return data;
-}
-
-function checkLogin() {
-    if (!getToken()) {
-        window.location.href = 'login.html';
-        return false;
-    }
-    return true;
-}
+activityForm?.addEventListener('submit', submitActivity);
+weightForm?.addEventListener('submit', submitWeight);
+loadTrackingDashboard();
 
 async function loadTrackingDashboard() {
-    if (!checkLogin()) return;
+    if (!requireAuth()) return;
     try {
-        const data = await apiRequest(`${API_URL}/tracking`);
-        updateDashboard(data);
-        loadWeightHistory();
+        updateDashboard(await getDashboard());
+        await loadWeightHistory();
     } catch (error) {
         console.error('שגיאה בטעינת לוח המעקב:', error);
+        showMessage(error.message);
     }
 }
 
 function updateDashboard(data) {
-    // 1. עדכון ההפרש מהמשקל ההתחלתי
-    const weightChange = Number(data.weightChange || 0);
-    const weightElement = document.getElementById('weight-change');
-
-    if (weightElement) {
-        const formatted = Math.abs(weightChange).toFixed(1);
-        if (weightChange > 0) weightElement.textContent = `+${formatted}`;
-        else if (weightChange < 0) weightElement.textContent = `-${formatted}`;
-        else weightElement.textContent = '0.0';
-    }
-
-    // 2. עדכון ההפרש מהשקילה הקודמת (בתיבה הבולטת החדשה)
-    const prevDiffVal = Number(data.previousWeightDiff || 0);
-    const prevDiffElement = document.getElementById('prev-weight-diff');
-
-    if (prevDiffElement) {
-        const prevFormatted = Math.abs(prevDiffVal).toFixed(1);
-        if (prevDiffVal > 0) prevDiffElement.textContent = `+${prevFormatted}`;
-        else if (prevDiffVal < 0) prevDiffElement.textContent = `-${prevFormatted}`;
-        else prevDiffElement.textContent = '0.0';
-    }
-
+    setSignedNumber('weight-change', data.weightChange);
+    setSignedNumber('prev-weight-diff', data.previousWeightDiff);
     setText('initial-weight', Number(data.initialWeight || 0).toFixed(1));
     setText('weigh-in-day', getHebrewDay(data.weighInDay));
     setText('weekly-food-calories', formatNumber(data.weeklyFoodCalories));
@@ -84,243 +47,164 @@ function updateDashboard(data) {
     setText('total-burned-calories', formatNumber(data.totalBurnedCalories));
     setText('calorie-balance', formatNumber(data.calorieBalance));
 
-    // הצגת היסטוריית פעילויות מאוחדת (פעילויות עצמאיות + אימוני סטודיו/זום שהושלמו)
-    const completedWorkoutsList = (data.history || []).map(h => ({
-        activityType: h.workoutId?.category || 'studio',
-        date: h.completedAt || h.createdAt,
-        durationMinutes: h.durationMinutes || 60,
-        caloriesBurned: h.caloriesBurned || 250,
-        title: h.workoutId?.title || 'אימון סטודיו'
+    const completedWorkouts = (data.history || []).map(record => ({
+        activityType: record.workoutId?.category || 'studio',
+        date: record.completedAt || record.createdAt,
+        durationMinutes: record.durationMinutes || 60,
+        caloriesBurned: record.caloriesBurned || 250,
+        title: record.workoutId?.title || 'אימון סטודיו'
     }));
-
-    const combinedActivities = [
-        ...(data.activityHistory || []).map(a => ({ ...a, title: ACTIVITY_NAMES[a.activityType] || a.activityType })),
-        ...completedWorkoutsList
+    const activities = [
+        ...(data.activityHistory || []).map(activity => ({
+            ...activity,
+            title: ACTIVITY_NAMES[activity.activityType] || activity.activityType
+        })),
+        ...completedWorkouts
     ].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    renderRecentActivities(combinedActivities);
+    renderRecentActivities(activities);
 }
-
 
 function renderRecentActivities(activities) {
     const container = document.getElementById('activity-history');
-
     if (!container) return;
+    const items = activities.slice(0, 4);
 
-    const lastFour = activities.slice(0, 4);
-
-    // אם אין פעילויות, מציגים הודעה
-    if (!lastFour.length) {
-        const message = document.createElement('div');
-
-        message.className = 'empty-history-message';
-        message.textContent = 'עדיין לא נוספו פעילויות או אימונים.';
-
-        container.replaceChildren(message);
-
+    if (!items.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-history-message';
+        empty.textContent = 'עדיין לא נוספו פעילויות או אימונים.';
+        container.replaceChildren(empty);
         return;
     }
 
-    // הכנת רשימת הפעילויות
     const fragment = document.createDocumentFragment();
-
-    lastFour.forEach(activity => {
-        const name = activity.title || 'פעילות';
-
-        const date = activity.date
-            ? new Date(activity.date).toLocaleDateString('he-IL')
-            : '';
-
-        const duration = Number(activity.durationMinutes || 0);
-        const calories = Number(activity.caloriesBurned || 0);
-
-        // כרטיס הפעילות
+    items.forEach(activity => {
         const item = document.createElement('div');
         item.className = 'activity-history-item';
-
-        // אזור הפרטים
         const details = document.createElement('div');
         details.className = 'activity-history-details';
-
-        // אייקון הפעילות
         const icon = document.createElement('div');
         icon.className = 'activity-history-icon';
         icon.textContent = '🏃';
-
-        // פרטי הפעילות
         const info = document.createElement('div');
         info.className = 'activity-history-info';
-
-        // שם הפעילות
-        const nameElement = document.createElement('div');
-        nameElement.className = 'activity-history-name';
-        nameElement.textContent = name;
-
-        // תאריך ומשך הפעילות
-        const dateElement = document.createElement('div');
-        dateElement.className = 'activity-history-date';
-        dateElement.textContent = `${date} · ${duration} דק'`;
-
-        // הרכבת אזור הפרטים
-        info.append(nameElement, dateElement);
+        const name = document.createElement('div');
+        name.className = 'activity-history-name';
+        name.textContent = activity.title || 'פעילות';
+        const date = document.createElement('div');
+        date.className = 'activity-history-date';
+        date.textContent = `${activity.date ? new Date(activity.date).toLocaleDateString('he-IL') : ''} · ${Number(activity.durationMinutes || 0)} דק'`;
+        info.append(name, date);
         details.append(icon, info);
-
-        // קלוריות שנשרפו
-        const caloriesElement = document.createElement('div');
-        caloriesElement.className = 'activity-history-calories';
-        caloriesElement.textContent =
-            `${calories.toLocaleString('he-IL')} Kcal`;
-
-        // הרכבת כרטיס הפעילות
-        item.append(details, caloriesElement);
-
-        fragment.appendChild(item);
+        const calories = document.createElement('div');
+        calories.className = 'activity-history-calories';
+        calories.textContent = `${Number(activity.caloriesBurned || 0).toLocaleString('he-IL')} Kcal`;
+        item.append(details, calories);
+        fragment.append(item);
     });
-
-    // הצגת כל הפעילויות
     container.replaceChildren(fragment);
 }
 
-
-// הוספת פעילות עצמאית
-async function addActivity(event) {
+async function submitActivity(event) {
     event.preventDefault();
-
     const activityType = document.getElementById('activity-type').value;
     const durationMinutes = Number(document.getElementById('activity-duration').value);
+    if (!activityType) return showMessage('יש לבחור סוג פעילות.');
+    if (!durationMinutes || durationMinutes <= 0) return showMessage('יש להזין משך פעילות תקין.');
 
-    if (!activityType) return alert('יש לבחור סוג פעילות.');
-    if (!durationMinutes || durationMinutes <= 0) return alert('יש להזין משך פעילות תקין.');
-
-    const button = event.target.querySelector('button[type="submit"]');
-    try {
-        if (button) { button.disabled = true; button.textContent = 'שומר...'; }
-
-        await apiRequest(`${API_URL}/activities`, {
-            method: 'POST',
-            body: JSON.stringify({ activityType, durationMinutes })
-        });
-
-        alert('הפעילות נוספה בהצלחה למאזן שלך!');
-        document.getElementById('activity-form').reset();
-        await loadTrackingDashboard(); 
-
-    } catch (error) {
-        alert(error.message || 'שגיאה בהוספת הפעילות.');
-    } finally {
-        if (button) { button.disabled = false; button.textContent = 'הוספת פעילות'; }
-    }
+    await withSubmitState(event.currentTarget, 'שומר...', 'הוספת פעילות', async () => {
+        await addActivity({ activityType, durationMinutes });
+        activityForm.reset();
+        showMessage('הפעילות נוספה בהצלחה למאזן שלך!');
+        await loadTrackingDashboard();
+    });
 }
 
-// עדכון משקל
-async function addWeight(event) {
+async function submitWeight(event) {
     event.preventDefault();
-
     const input = document.getElementById('new-weight');
     const weight = Number(input.value);
+    if (!weight || weight <= 0) return showMessage('יש להזין משקל תקין.');
 
-    if (!weight || weight <= 0) return alert('יש להזין משקל תקין.');
-
-    const button = event.target.querySelector('button[type="submit"]');
-    try {
-        if (button) { button.disabled = true; button.textContent = 'מעדכן...'; }
-
-        await apiRequest(`${API_URL}/weight`, {
-            method: 'POST',
-            body: JSON.stringify({ weight })
-        });
-
+    await withSubmitState(event.currentTarget, 'מעדכן...', 'עדכון משקל', async () => {
+        await addWeight(weight);
         input.value = '';
         await loadTrackingDashboard();
-        alert('המשקל עודכן בהצלחה!');
-
-    } catch (error) {
-        alert(error.message || 'שגיאה בעדכון המשקל.');
-    } finally {
-        if (button) { button.disabled = false; button.textContent = 'עדכון משקל'; }
-    }
+        showMessage('המשקל עודכן בהצלחה!');
+    });
 }
 
+async function withSubmitState(form, busyText, idleText, action) {
+    const button = form.querySelector('button[type="submit"]');
+    if (button) {
+        button.disabled = true;
+        button.textContent = busyText;
+    }
+    try {
+        await action();
+    } catch (error) {
+        showMessage(error.message);
+    } finally {
+        if (button) {
+            button.disabled = false;
+            button.textContent = idleText;
+        }
+    }
+}
 
 async function loadWeightHistory() {
     const container = document.getElementById('weight-history');
-
     if (!container) return;
-
     try {
-        const history = await apiRequest(`${API_URL}/weight/history`);
-
-        // אם אין היסטוריית משקל
+        const history = await getWeightHistory();
         if (!history.length) {
-            const message = document.createElement('div');
-
-            message.className = 'empty-history-message';
-            message.textContent = 'עדיין אין היסטוריית משקל.';
-
-            container.replaceChildren(message);
-
+            const empty = document.createElement('div');
+            empty.className = 'empty-history-message';
+            empty.textContent = 'עדיין אין היסטוריית משקל.';
+            container.replaceChildren(empty);
             return;
         }
 
-        // הכנת רשימת היסטוריית המשקל
         const fragment = document.createDocumentFragment();
-
         history.slice().reverse().forEach(record => {
-            const date = new Date(record.date).toLocaleDateString('he-IL');
-            const weight = Number(record.weight);
-
-            // יצירת כרטיס היסטוריה
             const item = document.createElement('div');
             item.className = 'weight-history-item';
-
-            // תאריך
-            const dateElement = document.createElement('span');
-            dateElement.className = 'weight-history-date';
-            dateElement.textContent = date;
-
-            // משקל
-            const weightElement = document.createElement('strong');
-            weightElement.className = 'weight-history-value';
-            weightElement.textContent = `${weight.toFixed(1)} ק"ג`;
-
-            // הרכבת הכרטיס
-            item.append(dateElement, weightElement);
-
-            fragment.appendChild(item);
+            const date = document.createElement('span');
+            date.className = 'weight-history-date';
+            date.textContent = new Date(record.date).toLocaleDateString('he-IL');
+            const weight = document.createElement('strong');
+            weight.className = 'weight-history-value';
+            weight.textContent = `${Number(record.weight).toFixed(1)} ק"ג`;
+            item.append(date, weight);
+            fragment.append(item);
         });
-
-        // הצגת כל הרשומות
         container.replaceChildren(fragment);
-
     } catch (error) {
         const message = document.createElement('div');
-
         message.className = 'weight-history-error';
-        message.textContent = 'לא ניתן לטעון היסטוריה.';
-
+        message.textContent = error.message || 'לא ניתן לטעון היסטוריה.';
         container.replaceChildren(message);
     }
 }
 
-
-function getHebrewDay(day) {
-    const days = { sunday: 'ראשון', monday: 'שני', tuesday: 'שלישי', wednesday: 'רביעי', thursday: 'חמישי', friday: 'שישי', saturday: 'שבת' };
-    return days[day] || '-';
+function setSignedNumber(id, value) {
+    const number = Number(value || 0);
+    const formatted = Math.abs(number).toFixed(1);
+    setText(id, number > 0 ? `+${formatted}` : number < 0 ? `-${formatted}` : '0.0');
 }
 
-function formatNumber(value) { return Number(value || 0).toLocaleString('he-IL'); }
-function setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
-function escapeHtml(value) { return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;'); }
-function logout() { showCustomModal('התנתקת בהצלחה מהמערכת', () => { localStorage.removeItem('token'); localStorage.removeItem('user'); window.location.href = 'index.html'; }); }
+function getHebrewDay(day) {
+    return ({
+        sunday: 'ראשון', monday: 'שני', tuesday: 'שלישי',
+        wednesday: 'רביעי', thursday: 'חמישי', friday: 'שישי', saturday: 'שבת'
+    })[day] || '-';
+}
 
-document.addEventListener('DOMContentLoaded', () => {
-    const activityForm = document.getElementById('activity-form');
-    const weightForm = document.getElementById('weight-form');
-    const logoutButton = document.getElementById('logout-button');
+function formatNumber(value) {
+    return Number(value || 0).toLocaleString('he-IL');
+}
 
-    if (activityForm) activityForm.addEventListener('submit', addActivity);
-    if (weightForm) weightForm.addEventListener('submit', addWeight);
-    if (logoutButton) logoutButton.addEventListener('click', logout);
-
-    loadTrackingDashboard();
-});
+function setText(id, value) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value;
+}

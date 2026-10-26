@@ -1,4 +1,9 @@
 import mongoose from "mongoose";
+import {
+  ACTIVITY_TYPES,
+  MIN_ACTIVITY_DURATION_MINUTES,
+  MIN_CALORIES
+} from "../constants/index.js";
 
 const activitySchema = new mongoose.Schema({
 
@@ -11,19 +16,20 @@ const activitySchema = new mongoose.Schema({
   activityType: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    enum: ACTIVITY_TYPES
   },
 
   durationMinutes: {
     type: Number,
     required: true,
-    min: 1
+    min: MIN_ACTIVITY_DURATION_MINUTES
   },
 
   caloriesBurned: {
     type: Number,
     required: true,
-    min: 0
+    min: MIN_CALORIES
   },
 
   date: {
