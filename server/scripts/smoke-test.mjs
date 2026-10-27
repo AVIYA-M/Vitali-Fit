@@ -1,4 +1,4 @@
-const BASE = process.env.BASE_URL || 'http://localhost:5000';
+const BASE = 'https://vitali-fit.onrender.com';
 const stamp = Date.now();
 const email = `smoke-${stamp}@example.com`;
 const password = 'Test1234';
