@@ -45,6 +45,7 @@ const allowedOrigins = (process.env.CLIENT_URL || '')
     .filter(Boolean);
 
 app.use(cors({
+    // מאשרת בקשות רק ממקורות המופיעים ב-CLIENT_URL.
     origin(origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
             return callback(null, true);

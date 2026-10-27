@@ -8,6 +8,7 @@ import {
   isShabbatBlockingEnabled
 } from '../middlewares/custom.middleware.js';
 
+// מוסיפה פעילות גופנית למשתמש ומחשבת קלוריות לפי משקל, משך וסוג הפעילות (חסום בשבת).
 export const addActivity = async (req, res, next) => {
   const userId = req.user.userId;
   const { activityType, durationMinutes, date } = req.body;
@@ -45,6 +46,7 @@ export const addActivity = async (req, res, next) => {
   });
 };
 
+// מחזירה את כל הפעילויות של המשתמש, מהחדשה לישנה.
 export const getUserActivities = async (req, res, next) => {
   const userId = req.user.userId;
   const activities = await Activity.find({ userId }).sort({ date: -1 });

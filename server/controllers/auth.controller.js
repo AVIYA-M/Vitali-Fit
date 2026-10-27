@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { signToken, publicUser } from '../utils/token.js';
 import AppError from '../utils/AppError.js';
 
+// הרשמת משתמש חדש: בודקת שהאימייל פנוי, שומרת ומחזירה טוקן.
 export const registerUser = async (req, res, next) => {
   const { fullName, email, password } = req.body;
 
@@ -27,7 +28,7 @@ export const registerUser = async (req, res, next) => {
   });
 };
 
-// התחברות
+// התחברות: בודקת אימייל וסיסמה ומחזירה טוקן.
 export const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 

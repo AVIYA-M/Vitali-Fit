@@ -6,6 +6,7 @@ const ai = new GoogleGenAI({
 });
 
 
+// שולחת תמונת ארוחה ל-Gemini ומחזירה הערכה תזונתית (קלוריות, חלבון, פחמימות, שומנים).
 async function analyzeMealImage(imagePath, mimeType, mealName) {
 
     const imageData = await fs.readFile(imagePath);

@@ -1,7 +1,9 @@
+// מחזירה את טוקן ההתחברות השמור בדפדפן.
 export function getToken() {
     return localStorage.getItem('token');
 }
 
+// מחזירה את אובייקט המשתמש השמור בדפדפן (או null אם אין / פגום).
 export function getUser() {
     try {
         return JSON.parse(localStorage.getItem('user') || 'null');
@@ -12,10 +14,12 @@ export function getUser() {
     }
 }
 
+// בודקת אם המשתמש מחובר (יש טוקן ופרטי משתמש).
 export function isAuthenticated() {
     return Boolean(getToken() && getUser());
 }
 
+// מוחקת מהדפדפן את כל נתוני ההתחברות.
 export function clearSession() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -23,11 +27,13 @@ export function clearSession() {
     localStorage.removeItem('name');
 }
 
+// מנתקת את המשתמש ומעבירה לעמוד הבית (או ליעד אחר).
 export function logout(redirectTo = 'index.html') {
     clearSession();
     location.href = redirectTo;
 }
 
+// מגנה על עמוד: מעבירה להתחברות אם לא מחובר, ולעמוד הבית אם חסרה הרשאת תפקיד.
 export function requireAuth(role) {
     const user = getUser();
     if (!getToken() || !user) {
@@ -41,6 +47,7 @@ export function requireAuth(role) {
     return true;
 }
 
+// מעדכנת את תפריט הניווט: מציגה שם משתמש וכפתור התנתקות, ומציגה קישור ניהול למנהלים בלבד.
 export function initializeSessionNavigation() {
     const user = getUser();
     const navActions = document.querySelector('.nav-actions');

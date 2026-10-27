@@ -1,6 +1,7 @@
 let messageModal;
 let currentOnClose;
 
+// יוצרת (פעם אחת) את חלון ההודעות המשותף ומחזירה אותו.
 function ensureMessageModal() {
     if (messageModal?.isConnected) return messageModal;
 
@@ -49,6 +50,7 @@ function ensureMessageModal() {
     return overlay;
 }
 
+// סוגרת את חלון ההודעות ומפעילה את פעולת הסגירה שהוגדרה.
 function closeMessage() {
     if (!messageModal) return;
     const callback = currentOnClose;
@@ -58,6 +60,7 @@ function closeMessage() {
     callback?.();
 }
 
+// מציגה הודעה למשתמש בחלון קופץ עם כפתור אישור.
 export function showMessage(message, { title = 'הודעת מערכת', onClose } = {}) {
     const overlay = ensureMessageModal();
     overlay.querySelector('.modal-title').textContent = title;
@@ -77,6 +80,7 @@ export function showMessage(message, { title = 'הודעת מערכת', onClose 
     requestAnimationFrame(() => overlay.querySelector('.modal-box')?.classList.add('modal-visible'));
 }
 
+// מציגה חלון אישור/ביטול ומחזירה Promise עם true או false לפי בחירת המשתמש.
 export function confirmMessage(message, { title = 'אישור פעולה' } = {}) {
     const overlay = ensureMessageModal();
     overlay.querySelector('.modal-title').textContent = title;
@@ -108,6 +112,7 @@ export function confirmMessage(message, { title = 'אישור פעולה' } = {}
     });
 }
 
+// פותחת חלון קופץ קיים.
 export function openModal(modal) {
     if (!modal) return;
     modal.classList.remove('hidden');
@@ -115,6 +120,7 @@ export function openModal(modal) {
     modal.setAttribute('aria-hidden', 'false');
 }
 
+// סוגרת חלון קופץ קיים.
 export function closeModal(modal) {
     if (!modal) return;
     modal.classList.add('hidden');

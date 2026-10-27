@@ -9,6 +9,7 @@ import AppError from '../utils/AppError.js';
 
 
 
+// מסמנת אימון כהושלם עבור משתמש רשום, ושומרת משך וקלוריות.
 export const completeWorkout = async (req, res, next) => {
         const userId = req.user.userId;
         const workoutId = req.params.workoutId;
@@ -56,6 +57,7 @@ export const completeWorkout = async (req, res, next) => {
 };
 
 
+// מחשבת ומחזירה את נתוני לוח המעקב: קלוריות שבועיות, מאזן קלוריות, שינוי במשקל והיסטוריה.
 export const getTrackingDashboard = async (req, res, next) => {
         const userId = req.user.userId;
 

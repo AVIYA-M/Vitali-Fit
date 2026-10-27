@@ -10,6 +10,7 @@ router.post('/register', validate(registerSchema), authController.registerUser);
 
 router.post('/login', validate(loginSchema), authController.loginUser);
 
+// מחזירה את פרטי המשתמש המחובר (דורש טוקן).
 router.get('/profile', verifyToken, (req, res) => {
   res.status(200).json({
     message: 'ברוך הבא לאזור האישי שלך!',

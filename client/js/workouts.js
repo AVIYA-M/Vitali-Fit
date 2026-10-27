@@ -37,15 +37,18 @@ if (document.getElementById('days-grid')) {
     fetchWorkouts();
 }
 
+// ממירה תאריך למחרוזת YYYY-MM-DD להשוואה בין ימים.
 function formatDateKey(date) {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
+// בודקת אם מועד האימון כבר עבר.
 function hasWorkoutFinished(workout) {
     const date = formatDateKey(new Date(workout.date));
     return new Date() >= new Date(`${date}T${workout.time}`);
 }
 
+// טוענת את האימונים מהשרת ומרעננת את הלוח והרשימה.
 async function fetchWorkouts() {
     try {
         allWorkouts = await listWorkouts();
@@ -57,6 +60,7 @@ async function fetchWorkouts() {
     }
 }
 
+// מצייר את לוח השנה של החודש הנבחר ומסמן את היום שנבחר.
 function renderCalendar() {
     const grid = document.getElementById('days-grid');
     if (!grid) return;
@@ -89,6 +93,7 @@ function renderCalendar() {
     }
 }
 
+// מציגה את האימונים של היום הנבחר (לפי מסננים) עם כפתורי הרשמה/סיום.
 function renderSelectedDaySessions() {
     const container = document.getElementById('selected-day-sessions');
     const heading = document.getElementById('selected-day-heading');
@@ -162,6 +167,7 @@ function renderSelectedDaySessions() {
     container.replaceChildren(fragment);
 }
 
+// יוצרת כפתור פעולה לאימון.
 function makeButton(text, className, onClick, disabled = false) {
     const button = document.createElement('button');
     button.type = 'button';
@@ -172,6 +178,7 @@ function makeButton(text, className, onClick, disabled = false) {
     return button;
 }
 
+// רושמת את המשתמש לאימון ומרעננת את הרשימה.
 async function registerSession(id) {
     if (!getToken()) {
         showMessage('עלייך להתחבר למערכת כדי להירשם לאימון.');
@@ -186,6 +193,7 @@ async function registerSession(id) {
     }
 }
 
+// מסמנת אימון כהושלם ומרעננת את הרשימה.
 async function completeSession(id) {
     if (!getToken()) {
         location.href = 'login.html';

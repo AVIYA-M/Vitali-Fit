@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 const LOGS_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'logs');
 const ERROR_LOG_PATH = path.join(LOGS_DIR, 'error.log');
 
+// מטפל השגיאות המרכזי: רושם לוג, מתרגם סוגי שגיאות להודעה וקוד מתאימים ושולח תשובה אחידה.
 const errorHandler = (err, req, res, next) => {
     if (res.headersSent) {
         return next(err);

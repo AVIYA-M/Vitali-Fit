@@ -2,6 +2,7 @@ import Nutrition from '../models/Nutrition.js';
 import analyzeMealImage from '../services/nutritionAI.service.js';
 import AppError from '../utils/AppError.js';
 
+// מנתחת תמונת ארוחה בעזרת AI ושומרת את הארוחה עם הערכים התזונתיים.
 export const analyzeMeal = async (req, res, next) => {
   if (!req.file) {
     return next(new AppError('לא הועלתה תמונה של הארוחה', 400));
@@ -34,6 +35,7 @@ export const analyzeMeal = async (req, res, next) => {
   });
 };
 
+// מחזירה את כל הארוחות של המשתמש.
 export const getUserMeals = async (req, res, next) => {
   const userId = req.user.userId;
   const meals = await Nutrition.find({ userId });

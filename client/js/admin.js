@@ -18,6 +18,7 @@ if (requireAuth('admin')) {
     initializeAdmin();
 }
 
+// מחברת את כפתורי וטפסי דף הניהול וטוענת את הנתונים.
 function initializeAdmin() {
     document.getElementById('add-workout-button')?.addEventListener('click', () =>
         openModal(document.getElementById('add-workout-modal'))
@@ -32,6 +33,7 @@ function initializeAdmin() {
     loadAdminData();
 }
 
+// טוענת במקביל את כל טבלאות הניהול.
 async function loadAdminData() {
     await Promise.all([
         loadUsers(),
@@ -41,6 +43,7 @@ async function loadAdminData() {
     ]);
 }
 
+// טוענת ומציגה את טבלת המשתמשים עם כפתורי שינוי תפקיד ומחיקה.
 async function loadUsers() {
     const body = document.getElementById('users-table-body');
     if (!body) return;
@@ -69,6 +72,7 @@ async function loadUsers() {
     }
 }
 
+// מוחקת משתמש לאחר אישור.
 async function deleteUser(id) {
     if (!await confirmMessage('האם את בטוחה שברצונך למחוק משתמש זה?')) return;
     try {
@@ -80,6 +84,7 @@ async function deleteUser(id) {
     }
 }
 
+// משנה תפקיד משתמש לאחר אישור.
 async function updateRole(id, role) {
     if (!await confirmMessage(`האם לשנות הרשאה ל-${role}?`)) return;
     try {
@@ -91,6 +96,7 @@ async function updateRole(id, role) {
     }
 }
 
+// טוענת ומציגה את טבלת האימונים עם כפתורי עריכה ומחיקה.
 async function loadWorkouts() {
     const body = document.getElementById('workouts-table-body');
     if (!body) return;
@@ -121,6 +127,7 @@ async function loadWorkouts() {
     }
 }
 
+// ממלאת את טופס העריכה בנתוני האימון ופותחת אותו.
 function openEditWorkout(workout) {
     setValue('edit-w-id', workout._id);
     setValue('edit-w-title', workout.title);
@@ -134,6 +141,7 @@ function openEditWorkout(workout) {
     openModal(document.getElementById('edit-workout-modal'));
 }
 
+// יוצרת אימון חדש מהטופס.
 async function handleCreateWorkout(event) {
     event.preventDefault();
     const currentForm = event.currentTarget;
@@ -153,6 +161,7 @@ async function handleCreateWorkout(event) {
     }
 }
 
+// מעדכנת אימון קיים מטופס העריכה.
 async function handleUpdateWorkout(event) {
     event.preventDefault();
     const currentForm = event.currentTarget;
@@ -173,6 +182,7 @@ async function handleUpdateWorkout(event) {
     }
 }
 
+// קוראת את שדות טופס האימון לאובייקט אחד (לפי תחילית השדות).
 function readWorkoutForm(prefix) {
     const payload = {
         title: getValue(`${prefix}title`).trim(),
@@ -191,6 +201,7 @@ function readWorkoutForm(prefix) {
     return payload;
 }
 
+// מוחקת אימון לאחר אישור (היסטוריית המשתתפים נשמרת).
 async function deleteWorkout(id) {
     if (!await confirmMessage('האם את בטוחה שברצונך למחוק אימון זה? ההיסטוריה של המשתתפים תישמר.')) return;
     try {
@@ -202,6 +213,7 @@ async function deleteWorkout(id) {
     }
 }
 
+// טוענת ומציגה את טבלת ההמלצות עם כפתורי אישור ודחייה.
 async function loadReviews() {
     const body = document.getElementById('reviews-table-body');
     if (!body) return;
@@ -238,6 +250,7 @@ async function loadReviews() {
     }
 }
 
+// משנה סטטוס של המלצה ומרעננת את הטבלה.
 async function setReviewStatus(id, status) {
     try {
         await updateReviewStatus(id, status);
@@ -247,6 +260,7 @@ async function setReviewStatus(id, status) {
     }
 }
 
+// טוענת ומציגה את טבלת פניות יצירת הקשר.
 async function loadContactMessages() {
     const body = document.getElementById('contact-messages-table-body');
     if (!body) return;
@@ -272,6 +286,7 @@ async function loadContactMessages() {
     }
 }
 
+// יוצרת תא טבלה (td) עם טקסט ומחלקת עיצוב.
 function cell(text, className = '') {
     const element = document.createElement('td');
     element.textContent = text;
@@ -279,6 +294,7 @@ function cell(text, className = '') {
     return element;
 }
 
+// יוצרת כפתור פעולה לטבלה.
 function makeButton(text, className) {
     const button = document.createElement('button');
     button.type = 'button';
@@ -287,6 +303,7 @@ function makeButton(text, className) {
     return button;
 }
 
+// מציגה שורה עם הודעה כשאין נתונים בטבלה.
 function renderEmptyRow(body, columns, message) {
     const row = document.createElement('tr');
     const empty = cell(message, 'admin-table-empty');
@@ -295,15 +312,18 @@ function renderEmptyRow(body, columns, message) {
     body.replaceChildren(row);
 }
 
+// מציגה בטבלה הודעת שגיאה כשטעינת הנתונים נכשלה.
 function reportLoadError(body, columns, error) {
     console.error('Failed to load admin data:', error);
     renderEmptyRow(body, columns, error.message || 'טעינת הנתונים נכשלה.');
 }
 
+// מחזירה את ערך השדה לפי מזהה (מחרוזת ריקה אם אין).
 function getValue(id) {
     return document.getElementById(id)?.value || '';
 }
 
+// מציבה ערך בשדה לפי מזהה.
 function setValue(id, value) {
     const input = document.getElementById(id);
     if (input) input.value = value ?? '';

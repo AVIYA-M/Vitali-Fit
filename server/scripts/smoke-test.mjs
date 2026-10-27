@@ -6,6 +6,7 @@ const password = 'Test1234';
 let passed = 0;
 let failed = 0;
 
+// שולחת בקשה לשרת ומחזירה סטטוס ונתונים.
 async function call(method, path, { token, body } = {}) {
     const res = await fetch(`${BASE}${path}`, {
         method,
@@ -21,6 +22,7 @@ async function call(method, path, { token, body } = {}) {
     return { status: res.status, data };
 }
 
+// רושמת תוצאת בדיקה (עבר / נכשל) ומעדכנת מונים.
 function check(name, condition, details = '') {
     if (condition) {
         passed++;
@@ -31,8 +33,10 @@ function check(name, condition, details = '') {
     }
 }
 
+// מדפיסה כותרת לקבוצת בדיקות.
 const section = (title) => console.log(`\n▶ ${title}`);
 
+// מריצה את כל בדיקות ה-API לפי סדר, ומדפיסה סיכום.
 async function run() {
     section('שרת');
     const status = await call('GET', '/api/status');

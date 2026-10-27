@@ -1,6 +1,7 @@
 import { API_BASE_URL } from './config.js';
 import { clearSession, getToken } from './session.js';
 
+// שולח בקשה לשרת, מוסיף טוקן התחברות, ומטפל בשגיאות (401 מנתק ומעביר להתחברות).
 export async function apiFetch(input, options = {}) {
     const inputRequest = input instanceof Request ? input : null;
     const requestInput = input instanceof URL
@@ -41,6 +42,7 @@ export async function apiFetch(input, options = {}) {
     return response;
 }
 
+// עטיפה ל-apiFetch שמחזירה את תשובת השרת כ-JSON (או null אם אין תוכן).
 export async function requestJSON(input, options = {}) {
     const response = await apiFetch(input, options);
     if (response.status === 204) return null;

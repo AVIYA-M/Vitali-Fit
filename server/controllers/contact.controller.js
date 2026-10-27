@@ -1,5 +1,6 @@
 import ContactMessage from '../models/ContactMessage.js';
 
+// שומרת פנייה חדשה מטופס יצירת הקשר.
 export const createContactMessage = async (req, res, next) => {
     const { name, email, subject, message } = req.body;
 
@@ -11,6 +12,7 @@ export const createContactMessage = async (req, res, next) => {
     });
 };
 
+// מחזירה למנהל את 200 הפניות האחרונות.
 export const getAdminContactMessages = async (req, res, next) => {
     const messages = await ContactMessage.find()
         .sort({ createdAt: -1 })

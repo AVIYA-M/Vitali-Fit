@@ -3,6 +3,7 @@ import WeightHistory from '../models/WeightHistory.js';
 import AppError from '../utils/AppError.js';
 
 
+// שומרת שקילה חדשה, מעדכנת את משקל המשתמש ומחשבת שינוי מההתחלה ומהשקילה הקודמת.
 export const addWeight = async (req, res, next) => {
     const userId = req.user.userId;
     const weight = req.body.weight;
@@ -55,6 +56,7 @@ export const addWeight = async (req, res, next) => {
 };
 
 
+// מחזירה את היסטוריית השקילות של 6 החודשים האחרונים.
 export const getWeightHistory = async (req, res, next) => {
     const userId = req.user.userId;
     const sixMonthsAgo = new Date();

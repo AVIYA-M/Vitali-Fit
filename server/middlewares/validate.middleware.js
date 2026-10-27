@@ -2,6 +2,7 @@ import fs from 'fs';
 import AppError from '../utils/AppError.js';
 
 
+// יוצרת Middleware לאימות נתוני הבקשה מול סכמת Joi, ומוחקת קובץ שהועלה אם הנתונים שגויים.
 export const validate = (schema, source = 'body') => {
     return (req, res, next) => {
 

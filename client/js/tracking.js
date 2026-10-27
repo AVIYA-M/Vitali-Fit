@@ -25,6 +25,7 @@ activityForm?.addEventListener('submit', submitActivity);
 weightForm?.addEventListener('submit', submitWeight);
 loadTrackingDashboard();
 
+// טוענת את נתוני לוח המעקב והיסטוריית המשקל.
 async function loadTrackingDashboard() {
     if (!requireAuth()) return;
     try {
@@ -36,6 +37,7 @@ async function loadTrackingDashboard() {
     }
 }
 
+// מציגה בלוח את נתוני המשקל והקלוריות ומאחדת אימונים ופעילויות לרשימה אחת.
 function updateDashboard(data) {
     setSignedNumber('weight-change', data.weightChange);
     setSignedNumber('prev-weight-diff', data.previousWeightDiff);
@@ -64,6 +66,7 @@ function updateDashboard(data) {
     renderRecentActivities(activities);
 }
 
+// מציגה את 4 הפעילויות והאימונים האחרונים.
 function renderRecentActivities(activities) {
     const container = document.getElementById('activity-history');
     if (!container) return;
@@ -105,6 +108,7 @@ function renderRecentActivities(activities) {
     container.replaceChildren(fragment);
 }
 
+// בודקת ושולחת פעילות חדשה, ומרעננת את הלוח.
 async function submitActivity(event) {
     event.preventDefault();
     const activityType = document.getElementById('activity-type').value;
@@ -121,6 +125,7 @@ async function submitActivity(event) {
     });
 }
 
+// בודקת ושולחת שקילה חדשה, ומרעננת את הלוח.
 async function submitWeight(event) {
     event.preventDefault();
     const input = document.getElementById('new-weight');
@@ -135,6 +140,7 @@ async function submitWeight(event) {
     });
 }
 
+// מריצה פעולה תוך נעילת כפתור השליחה והצגת טקסט "בטעינה".
 async function withSubmitState(form, busyText, idleText, action) {
     const button = form.querySelector('button[type="submit"]');
     if (button) {
@@ -153,6 +159,7 @@ async function withSubmitState(form, busyText, idleText, action) {
     }
 }
 
+// טוענת ומציגה את היסטוריית השקילות.
 async function loadWeightHistory() {
     const container = document.getElementById('weight-history');
     if (!container) return;
@@ -188,12 +195,14 @@ async function loadWeightHistory() {
     }
 }
 
+// מציגה מספר עם סימן + או - (שינוי במשקל).
 function setSignedNumber(id, value) {
     const number = Number(value || 0);
     const formatted = Math.abs(number).toFixed(1);
     setText(id, number > 0 ? `+${formatted}` : number < 0 ? `-${formatted}` : '0.0');
 }
 
+// ממירה שם יום באנגלית לשם יום בעברית.
 function getHebrewDay(day) {
     return ({
         sunday: 'ראשון', monday: 'שני', tuesday: 'שלישי',
@@ -201,10 +210,12 @@ function getHebrewDay(day) {
     })[day] || '-';
 }
 
+// מעצבת מספר בפורמט עברי עם מפרידי אלפים.
 function formatNumber(value) {
     return Number(value || 0).toLocaleString('he-IL');
 }
 
+// מעדכנת טקסט באלמנט לפי מזהה (אם קיים).
 function setText(id, value) {
     const element = document.getElementById(id);
     if (element) element.textContent = value;

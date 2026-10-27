@@ -9,10 +9,12 @@ export const UPLOADS_DIR = path.join(__dirname, '..', 'uploads');
 fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
 const storage = multer.diskStorage({
+  // קובעת את תיקיית השמירה של הקבצים שהועלו.
   destination: (req, file, cb) => {
     cb(null, UPLOADS_DIR);
   },
 
+  // יוצרת שם ייחודי לקובץ (זמן + מספר אקראי).
   filename: (req, file, cb) => {
     const uniqueSuffix =
       Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -26,6 +28,7 @@ const storage = multer.diskStorage({
 
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
+// מאפשרת העלאה של תמונות JPG, PNG ו-WEBP בלבד.
 const fileFilter = (req, file, cb) => {
   if (ALLOWED_MIME_TYPES.includes(file.mimetype)) {
     return cb(null, true);

@@ -1,6 +1,7 @@
 import Review from '../models/Review.js';
 import AppError from '../utils/AppError.js';
 
+// שומרת המלצה חדשה בסטטוס "ממתין לאישור".
 export const addReview = async (req, res, next) => {
     const userId = req.user.userId;
     const { text, name, isAnonymous } = req.body;
@@ -20,6 +21,7 @@ export const addReview = async (req, res, next) => {
     });
 };
 
+// מחזירה את 10 ההמלצות המאושרות האחרונות.
 export const getApprovedReviews = async (req, res, next) => {
     const reviews = await Review.find({ status: 'approved' })
         .sort({ createdAt: -1 })
@@ -28,11 +30,13 @@ export const getApprovedReviews = async (req, res, next) => {
     res.status(200).json(reviews);
 };
 
+// מחזירה למנהל את כל ההמלצות.
 export const getAllReviewsAdmin = async (req, res, next) => {
     const reviews = await Review.find().sort({ createdAt: -1 });
     res.status(200).json(reviews);
 };
 
+// מעדכנת סטטוס המלצה (אישור / דחייה).
 export const updateReviewStatus = async (req, res, next) => {
     const { id } = req.params;
     const { status } = req.body;

@@ -43,6 +43,7 @@ const userSchema = new mongoose.Schema({
 }, {
     timestamps: true,
     toJSON: {
+        // מסירה את הסיסמה מכל תשובת JSON של משתמש.
         transform: (doc, ret) => {
             delete ret.password;
             return ret;
@@ -50,6 +51,7 @@ const userSchema = new mongoose.Schema({
     }
 });
 
+// מצפינת את הסיסמה (bcrypt) לפני שמירה, רק אם היא השתנתה.
 userSchema.pre('save', async function () {
     if (!this.isModified('password')) {
         return;
@@ -58,6 +60,7 @@ userSchema.pre('save', async function () {
     this.password = await bcrypt.hash(this.password, 10);
 });
 
+// אחרי מחיקת משתמש: מוחקת את כל הנתונים שלו ומסירה אותו מרשימות הנרשמים לאימונים.
 userSchema.post('findOneAndDelete', async function (deletedUser) {
     if (!deletedUser) {
         return;

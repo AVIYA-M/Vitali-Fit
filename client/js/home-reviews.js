@@ -18,6 +18,7 @@ if (reviewsContainer) {
     initializeReviewForm();
 }
 
+// טוענת מהשרת את ההמלצות המאושרות ומציגה אותן.
 async function loadReviews() {
     try {
         displayReviews(await listApprovedReviews());
@@ -27,6 +28,7 @@ async function loadReviews() {
     }
 }
 
+// בונה את כרטיסי ההמלצות בעמוד ומפעילה את הקרוסלה.
 function displayReviews(reviews) {
     reviewsContainer.replaceChildren();
 
@@ -56,10 +58,12 @@ function displayReviews(reviews) {
     setupCarousel();
 }
 
+// מפעילה את גלילת ההמלצות (קרוסלה) עם כפתורי הבא/הקודם.
 function setupCarousel() {
     const firstCard = reviewsContainer.firstElementChild;
     if (!firstCard || !carouselWrapper) return;
 
+    // מזיזה את הקרוסלה למיקום הנוכחי ומגבילה אותו לטווח התקין.
     const updateCarousel = () => {
         const cardWidth = firstCard.offsetWidth + 20;
         const maxVisible = Math.floor(carouselWrapper.offsetWidth / cardWidth);
@@ -80,6 +84,7 @@ function setupCarousel() {
     updateCarousel();
 }
 
+// מפעילה את טופס כתיבת ההמלצה: הצגה למחוברים, מצב אנונימי ושליחה.
 function initializeReviewForm() {
     if (getToken() && reviewFormSection) {
         reviewFormSection.style.display = 'block';

@@ -56,6 +56,7 @@ if (form) {
         }
     });
 
+    // מציגה הודעת סטטוס (הצלחה/שגיאה) מתחת לטופס יצירת הקשר.
     function showStatus(message, state) {
         if (!status) {
             return;

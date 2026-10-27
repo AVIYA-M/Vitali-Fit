@@ -41,6 +41,7 @@ loginForm?.addEventListener('submit', async event => {
     }
 });
 
+// מציגה הודעת הצלחה או שגיאה בטופסי ההתחברות וההרשמה.
 function showAuthMessage(element, message, success = false) {
     if (!element) {
         showMessage(message);

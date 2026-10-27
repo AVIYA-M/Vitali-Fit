@@ -14,11 +14,13 @@ if (mealForm && requireAuth()) {
     loadMeals();
 }
 
+// מחזירה את התאריך של היום בפורמט YYYY-MM-DD לפי שעון המשתמש.
 function getLocalDate() {
     const today = new Date();
     return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 }
 
+// טוענת את הארוחות מהשרת ומציגה אותן (היום והיסטוריה).
 async function loadMeals() {
     try {
         allMeals = await listMeals();
@@ -30,6 +32,7 @@ async function loadMeals() {
     }
 }
 
+// בודקת אם הארוחה שייכת להיום.
 function isToday(meal) {
     const date = new Date(meal.date);
     const today = new Date();
@@ -38,14 +41,17 @@ function isToday(meal) {
         && date.getFullYear() === today.getFullYear();
 }
 
+// מסננת את הארוחות של היום.
 function getTodayMeals(meals) {
     return meals.filter(isToday);
 }
 
+// מסננת את הארוחות מימים קודמים.
 function getHistoryMeals(meals) {
     return meals.filter(meal => !isToday(meal));
 }
 
+// שולחת ארוחה עם תמונה לניתוח, ומעדכנת את התצוגה.
 async function addMeal(event) {
     event.preventDefault();
     const mealName = document.getElementById('meal-name').value.trim();
@@ -81,6 +87,7 @@ async function addMeal(event) {
     }
 }
 
+// בונה כרטיס ארוחה עם תמונה וערכים תזונתיים.
 function createMealCard(meal) {
     const item = document.createElement('div');
     item.className = 'meal-card';
@@ -146,6 +153,7 @@ function createMealCard(meal) {
     return item;
 }
 
+// מציגה את ארוחות היום ומחשבת סיכום קלוריות וערכים תזונתיים.
 function displayMeals(meals) {
     const container = document.getElementById('meals-list');
     if (!container) return;
@@ -178,6 +186,7 @@ function displayMeals(meals) {
     setText('summary-fats', `${fats}g`);
 }
 
+// מציגה את היסטוריית הארוחות מהחדשה לישנה.
 function displayHistory(meals) {
     const container = document.getElementById('history-list');
     if (!container) return;
@@ -195,11 +204,13 @@ function displayHistory(meals) {
         .forEach(meal => container.append(createMealCard(meal)));
 }
 
+// מעדכנת טקסט באלמנט לפי מזהה (אם קיים).
 function setText(id, value) {
     const element = document.getElementById(id);
     if (element) element.textContent = value;
 }
 
+// מעצבת תאריך לפורמט עברי.
 function formatDate(value) {
     return value ? new Date(value).toLocaleDateString('he-IL') : '';
 }

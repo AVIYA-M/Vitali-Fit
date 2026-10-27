@@ -1,11 +1,13 @@
 import User from '../models/User.js';
 import AppError from '../utils/AppError.js';
 
+// מחזירה את כל המשתמשים ללא סיסמאות.
 export const getAllUsers = async (req, res, next) => {
     const users = await User.find({}).select('-password');
     res.status(200).json(users);
 };
 
+// מוחקת משתמש (אי אפשר למחוק את המנהל המחובר).
 export const deleteUser = async (req, res, next) => {
     const userIdToDelete = req.params.id;
     if (userIdToDelete === String(req.user.userId)) {
@@ -20,6 +22,7 @@ export const deleteUser = async (req, res, next) => {
     res.status(200).json({ message: 'המשתמש נמחק בהצלחה' });
 };
 
+// משנה תפקיד משתמש (אי אפשר לשנות את המנהל המחובר).
 export const updateUserRole = async (req, res, next) => {
     const userIdToUpdate = req.params.id;
     const { role } = req.body; 

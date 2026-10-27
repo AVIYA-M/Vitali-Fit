@@ -1,8 +1,10 @@
 import AppError from '../utils/AppError.js';
 
+// בודקת אם התאריך שנבחר חל ביום שבת (שעון ירושלים).
 export const isShabbatBlockingEnabled = () =>
     process.env.SHABBAT_BLOCKING_ENABLED !== 'false';
 
+// מחזירה את מספר היום בשבוע (0=ראשון ... 6=שבת) לפי שעון ירושלים.
 const getJerusalemDayNumber = (date) =>
     ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(
         new Intl.DateTimeFormat('en-US', {
@@ -14,6 +16,7 @@ const getJerusalemDayNumber = (date) =>
 export const isShabbat = (date = new Date()) =>
     getJerusalemDayNumber(date) === 6;
 
+// יוצרת Middleware שחוסם גישה לשרת בימים שהוגדרו.
 export function createDayBlocker(blockedDays) {
     return (req, res, next) => {
         if (!isShabbatBlockingEnabled()) {
