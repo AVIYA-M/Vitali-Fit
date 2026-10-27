@@ -110,8 +110,8 @@ function createMealCard(meal) {
     const content = document.createElement('div');
     content.className = 'meal-details-content';
     if (meal.imageUrl) {
-        const imageUrl = new URL(meal.imageUrl, API_BASE_URL);
-        if (imageUrl.origin === new URL(API_BASE_URL).origin) {
+    const imageUrl = new URL(meal.imageUrl, window.location.origin);
+    if (imageUrl.origin === window.location.origin) {
             const image = document.createElement('img');
             image.className = 'meal-image';
             image.alt = meal.mealName ?? '';

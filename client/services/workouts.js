@@ -4,7 +4,7 @@ import { requestJSON } from '../shared/http.js';
 const WORKOUTS_URL = `${API_URL}/workouts`;
 
 export const listWorkouts = query => {
-    const url = new URL(WORKOUTS_URL);
+const url = new URL(WORKOUTS_URL, window.location.origin);
     for (const [key, value] of Object.entries(query || {})) {
         if (value) url.searchParams.set(key, value);
     }
