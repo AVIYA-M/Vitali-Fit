@@ -103,7 +103,7 @@ async function loadWorkouts() {
             const date = workout.date ? workout.date.split('T')[0] : '';
             row.append(
                 cell(workout.title || '', 'admin-cell-strong'),
-                cell(`${date} - ${workout.time || ''}`, 'admin-cell-muted'),
+                cell(`${date}\n${workout.time || ''}`, 'admin-cell-muted'),
                 cell(workout.instructor || '', 'admin-cell-muted')
             );
             const actions = cell('', 'admin-table-center');
@@ -136,12 +136,15 @@ function openEditWorkout(workout) {
 
 async function handleCreateWorkout(event) {
     event.preventDefault();
+    const currentForm = event.currentTarget;
+    
     try {
         await createWorkout(readWorkoutForm('w-'));
         closeModal(document.getElementById('add-workout-modal'));
-       if (event.currentTarget) {
-    event.currentTarget.reset();
-}
+        
+        if (currentForm) {
+            currentForm.reset();
+        }
 
         showMessage('האימון נוסף בהצלחה!');
         await loadWorkouts();
@@ -152,10 +155,17 @@ async function handleCreateWorkout(event) {
 
 async function handleUpdateWorkout(event) {
     event.preventDefault();
+    const currentForm = event.currentTarget;
+    
     try {
         const id = document.getElementById('edit-w-id').value;
         await updateWorkout(id, readWorkoutForm('edit-w-'));
         closeModal(document.getElementById('edit-workout-modal'));
+        
+        if (currentForm) {
+            currentForm.reset();
+        }
+        
         showMessage('האימון עודכן בהצלחה!');
         await loadWorkouts();
     } catch (error) {

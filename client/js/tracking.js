@@ -114,8 +114,9 @@ async function submitActivity(event) {
 
     await withSubmitState(event.currentTarget, 'שומר...', 'הוספת פעילות', async () => {
         await addActivity({ activityType, durationMinutes });
+        if (activityForm) {
         activityForm.reset();
-        showMessage('הפעילות נוספה בהצלחה למאזן שלך!');
+}        showMessage('הפעילות נוספה בהצלחה למאזן שלך!');
         await loadTrackingDashboard();
     });
 }
