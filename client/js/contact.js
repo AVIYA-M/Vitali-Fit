@@ -41,8 +41,7 @@ if (form) {
                 'success'
             );
 
-            form.reset();
-
+        form?.reset();
         } catch (error) {
             console.error('שגיאה בשליחת טופס יצירת קשר:', error);
 

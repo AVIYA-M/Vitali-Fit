@@ -68,8 +68,9 @@ async function addMeal(event) {
         allMeals.push(data.meal);
         displayMeals(getTodayMeals(allMeals));
         displayHistory(getHistoryMeals(allMeals));
+        if (mealForm) {
         mealForm.reset();
-        dateInput.value = getLocalDate();
+}        dateInput.value = getLocalDate();
         showMessage('הארוחה נוספה בהצלחה!');
     } catch (error) {
         console.error('שגיאה בהוספת הארוחה:', error);

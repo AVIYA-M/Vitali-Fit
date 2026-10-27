@@ -139,7 +139,10 @@ async function handleCreateWorkout(event) {
     try {
         await createWorkout(readWorkoutForm('w-'));
         closeModal(document.getElementById('add-workout-modal'));
-        event.currentTarget.reset();
+       if (event.currentTarget) {
+    event.currentTarget.reset();
+}
+
         showMessage('האימון נוסף בהצלחה!');
         await loadWorkouts();
     } catch (error) {
