@@ -90,11 +90,9 @@ app.use('/api/contact', contactRoutes);
 // ========================================
 app.use(express.static(path.join(__dirname, '../client')));
 
-app.get('*', (req, res) => {
+app.get('/(.*)', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/index.html'));
 });
-
-// נתיב API שלא קיים - תשובת JSON במקום דף HTML
 app.use('/api', (req, res, next) => {
     next(new AppError('הנתיב המבוקש לא נמצא.', 404));
 });
