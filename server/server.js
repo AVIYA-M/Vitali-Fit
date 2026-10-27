@@ -85,16 +85,15 @@ app.use('/api/weight', weightRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/contact', contactRoutes);
 
-// ========================================
-// הגשת צד הלקוח (Client Static Files)
-// ========================================
+
 app.use(express.static(path.join(__dirname, '../client')));
 
-app.get('/(.*)', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/index.html'));
-});
 app.use('/api', (req, res, next) => {
     next(new AppError('הנתיב המבוקש לא נמצא.', 404));
+});
+
+app.use((req, res) => {
+    res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
 // ========================================
