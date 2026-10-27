@@ -13,13 +13,7 @@
     box-shadow: 0 8px 20px rgba(30, 70, 48, 0.06);
 }
 
-.home-brand-image-wrap {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #1c4a39;
-}
+
 
 .home-brand-image {
     width: 80px;
