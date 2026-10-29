@@ -1,5 +1,5 @@
 import { listWorkouts, registerForWorkout } from '../services/workouts.js';
-import { completeWorkout } from '../services/tracking.js';
+import { completeWorkout, getCompletedWorkoutIds } from '../services/tracking.js';
 import { getToken, getUser } from '../shared/session.js';
 import { showMessage } from '../shared/ui/modal.js';
 
@@ -14,6 +14,7 @@ let currentDate = new Date();
 let selectedDate = new Date();
 let activeFilter = 'all';
 let allWorkouts = [];
+let completedWorkoutIds = new Set();
 
 if (document.getElementById('days-grid')) {
     document.getElementById('prev-btn')?.addEventListener('click', () => {
@@ -37,21 +38,34 @@ if (document.getElementById('days-grid')) {
     fetchWorkouts();
 }
 
-// ממירה תאריך למחרוזת YYYY-MM-DD להשוואה בין ימים.
 function formatDateKey(date) {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
-// בודקת אם מועד האימון כבר עבר.
-function hasWorkoutFinished(workout) {
+function getWorkoutStart(workout) {
     const date = formatDateKey(new Date(workout.date));
-    return new Date() >= new Date(`${date}T${workout.time}`);
+    return new Date(`${date}T${workout.time}`);
 }
 
-// טוענת את האימונים מהשרת ומרעננת את הלוח והרשימה.
+function hasWorkoutStarted(workout) {
+    return new Date() >= getWorkoutStart(workout);
+}
+
+function hasWorkoutFinished(workout) {
+    const end = new Date(getWorkoutStart(workout).getTime() + (Number(workout.durationMinutes) || 0) * 60 * 1000);
+    return new Date() >= end;
+}
+
 async function fetchWorkouts() {
     try {
         allWorkouts = await listWorkouts();
+        if (getToken()) {
+            try {
+                completedWorkoutIds = new Set(await getCompletedWorkoutIds());
+            } catch (error) {
+                completedWorkoutIds = new Set();
+            }
+        }
         renderCalendar();
         renderSelectedDaySessions();
     } catch (error) {
@@ -60,7 +74,6 @@ async function fetchWorkouts() {
     }
 }
 
-// מצייר את לוח השנה של החודש הנבחר ומסמן את היום שנבחר.
 function renderCalendar() {
     const grid = document.getElementById('days-grid');
     if (!grid) return;
@@ -93,7 +106,6 @@ function renderCalendar() {
     }
 }
 
-// מציגה את האימונים של היום הנבחר (לפי מסננים) עם כפתורי הרשמה/סיום.
 function renderSelectedDaySessions() {
     const container = document.getElementById('selected-day-sessions');
     const heading = document.getElementById('selected-day-heading');
@@ -153,9 +165,13 @@ function renderSelectedDaySessions() {
             actions.append(makeButton('התחבר כדי להירשם', 'login', () => { location.href = 'login.html'; }));
         } else if (isRegistered) {
             actions.append(makeButton('נרשמת בהצלחה', 'registered', null, true));
-            if (hasWorkoutFinished(session)) {
+            if (completedWorkoutIds.has(String(session._id))) {
+                actions.append(makeButton('האימון הושלם', 'registered', null, true));
+            } else if (hasWorkoutFinished(session)) {
                 actions.append(makeButton('סיימתי את האימון', 'complete', () => completeSession(session._id)));
             }
+        } else if (hasWorkoutStarted(session)) {
+            actions.append(makeButton('האימון כבר עבר', 'full', null, true));
         } else if (isFull) {
             actions.append(makeButton('האימון מלא', 'full', null, true));
         } else {
@@ -167,7 +183,6 @@ function renderSelectedDaySessions() {
     container.replaceChildren(fragment);
 }
 
-// יוצרת כפתור פעולה לאימון.
 function makeButton(text, className, onClick, disabled = false) {
     const button = document.createElement('button');
     button.type = 'button';
@@ -178,7 +193,6 @@ function makeButton(text, className, onClick, disabled = false) {
     return button;
 }
 
-// רושמת את המשתמש לאימון ומרעננת את הרשימה.
 async function registerSession(id) {
     if (!getToken()) {
         showMessage('עלייך להתחבר למערכת כדי להירשם לאימון.');
@@ -193,7 +207,6 @@ async function registerSession(id) {
     }
 }
 
-// מסמנת אימון כהושלם ומרעננת את הרשימה.
 async function completeSession(id) {
     if (!getToken()) {
         location.href = 'login.html';

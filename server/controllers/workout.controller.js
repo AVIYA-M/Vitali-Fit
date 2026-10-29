@@ -1,11 +1,10 @@
 import Workout from '../models/Workout.js';
 import Tracking from '../models/Tracking.js';
 import AppError from '../utils/AppError.js';
+import { getWorkoutStart } from '../utils/helpers.js';
 
-// מנטרלת תווים מיוחדים בטקסט חיפוש כדי שישמש בבטחה ב-regex.
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-// מחזירה אימונים, עם סינון לפי חיפוש בכותרת, קטגוריה וסוג.
 export const getAllWorkouts = async (req, res, next) => {
         const query = {};
 
@@ -27,7 +26,6 @@ export const getAllWorkouts = async (req, res, next) => {
         return res.status(200).json(workouts);
 };
 
-// יוצרת אימון חדש.
 export const createWorkout = async (req, res, next) => {
         const newWorkout = new Workout(req.body);
         const savedWorkout = await newWorkout.save();
@@ -38,7 +36,6 @@ export const createWorkout = async (req, res, next) => {
         });
 };
 
-// מעדכנת אימון קיים.
 export const updateWorkout = async (req, res, next) => {
         const { id } = req.params;
 
@@ -62,7 +59,6 @@ export const updateWorkout = async (req, res, next) => {
         });
 };
 
-// מוחקת אימון ושומרת את היסטוריית המעקב של המשתתפים.
 export const deleteWorkout = async (req, res, next) => {
         const { id } = req.params;
 
@@ -85,11 +81,19 @@ export const deleteWorkout = async (req, res, next) => {
         });
 };
 
-// רושמת משתמש לאימון בצורה אטומית, בלי כפילות ובלי חריגה ממספר המקומות.
 export const registerForWorkout = async (req, res, next) => {
         const { id } = req.params;
         const userId = req.user.userId;
 
+        const workoutToCheck = await Workout.findById(id);
+
+        if (!workoutToCheck) {
+            return next(new AppError('האימון לא נמצא', 404));
+        }
+
+        if (new Date() >= getWorkoutStart(workoutToCheck)) {
+            return next(new AppError('האימון כבר התחיל או הסתיים, לא ניתן להירשם אליו', 400));
+        }
 
         const workout = await Workout.findOneAndUpdate(
             {

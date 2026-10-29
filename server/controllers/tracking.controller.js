@@ -4,12 +4,11 @@ import Activity from '../models/Activity.js';
 import Nutrition from '../models/Nutrition.js';
 import User from '../models/User.js';
 import WeightHistory from '../models/WeightHistory.js';
-import { getStartOfWeek } from '../utils/helpers.js';
+import { getStartOfWeek, getWorkoutEnd } from '../utils/helpers.js';
 import AppError from '../utils/AppError.js';
 
 
 
-// מסמנת אימון כהושלם עבור משתמש רשום, ושומרת משך וקלוריות.
 export const completeWorkout = async (req, res, next) => {
         const userId = req.user.userId;
         const workoutId = req.params.workoutId;
@@ -28,6 +27,10 @@ export const completeWorkout = async (req, res, next) => {
 
         if (!isRegistered) {
             return next(new AppError('אפשר לסמן כהושלם רק אימון שנרשמת אליו.', 403));
+        }
+
+        if (new Date() < getWorkoutEnd(workout)) {
+            return next(new AppError('אפשר לסמן אימון כהושלם רק אחרי שהוא הסתיים.', 400));
         }
 
         const existingTracking = await Tracking.findOne({
@@ -57,7 +60,15 @@ export const completeWorkout = async (req, res, next) => {
 };
 
 
-// מחשבת ומחזירה את נתוני לוח המעקב: קלוריות שבועיות, מאזן קלוריות, שינוי במשקל והיסטוריה.
+export const getCompletedWorkoutIds = async (req, res, next) => {
+        const records = await Tracking.find({
+            userId: req.user.userId,
+            workoutId: { $ne: null }
+        }).select('workoutId');
+
+        res.status(200).json(records.map(record => String(record.workoutId)));
+};
+
 export const getTrackingDashboard = async (req, res, next) => {
         const userId = req.user.userId;
 
